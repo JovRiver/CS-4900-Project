@@ -31,6 +31,7 @@ function start (){
 	setupPhysicsWorld();
 	setupGraphics();
 	createGround();
+    createObstacles(); // Added for player movement testing
 	createPlayer();
 	setupControls();
 	setupEventHandlers();
@@ -105,7 +106,7 @@ function setupGraphics(){
 }
 
 function createPlayer(){
-	var pos = {x: 0, y: 200, z: 0};
+	var pos = {x: 20, y: 200, z: 0};
 	var scale = {x: 2, y: 5, z: 2};
 	var quat = {x: 0, y: 0, z: 0, w: 1};
 	var mass = 1;
@@ -138,7 +139,6 @@ function createPlayer(){
 	physicsWorld.addRigidBody( body );
 	player.userData.physicsBody = body;
 	rigidBodies.push(player);
-
 }
 
 
@@ -175,6 +175,125 @@ function createGround(){
 	physicsWorld.addRigidBody( body );
 }
 //
+
+function createObstacles() {
+    
+    //ledge variables
+    var pos = {x: 25, y: 10, z: 0};
+    var pos2 = {x: 11, y: 3, z: 0};
+    var pos3 = {x: -5, y: 10, z: 0};
+    
+	var scale = {x: 20, y: 1, z: 20};
+    var scale2 = {x: 5, y: 5, z: 5};
+	
+    var quat = {x: 0, y: 0, z: 0, w: 1};
+	var mass = 0;
+    
+    //ramp variables
+    var r1Pos = {x: 25, y: 4.5, z: 14.58};
+    var r2Pos = {x: 25, y: 5.2, z: -15.4};
+	var rScale = {x: 20, y: 1, z: 15};
+    
+//three.js section
+    
+    //ledge creation
+    var ledge = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+        ledge.position.set(pos.x, pos.y, pos.z);
+        ledge.scale.set(scale.x, scale.y, scale.z);
+        ledge.castShadow = true;
+        ledge.receiveShadow = true;
+        scene.add(ledge);
+    
+    //ledge2 creation
+    var ledge2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+        ledge2.position.set(pos3.x, pos3.y, pos3.z);
+        ledge2.scale.set(scale.x, scale.y, scale.z);
+        ledge2.castShadow = true;
+        ledge2.receiveShadow = true;
+        scene.add(ledge2);
+    
+    //stepUpLedge creation
+    var stepUpLedge = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+        stepUpLedge.position.set(pos2.x, pos2.y, pos2.z);
+        stepUpLedge.scale.set(scale2.x, scale2.y, scale2.z);
+        stepUpLedge.castShadow = true;
+        stepUpLedge.receiveShadow = true;
+        scene.add(stepUpLedge);
+    
+    //ramp1 creation
+    var ramp1 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+        ramp1.position.set(r1Pos.x, r1Pos.y, r1Pos.z);
+        ramp1.scale.set(rScale.x, rScale.y, rScale.z);
+        ramp1.castShadow = true;
+        ramp1.receiveShadow = true;
+        ramp1.rotation.x = Math.sin(45);
+        scene.add(ramp1);
+    
+    //ramp2 creation
+    var ramp2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+        ramp2.position.set(r2Pos.x, r2Pos.y, r2Pos.z);
+        ramp2.scale.set(rScale.x, rScale.y, rScale.z);
+        ramp2.castShadow = true;
+        ramp2.receiveShadow = true;
+        ramp2.rotation.x = Math.cos( 3 * Math.PI / 4);
+        scene.add(ramp2);
+    
+//ammo.js section
+    
+    //ledge transform
+    var transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+        transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+    var motionState = new Ammo.btDefaultMotionState( transform );
+	var colShape = new Ammo.btBoxShape( new Ammo.btVector3( scale.x * 0.5, scale.y * 0.5, scale.z * 0.5 ) );
+        colShape.setMargin( 0.05 );
+    var localInertia = new Ammo.btVector3( 0, 0, 0 );
+        colShape.calculateLocalInertia( mass, localInertia );
+    var rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+    var body = new Ammo.btRigidBody( rbInfo );
+        body.setFriction(4);
+        body.setRollingFriction(10);
+        physicsWorld.addRigidBody( body );
+    
+    //ramp1 transform
+    var transform1 = new Ammo.btTransform();
+        transform1.setIdentity();
+        transform1.setOrigin( new Ammo.btVector3( r1Pos.x, r1Pos.y, r1Pos.z ) );
+        transform1.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+    var motionState1 = new Ammo.btDefaultMotionState( transform1 );
+	var colShape1 = new Ammo.btBoxShape( new Ammo.btVector3( rScale.x * 0.5, rScale.y * 0.5, rScale.z * 0.5 ) );
+        colShape1.setMargin( 0.05 );
+    var localInertia1 = new Ammo.btVector3( 0, 0, 0 );
+        colShape1.calculateLocalInertia( mass, localInertia1 );
+    var rbInfo1 = new Ammo.btRigidBodyConstructionInfo( mass, motionState1, colShape1, localInertia1 );
+    var body1 = new Ammo.btRigidBody( rbInfo1 );
+        body1.setFriction(4);
+        body1.setRollingFriction(10);
+        physicsWorld.addRigidBody( body1 );
+    
+    //ramp2 transform
+    var transform2 = new Ammo.btTransform();
+        transform2.setIdentity();
+        transform2.setOrigin( new Ammo.btVector3( r2Pos.x, r2Pos.y, r2Pos.z ) );
+        transform2.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+    var motionState2 = new Ammo.btDefaultMotionState( transform2 );
+	var colShape2 = new Ammo.btBoxShape( new Ammo.btVector3( rScale.x * 0.5, rScale.y * 0.5, rScale.z * 0.5 ) );
+        colShape2.setMargin( 0.05 );
+    var localInertia2 = new Ammo.btVector3( 0, 0, 0 );
+        colShape2.calculateLocalInertia( mass, localInertia2 );
+    var rbInfo2 = new Ammo.btRigidBodyConstructionInfo( mass, motionState2, colShape2, localInertia2 );
+    var body2 = new Ammo.btRigidBody( rbInfo2 );
+        body2.setFriction(4);
+        body2.setRollingFriction(10);
+        physicsWorld.addRigidBody( body2 );
+    
+    //stepUpLedge transform
+        //TODO
+    
+    //ledge2 creation
+        //TODO
+}
 
 //System
 function setupPhysicsWorld(){
