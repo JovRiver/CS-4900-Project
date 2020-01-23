@@ -31,7 +31,7 @@ function start (){
 	setupPhysicsWorld();
 	setupGraphics();
 	createGround();
-    createObstacles(); // Added for player movement testing
+	createObstacles(); // Added for player movement testing
 	createPlayer();
 	setupControls();
 	setupEventHandlers();
@@ -51,7 +51,6 @@ function setupControls(){
 
 }
 
-
 //Graphics
 function setupGraphics(){
 	//create clock for timing
@@ -63,9 +62,10 @@ function setupGraphics(){
 
 	//create camera
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.y = 5;
-	//camera.position.z = 3;
-	
+	camera.position.y = 3;
+	camera.position.z = 5;
+
+
 	//create raycaster
 	raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
 
@@ -105,23 +105,76 @@ function setupGraphics(){
 	renderer.shadowMap.enabled = true;
 }
 
-function createPlayer(){
-	var pos = {x: 20, y: 200, z: 0};
-	var scale = {x: 2, y: 5, z: 2};
+
+
+
+
+function createObstacles() {
+
+	//ledge variables
+	var pos = {x: 25, y: 10, z: 0};
+	var pos2 = {x: 11, y: 3, z: 0};
+	var pos3 = {x: -5, y: 10, z: 0};
+
+	var scale = {x: 20, y: 1, z: 20};
+	var scale2 = {x: 5, y: 5, z: 5};
+
 	var quat = {x: 0, y: 0, z: 0, w: 1};
-	var mass = 1;
+	var r1quat = {x: 0, y: 45, z: 0, w: 1};
+	var mass = 0;
 
-	//threeJS Section
-	player = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({color: 0x30ab78}));
-	player.position.set(pos.x, pos.y, pos.z);
-	player.scale.set(scale.x, scale.y, scale.z);
-	player.castShadow = true;
-	player.receiveShadow = true;
-	scene.add(player);
-	player.add(camera);
-	
+	//ramp variables
+	var r1Pos = {x: 25, y: 7, z: 14.58};
+	var r2Pos = {x: 25, y: 5.2, z: -15.4};
+	var rScale = {x: 20, y: 1, z: 15};
 
-	//Ammojs Section
+//three.js section
+
+	//ledge creation
+	var ledge = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+	ledge.position.set(pos.x, pos.y, pos.z);
+	ledge.scale.set(scale.x, scale.y, scale.z);
+	ledge.castShadow = true;
+	ledge.receiveShadow = true;
+	scene.add(ledge);
+
+	//ledge2 creation
+	var ledge2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+	ledge2.position.set(pos3.x, pos3.y, pos3.z);
+	ledge2.scale.set(scale.x, scale.y, scale.z);
+	ledge2.castShadow = true;
+	ledge2.receiveShadow = true;
+	scene.add(ledge2);
+
+	//stepUpLedge creation
+	var stepUpLedge = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+	stepUpLedge.position.set(pos2.x, pos2.y, pos2.z);
+	stepUpLedge.scale.set(scale2.x, scale2.y, scale2.z);
+	stepUpLedge.castShadow = true;
+	stepUpLedge.receiveShadow = true;
+	scene.add(stepUpLedge);
+
+	//ramp1 creation
+	var ramp1 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 , wireframe: true}));
+	ramp1.position.set(r1Pos.x, r1Pos.y, r1Pos.z);
+	ramp1.scale.set(rScale.x, rScale.y, rScale.z);
+	ramp1.castShadow = true;
+	ramp1.receiveShadow = true;
+	ramp1.rotation.x = Math.sin(45);
+	scene.add(ramp1);
+
+	//ramp2 creation
+	var ramp2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+	ramp2.position.set(r2Pos.x, r2Pos.y, r2Pos.z);
+	ramp2.scale.set(rScale.x, rScale.y, rScale.z);
+	ramp2.castShadow = true;
+	ramp2.receiveShadow = true;
+	ramp2.rotation.x = Math.cos( 3 * Math.PI / 4);
+	scene.add(ramp2);
+
+//ammo.js section
+
+	//ledge transform
 	var transform = new Ammo.btTransform();
 	transform.setIdentity();
 	transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
@@ -135,13 +188,98 @@ function createPlayer(){
 	var body = new Ammo.btRigidBody( rbInfo );
 	body.setFriction(4);
 	body.setRollingFriction(10);
+	physicsWorld.addRigidBody( body );
+
+	//ramp1 transform
+	var transform1 = new Ammo.btTransform();
+	transform1.setIdentity();
+	transform1.setOrigin( new Ammo.btVector3( r1Pos.x, r1Pos.y, r1Pos.z ) );
+	transform1.setRotation( new Ammo.btQuaternion( r1quat.x, r1quat.y, r1quat.z, r1quat.w ) );
+	var motionState1 = new Ammo.btDefaultMotionState( transform1 );
+	var colShape1 = new Ammo.btBoxShape( new Ammo.btVector3( rScale.x *.5 , rScale.y *.5 , rScale.z *.5  ) );
+	colShape1.setMargin( 0.05 );
+	var localInertia1 = new Ammo.btVector3( 0, 0, 0 );
+	colShape1.calculateLocalInertia( mass, localInertia1 );
+	var rbInfo1 = new Ammo.btRigidBodyConstructionInfo( mass, motionState1, colShape1, localInertia1 );
+	var body1 = new Ammo.btRigidBody( rbInfo1 );
+	body1.setFriction(4);
+	body1.setRollingFriction(10);
+	physicsWorld.addRigidBody( body1 );
+
+	//ramp2 transform
+	var transform2 = new Ammo.btTransform();
+	transform2.setIdentity();
+	transform2.setOrigin( new Ammo.btVector3( r2Pos.x, r2Pos.y, r2Pos.z ) );
+	transform2.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+	var motionState2 = new Ammo.btDefaultMotionState( transform2 );
+	var colShape2 = new Ammo.btBoxShape( new Ammo.btVector3( rScale.x * 0.5, rScale.y * 0.5, rScale.z * 0.5 ) );
+	colShape2.setMargin( 0.05 );
+	var localInertia2 = new Ammo.btVector3( 0, 0, 0 );
+	colShape2.calculateLocalInertia( mass, localInertia2 );
+	var rbInfo2 = new Ammo.btRigidBodyConstructionInfo( mass, motionState2, colShape2, localInertia2 );
+	var body2 = new Ammo.btRigidBody( rbInfo2 );
+	body2.setFriction(4);
+	body2.setRollingFriction(10);
+	physicsWorld.addRigidBody( body2 );
+
+	//stepUpLedge transform
+	//TODO
+
+	//ledge2 creation
+	//TODO
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function createPlayer(){
+	//var pos = {x: 0, y: 5, z: 0};
+	var pos = {x: 20, y: 30, z: 0};
+	var scale = {x: 2, y: 2, z: 2};
+	var quat = {x: 0 , y: 0, z: 0, w: 1};
+	var mass = 1;
+
+	//threeJS Section
+	player = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({color: 0x30ab78}));
+	player.position.set(pos.x, pos.y, pos.z);
+	player.scale.set(scale.x, scale.y, scale.z);
+	player.castShadow = true;
+	player.receiveShadow = true;
+	scene.add(player);
+
+
+	//Ammojs Section
+	var transform = new Ammo.btTransform();
+	transform.setIdentity();
+	transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+	transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+	var motionState = new Ammo.btDefaultMotionState( transform );
+	var colShape = new Ammo.btBoxShape( new Ammo.btVector3( scale.x * 0.5, scale.y * 0.5, scale.z * 0.5 ) );
+	colShape.setMargin( 0.05 );
+	var localInertia = new Ammo.btVector3( 0, 0, 0 );
+	colShape.calculateLocalInertia( mass, localInertia );
+	var rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+	var body = new Ammo.btRigidBody( rbInfo );
+	body.setFriction(1);
+	body.setRollingFriction(1000);
 	body.setActivationState( STATE.DISABLE_DEACTIVATION );
 	physicsWorld.addRigidBody( body );
 	player.userData.physicsBody = body;
 	rigidBodies.push(player);
+
 }
-
-
 
 function createGround(){
 	var pos = {x: 0, y: 0, z: 0};
@@ -176,131 +314,12 @@ function createGround(){
 }
 //
 
-function createObstacles() {
-    
-    //ledge variables
-    var pos = {x: 25, y: 10, z: 0};
-    var pos2 = {x: 11, y: 3, z: 0};
-    var pos3 = {x: -5, y: 10, z: 0};
-    
-	var scale = {x: 20, y: 1, z: 20};
-    var scale2 = {x: 5, y: 5, z: 5};
-	
-    var quat = {x: 0, y: 0, z: 0, w: 1};
-	var mass = 0;
-    
-    //ramp variables
-    var r1Pos = {x: 25, y: 4.5, z: 14.58};
-    var r2Pos = {x: 25, y: 5.2, z: -15.4};
-	var rScale = {x: 20, y: 1, z: 15};
-    
-//three.js section
-    
-    //ledge creation
-    var ledge = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
-        ledge.position.set(pos.x, pos.y, pos.z);
-        ledge.scale.set(scale.x, scale.y, scale.z);
-        ledge.castShadow = true;
-        ledge.receiveShadow = true;
-        scene.add(ledge);
-    
-    //ledge2 creation
-    var ledge2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
-        ledge2.position.set(pos3.x, pos3.y, pos3.z);
-        ledge2.scale.set(scale.x, scale.y, scale.z);
-        ledge2.castShadow = true;
-        ledge2.receiveShadow = true;
-        scene.add(ledge2);
-    
-    //stepUpLedge creation
-    var stepUpLedge = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
-        stepUpLedge.position.set(pos2.x, pos2.y, pos2.z);
-        stepUpLedge.scale.set(scale2.x, scale2.y, scale2.z);
-        stepUpLedge.castShadow = true;
-        stepUpLedge.receiveShadow = true;
-        scene.add(stepUpLedge);
-    
-    //ramp1 creation
-    var ramp1 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
-        ramp1.position.set(r1Pos.x, r1Pos.y, r1Pos.z);
-        ramp1.scale.set(rScale.x, rScale.y, rScale.z);
-        ramp1.castShadow = true;
-        ramp1.receiveShadow = true;
-        ramp1.rotation.x = Math.sin(45);
-        scene.add(ramp1);
-    
-    //ramp2 creation
-    var ramp2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
-        ramp2.position.set(r2Pos.x, r2Pos.y, r2Pos.z);
-        ramp2.scale.set(rScale.x, rScale.y, rScale.z);
-        ramp2.castShadow = true;
-        ramp2.receiveShadow = true;
-        ramp2.rotation.x = Math.cos( 3 * Math.PI / 4);
-        scene.add(ramp2);
-    
-//ammo.js section
-    
-    //ledge transform
-    var transform = new Ammo.btTransform();
-        transform.setIdentity();
-        transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
-        transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
-    var motionState = new Ammo.btDefaultMotionState( transform );
-	var colShape = new Ammo.btBoxShape( new Ammo.btVector3( scale.x * 0.5, scale.y * 0.5, scale.z * 0.5 ) );
-        colShape.setMargin( 0.05 );
-    var localInertia = new Ammo.btVector3( 0, 0, 0 );
-        colShape.calculateLocalInertia( mass, localInertia );
-    var rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
-    var body = new Ammo.btRigidBody( rbInfo );
-        body.setFriction(4);
-        body.setRollingFriction(10);
-        physicsWorld.addRigidBody( body );
-    
-    //ramp1 transform
-    var transform1 = new Ammo.btTransform();
-        transform1.setIdentity();
-        transform1.setOrigin( new Ammo.btVector3( r1Pos.x, r1Pos.y, r1Pos.z ) );
-        transform1.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
-    var motionState1 = new Ammo.btDefaultMotionState( transform1 );
-	var colShape1 = new Ammo.btBoxShape( new Ammo.btVector3( rScale.x * 0.5, rScale.y * 0.5, rScale.z * 0.5 ) );
-        colShape1.setMargin( 0.05 );
-    var localInertia1 = new Ammo.btVector3( 0, 0, 0 );
-        colShape1.calculateLocalInertia( mass, localInertia1 );
-    var rbInfo1 = new Ammo.btRigidBodyConstructionInfo( mass, motionState1, colShape1, localInertia1 );
-    var body1 = new Ammo.btRigidBody( rbInfo1 );
-        body1.setFriction(4);
-        body1.setRollingFriction(10);
-        physicsWorld.addRigidBody( body1 );
-    
-    //ramp2 transform
-    var transform2 = new Ammo.btTransform();
-        transform2.setIdentity();
-        transform2.setOrigin( new Ammo.btVector3( r2Pos.x, r2Pos.y, r2Pos.z ) );
-        transform2.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
-    var motionState2 = new Ammo.btDefaultMotionState( transform2 );
-	var colShape2 = new Ammo.btBoxShape( new Ammo.btVector3( rScale.x * 0.5, rScale.y * 0.5, rScale.z * 0.5 ) );
-        colShape2.setMargin( 0.05 );
-    var localInertia2 = new Ammo.btVector3( 0, 0, 0 );
-        colShape2.calculateLocalInertia( mass, localInertia2 );
-    var rbInfo2 = new Ammo.btRigidBodyConstructionInfo( mass, motionState2, colShape2, localInertia2 );
-    var body2 = new Ammo.btRigidBody( rbInfo2 );
-        body2.setFriction(4);
-        body2.setRollingFriction(10);
-        physicsWorld.addRigidBody( body2 );
-    
-    //stepUpLedge transform
-        //TODO
-    
-    //ledge2 creation
-        //TODO
-}
-
 //System
 function setupPhysicsWorld(){
 	var collisionConfiguration  = new Ammo.btDefaultCollisionConfiguration(),
-	dispatcher              = new Ammo.btCollisionDispatcher(collisionConfiguration),
-	overlappingPairCache    = new Ammo.btDbvtBroadphase(),
-	solver                  = new Ammo.btSequentialImpulseConstraintSolver();
+		dispatcher              = new Ammo.btCollisionDispatcher(collisionConfiguration),
+		overlappingPairCache    = new Ammo.btDbvtBroadphase(),
+		solver                  = new Ammo.btSequentialImpulseConstraintSolver();
 
 	physicsWorld           = new Ammo.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 	physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
@@ -327,55 +346,74 @@ function updatePhysics( deltaTime ){
 
 function moveKinematic(){
 
-                var scalingFactor = 0.3;
+	var scalingFactor = 0.3;
 
-                var moveX =  playerMoveDirection.right - playerMoveDirection.left;
-                var moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
-                var moveY =  0;
+	var moveX =  playerMoveDirection.right - playerMoveDirection.left;
+	var moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
+	var moveY =  0;
 
 
-                var translateFactor = tmpPos.set(moveX, moveY, moveZ);
+	var translateFactor = tmpPos.set(moveX, moveY, moveZ);
 
-                translateFactor.multiplyScalar(scalingFactor);
+	translateFactor.multiplyScalar(scalingFactor);
 
-                kObject.translateX(translateFactor.x);
-                kObject.translateY(translateFactor.y);
-                kObject.translateZ(translateFactor.z);
-				
-				kObject.getWorldPosition(tmpPos);
-				kObject.getWorldQuaternion(tmpQuat);
+	player.translateX(translateFactor.x);
+	player.translateY(translateFactor.y);
+	player.translateZ(translateFactor.z);
 
-                var physicsBody = kObject.userData.physicsBody;
+	player.getWorldPosition(tmpPos);
+	player.getWorldQuaternion(tmpQuat);
 
-                var ms = physicsBody.getMotionState();
-                if ( ms ) {
+	var physicsBody = player.userData.physicsBody;
 
-                    ammoTmpPos.setValue(tmpPos.x, tmpPos.y, tmpPos.z);
-                    ammoTmpQuat.setValue( tmpQuat.x, tmpQuat.y, tmpQuat.z, tmpQuat.w);
+	var ms = physicsBody.getMotionState();
+	if ( ms ) {
 
-                    
-                    tmpTrans.setIdentity();
-                    tmpTrans.setOrigin( ammoTmpPos ); 
-                    tmpTrans.setRotation( ammoTmpQuat ); 
+		ammoTmpPos.setValue(tmpPos.x, tmpPos.y, tmpPos.z);
+		ammoTmpQuat.setValue( tmpQuat.x, tmpQuat.y, tmpQuat.z, tmpQuat.w);
 
-                    ms.setWorldTransform(tmpTrans);
 
-                }
+		tmpTrans.setIdentity();
+		tmpTrans.setOrigin( ammoTmpPos );
+		tmpTrans.setRotation( ammoTmpQuat );
 
-            }
+		ms.setWorldTransform(tmpTrans);
+
+	}
+
+}
+
+function moveBall(){
+
+	let scalingFactor = 20;
+
+	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
+	let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
+	let moveY =  0;
+
+	if( moveX == 0 && moveY == 0 && moveZ == 0) return;
+
+	let resultantImpulse = new Ammo.btVector3( moveX, moveY, moveZ )
+	resultantImpulse.op_mul(scalingFactor);
+
+	let physicsBody = player.userData.physicsBody;
+	physicsBody.setLinearVelocity ( resultantImpulse );
+
+}
 
 function renderFrame(){
 	var deltaTime = clock.getDelta();
 	updatePhysics( deltaTime );
-	
+
+
 	requestAnimationFrame( renderFrame );
 
 	if ( controls.isLocked === true ) {
 		raycaster.ray.origin.copy( controls.getObject().position );
 		raycaster.ray.origin.y -= 10;
 
-		//var intersections = raycaster.intersectObjects( objects );
-		//var onObject = intersections.length > 0;
+		var intersections = raycaster.intersectObjects( objects );
+		var onObject = intersections.length > 0;
 		var time = performance.now();
 		var delta = ( time - prevTime ) / 1000;
 
@@ -394,7 +432,7 @@ function renderFrame(){
 		}else{
 			moveSpeed = 400;
 		}
-		
+
 		if ( moveLeft || moveRight ){
 			velocity.x -= direction.x * moveSpeed * delta;
 		}
@@ -406,12 +444,14 @@ function renderFrame(){
 		*/
 
 		controls.moveRight( - velocity.x * delta );
-		
+
 		controls.moveForward( - velocity.z * delta );
 
 		prevTime = time;
 	}
-	
+
+	//moveKinematic();
+	moveBall();
 	renderer.render( scene, camera );
 }
 //
@@ -431,54 +471,87 @@ function onWindowResize() {
 
 function onKeyDown (event ) {
 	switch ( event.keyCode ) {
-		case 38: // up
 		case 87: // w
-		moveForward = true;
-		break;
+			moveForward = true;
+			break;
+
+		case 65: // a
+			moveLeft = true;
+			break;
+
+		case 83: // s
+			moveBackward = true;
+			break;
+
+		case 68: // d
+			moveRight = true;
+			break;
+
+		case 38: // up
+			playerMoveDirection.forward = 1;
+			break;
 
 		case 37: // left
-		case 65: // a
-		moveLeft = true;
-		break;
+			playerMoveDirection.left = 1;
+			break;
 
 		case 40: // down
-		case 83: // s
-		moveBackward = true;
-		break;
+			playerMoveDirection.back = 1;
+			break;
 
 		case 39: // right
-		case 68: // d
-		moveRight = true;
-		break;
+			playerMoveDirection.right = 1;
+			break;
 
 		case 32: // space
-		if ( canJump === true ) velocity.y += 350;
-		canJump = false;
-		break;
+			if ( canJump === true ) velocity.y += 350;
+			canJump = false;
+			break;
+
+		case 16: // shift
+			player.scale.set(1, 1, 1);
+			break;
 	}
-};
+}
 
 function onKeyUp( event ) {
 	switch ( event.keyCode ) {
-		case 38: // up
 		case 87: // w
-		moveForward = false;
-		break;
+			moveForward = false;
+			break;
+
+		case 65: // a
+			moveLeft = false;
+			break;
+
+		case 83: // s
+			moveBackward = false;
+			break;
+
+		case 68: // d
+			moveRight = false;
+			break;
+
+		case 38: // up
+			playerMoveDirection.forward = 0;
+			break;
 
 		case 37: // left
-		case 65: // a
-		moveLeft = false;
-		break;
+			playerMoveDirection.left = 0;
+			break;
 
 		case 40: // down
-		case 83: // s
-		moveBackward = false;
-		break;
+			playerMoveDirection.back = 0;
+			break;
 
 		case 39: // right
-		case 68: // d
-		moveRight = false;
-		break;
+			playerMoveDirection.right = 0;
+			break;
+
+		case 16: // shift
+			player.scale.set(2, 2, 2);
+			break;
+
 	}
-};
+}
 //
