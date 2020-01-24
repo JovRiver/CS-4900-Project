@@ -1,0 +1,19 @@
+//A log for all changes made to the project
+
+//Format:
+//Month/Day/Year
+//Programmer Name:
+//Programmer Commit #:
+//
+//  Changes made/sources if used.
+
+Jan/22/2020
+Ryan Slaybaugh:
+Commit 1:
+
+  Added three planes for player movement testing. Also added collision physics for player interaction.
+Attempted to create two ramps out of two of the planes but ran into issues with collision phyics. Still
+unresolved. Sources for collision physics code is the same code used for the base plane currently in the
+main code provided by Michael. Main purpose of this code is to get a better understanding of collision 
+physics and object placement. No plans to use this code in final build.
+
