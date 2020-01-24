@@ -17,3 +17,14 @@ unresolved. Sources for collision physics code is the same code used for the bas
 main code provided by Michael. Main purpose of this code is to get a better understanding of collision 
 physics and object placement. No plans to use this code in final build.
 
+
+Jan/24/2020
+Ryan Slaybaugh:
+Commit 2:
+
+  Added two new objects, a box and a ramp. The box provides collision for player character movement testing
+such as jumping. The ramp has a rotated collision box, but there are a few issues that need to be worked out, 
+such as imperfect alignment with visual ramp and awkward friction for player movement. Collision code recycled
+from previous object collision code.
+
+
