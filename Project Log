@@ -28,3 +28,12 @@ such as imperfect alignment with visual ramp and awkward friction for player mov
 from previous object collision code.
 
 
+Jan/25/2020
+Ryan Slaybaugh
+Commit 3:
+
+  Moved createObstacles() code to a new file named gamestage.js and renamed function call to createGameStage().
+Added a function called createTestGround() for the obstacle objects and a createDynamicGround() for new platform 
+testing inside the createGameStage() function. createDynamicGround() currently adds 10 new 5x2x5 cubes in 
+preparation for object movement testing. Tidied up code for already created objects to make it easier to 
+differentiate between objects. No collision code added to the squares.
