@@ -37,3 +37,16 @@ Added a function called createTestGround() for the obstacle objects and a create
 testing inside the createGameStage() function. createDynamicGround() currently adds 10 new 5x2x5 cubes in 
 preparation for object movement testing. Tidied up code for already created objects to make it easier to 
 differentiate between objects. No collision code added to the squares.
+
+
+Jan/26/2020
+Ryan Slaybaugh
+Commit 4:
+
+  Tested out creating objects using a for loop. I first created a var str called box, and then used the iterative
+number from the for loop and concatenated it to str box. This creates new a new numbered box string. Then I created 
+objects using this str and manipulated the position with some math to place each object in a different location. I also
+created a flat collision plane to encompass all 10 boxes, rather than creating an individual collision plane for each box.
+
+
+
