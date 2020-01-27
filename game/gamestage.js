@@ -1,10 +1,79 @@
 function createGameStage() {
     "use strict";
     var groundObjects = [];
-    
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    function createTestGround() {
+
+    function createGround() {
+        
+        var pos = {x: -53, y: 0, z: 0};
+        var pgPos = {x: -64, y: 0, z: 4};
+        
+        var scale = {x: 5, y: 2, z: 5};
+        var pgScale = {x: 30, y: 2, z: 11};
+        
+        var quat = {x: 0,y: 0, z: 0, w: 1};
+        var mass = 0;
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //Physics for newly created objects
+        var platformGTransform = new Ammo.btTransform();
+            platformGTransform.setIdentity();
+            platformGTransform.setOrigin( new Ammo.btVector3( pgPos.x, pgPos.y, pgPos.z ) );
+            platformGTransform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+        var platformGMotionState = new Ammo.btDefaultMotionState( platformGTransform );
+        var platformGColShape = new Ammo.btBoxShape( new Ammo.btVector3( pgScale.x * 0.5, pgScale.y * 0.5, pgScale.z * 0.5 ) );
+            platformGColShape.setMargin( 0.05 );
+        var platformGLocalInertia = new Ammo.btVector3( 0, 0, 0 );
+            platformGColShape.calculateLocalInertia( mass, platformGLocalInertia );
+        var platformGRBInfo = new Ammo.btRigidBodyConstructionInfo( mass, platformGMotionState, platformGColShape, platformGLocalInertia );
+        var platformGBody = new Ammo.btRigidBody( platformGRBInfo );
+            platformGBody.setFriction(4);
+            platformGBody.setRollingFriction(10);
+	
+            physicsWorld.addRigidBody( platformGBody );
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //for loop to create new box objects
+        for (var i = 0; i < 5; i++) {
+            
+            var boxG1 = "box";
+            boxG1.concat(i.toString);
+            
+            var boxG1 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+                boxG1.position.set((pos.x - (i * 6) ), pos.y, pos.z);
+                boxG1.scale.set(scale.x, scale.y, scale.z);
+                boxG1.castShadow = true;
+                boxG1.receiveShadow = true;
+            
+            scene.add(boxG1);
+            groundObjects.push(boxG1);
+        }
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //for loop to create new box objects with different positions
+        for (var i = 0; i < 5; i++) {
+            
+            var boxG2 = "box";
+            boxG2.concat(i.toString);
+            
+            var boxG2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
+                boxG2.position.set((pos.x - (i * 6) ), pos.y, pos.z + 6);
+                boxG2.scale.set(scale.x, scale.y, scale.z);
+                boxG2.castShadow = true;
+                boxG2.receiveShadow = true;
+            
+            scene.add(boxG2);
+            groundObjects.push(boxG2);
+        }
+            
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    }
+    createGround();
+}
+
+function createTestGround() {
         
         //object position variables
         var ledge1Pos = {x: 25, y: 10, z: 0};
@@ -144,9 +213,26 @@ function createGameStage() {
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    function createStartPoint() {
+        var geometry = new THREE.TorusBufferGeometry( 20, 2, 16, 100 );
+        var material = new THREE.MeshBasicMaterial( { color: 0x79a1e0 } );
+        var torus = new THREE.Mesh( geometry, material );
+        torus.position.set(0, 20, 0);
+        torus.scale.set(1, 1, 1);
+        torus.rotation.x = THREE.Math.degToRad(90);
+        torus.castShadow = true;
+        torus.receiveShadow = true;
+        
+        scene.add( torus );
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     function createDynamicGround() {
         
-        var pos = {x: -53,y: 0,z: 0};
+        var pos = {x: -53,y: 0,z: -12};
         var scale = {x: 5,y: 2,z: 5};
         var quat = {x: 0,y: 0, z: 0, w: 1};
         var mass = 0;
@@ -253,85 +339,3 @@ function createGameStage() {
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
-    
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    function createGround() {
-        
-        var pos = {x: -53, y: 0, z: 0};
-        var pgPos = {x: -64, y: 0, z: 0};
-        
-        var scale = {x: 5, y: 2, z: 5};
-        var pgScale = {x: 30, y: 2, z: 11};
-        
-        var quat = {x: 0,y: 0, z: 0, w: 1};
-        var mass = 0;
-        
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        //Physics for newly created objects
-        var platformGTransform = new Ammo.btTransform();
-            platformGTransform.setIdentity();
-            platformGTransform.setOrigin( new Ammo.btVector3( pgPos.x, pgPos.y, pgPos.z ) );
-            platformGTransform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
-        var platformGMotionState = new Ammo.btDefaultMotionState( platformGTransform );
-        var platformGColShape = new Ammo.btBoxShape( new Ammo.btVector3( pgScale.x * 0.5, pgScale.y * 0.5, pgScale.z * 0.5 ) );
-            platformGColShape.setMargin( 0.05 );
-        var platformGLocalInertia = new Ammo.btVector3( 0, 0, 0 );
-            platformGColShape.calculateLocalInertia( mass, platformGLocalInertia );
-        var platformGRBInfo = new Ammo.btRigidBodyConstructionInfo( mass, platformGMotionState, platformGColShape, platformGLocalInertia );
-        var platformGBody = new Ammo.btRigidBody( platformGRBInfo );
-            platformGBody.setFriction(4);
-            platformGBody.setRollingFriction(10);
-	
-            physicsWorld.addRigidBody( platformGBody );
-        
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        //for loop to create new box objects
-        for (var i = 0; i < 5; i++) {
-            
-            var boxG1 = "box";
-            boxG1.concat(i.toString);
-            
-            var boxG1 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
-                boxG1.position.set((pos.x - (i * 6) ), pos.y, pos.z);
-                boxG1.scale.set(scale.x, scale.y, scale.z);
-                boxG1.castShadow = true;
-                boxG1.receiveShadow = true;
-            
-            scene.add(boxG1);
-            groundObjects.push(boxG1);
-        }
-        
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        //for loop to create new box objects with different positions
-        for (var i = 0; i < 5; i++) {
-            
-            var boxG1 = "box";
-            boxG1.concat(i.toString);
-            
-            var boxG2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
-                boxG2.position.set((pos.x - (i * 6) ), pos.y, pos.z + 6);
-                boxG2.scale.set(scale.x, scale.y, scale.z);
-                boxG2.castShadow = true;
-                boxG2.receiveShadow = true;
-            
-            scene.add(boxG2);
-            groundObjects.push(boxG2);
-        }
-        
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    }
-    
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    createTestGround();
-//  createDynamicGround();
-    createGround();
-}

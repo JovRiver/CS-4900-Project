@@ -4,6 +4,7 @@ var player = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 
 var ammoTmpPos = null, ammoTmpQuat = null;
 
 var objects = [];
+var codeFinished = false;
 var moveForward = false;
 var moveBackward = false;
 var moveLeft = false;
@@ -32,6 +33,8 @@ function start (){
 	setupGraphics();
 	createGround();
     createGameStage(); //function call from gamestage.js file / creates level objects / rs
+    createTestGround(); //function call to create test ground
+    createStartPoint(); //function call to create a torus
 	createPlayer();
 	setupControls();
 	setupEventHandlers();
@@ -65,7 +68,8 @@ function setupGraphics(){
 	camera.position.x = 40;
     camera.position.y = 40;
 	camera.position.z = 40;
-    
+
+	
     camera.lookAt(0, 0, 0,);
 
 	//create raycaster
@@ -264,10 +268,10 @@ function moveBall(){
 
 }
 
+
 function renderFrame(){
 	var deltaTime = clock.getDelta();
 	updatePhysics( deltaTime );
-
 
 	requestAnimationFrame( renderFrame );
 
@@ -315,6 +319,7 @@ function renderFrame(){
 
 	//moveKinematic();
 	moveBall();
+    
 	renderer.render( scene, camera );
 }
 //
@@ -417,4 +422,5 @@ function onKeyUp( event ) {
 
 	}
 }
+
 //
