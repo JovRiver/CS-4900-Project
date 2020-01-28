@@ -1,5 +1,5 @@
 //variable declaration section
-var physicsWorld, scene, camera, controls, raycaster, moveSpeed, renderer, rigidBodies = [], tmpTrans = null
+var physicsWorld, scene, camera, stats, controls, raycaster, moveSpeed, renderer, rigidBodies = [], tmpTrans = null
 var player = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tmpPos = new THREE.Vector3(), tmpQuat = new THREE.Quaternion();
 var ammoTmpPos = null, ammoTmpQuat = null;
 
@@ -35,6 +35,7 @@ function start (){
 	createPlayer();
 	setupControls();
 	setupEventHandlers();
+	showStats();
 	renderFrame();
 }
 
@@ -47,7 +48,6 @@ function setupControls(){
 	controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none';} );
 	controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = '';} );
 	scene.add( controls.getObject() );
-	//player.add(camera);
 
 }
 
@@ -62,8 +62,8 @@ function setupGraphics(){
 
 	//create camera
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.y = 3;
-	camera.position.z = 5;
+	camera.position.y = 2;
+	camera.position.z = 10;
 
 
 	//create raycaster
@@ -240,15 +240,15 @@ function createObstacles() {
     
 }
 
-
-
 function createPlayer(){
-	//var pos = {x: 0, y: 5, z: 0};
-	var pos = {x: 20, y: 30, z: 0};
-	var scale = {x: 2, y: 2, z: 2};
-	var quat = {x: 0 , y: 0, z: 0, w: 1};
-	var mass = 1;
+	//var pos = {x: 0, y: 2, z: 3};
+	let pos = {x: 20, y: 30, z: 0};
+	//var scale = {x: 2, y: 2, z: 2};
+	let radius = 2;
+	let quat = {x: 0 , y: 0, z: 0, w: 1};
+	let mass = 1;
 
+	/*
 	//threeJS Section
 	player = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({color: 0x30ab78}));
 	player.position.set(pos.x, pos.y, pos.z);
@@ -276,6 +276,40 @@ function createPlayer(){
 	physicsWorld.addRigidBody( body );
 	player.userData.physicsBody = body;
 	rigidBodies.push(player);
+	*/
+	player = new THREE.Mesh(new THREE.SphereBufferGeometry(radius), new THREE.MeshPhongMaterial({color: 0xff0505}));
+
+	player.position.set(pos.x, pos.y, pos.z);
+
+	player.castShadow = true;
+	player.receiveShadow = true;
+
+	scene.add(player);
+
+	let transform = new Ammo.btTransform();
+	transform.setIdentity();
+	transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+	transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+	let motionState = new Ammo.btDefaultMotionState( transform );
+
+	let colShape = new Ammo.btSphereShape( radius );
+	colShape.setMargin( 0.05 );
+
+	let localInertia = new Ammo.btVector3( 0, 0, 0 );
+	colShape.calculateLocalInertia( mass, localInertia );
+
+	let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+	let body = new Ammo.btRigidBody( rbInfo );
+
+	body.setFriction(4);
+	body.setRollingFriction(10);
+
+
+	physicsWorld.addRigidBody( body );
+
+	player.userData.physicsBody = body;
+	rigidBodies.push(player);
+
 
 }
 
@@ -323,6 +357,13 @@ function setupPhysicsWorld(){
 	physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
 }
 
+function showStats(){
+	//stats display
+	stats = new Stats();
+	stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+	document.body.appendChild( stats.dom );
+}
+
 function updatePhysics( deltaTime ){
 	// Step world
 	physicsWorld.stepSimulation( deltaTime, 10 );
@@ -341,49 +382,14 @@ function updatePhysics( deltaTime ){
 		}
 	}
 }
-
-function moveKinematic(){
-
-	var scalingFactor = 0.3;
-
-	var moveX =  playerMoveDirection.right - playerMoveDirection.left;
-	var moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
-	var moveY =  0;
-
-
-	var translateFactor = tmpPos.set(moveX, moveY, moveZ);
-
-	translateFactor.multiplyScalar(scalingFactor);
-
-	player.translateX(translateFactor.x);
-	player.translateY(translateFactor.y);
-	player.translateZ(translateFactor.z);
-
-	player.getWorldPosition(tmpPos);
-	player.getWorldQuaternion(tmpQuat);
-
-	var physicsBody = player.userData.physicsBody;
-
-	var ms = physicsBody.getMotionState();
-	if ( ms ) {
-
-		ammoTmpPos.setValue(tmpPos.x, tmpPos.y, tmpPos.z);
-		ammoTmpQuat.setValue( tmpQuat.x, tmpQuat.y, tmpQuat.z, tmpQuat.w);
-
-
-		tmpTrans.setIdentity();
-		tmpTrans.setOrigin( ammoTmpPos );
-		tmpTrans.setRotation( ammoTmpQuat );
-
-		ms.setWorldTransform(tmpTrans);
-
-	}
-
+function updateCamera(){
+	camera.position.x = player.position.x;
+	camera.position.y = player.position.y;
+	camera.position.z = player.position.z;
 }
-
 function moveBall(){
 
-	let scalingFactor = 20;
+	let scalingFactor = 20; //move speed
 
 	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
 	let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
@@ -396,12 +402,13 @@ function moveBall(){
 
 	let physicsBody = player.userData.physicsBody;
 	physicsBody.setLinearVelocity ( resultantImpulse );
-
 }
 
 function renderFrame(){
 	var deltaTime = clock.getDelta();
 	updatePhysics( deltaTime );
+
+	stats.update();
 
 
 	requestAnimationFrame( renderFrame );
@@ -429,6 +436,7 @@ function renderFrame(){
 			}
 		}else{
 			moveSpeed = 400;
+
 		}
 
 		if ( moveLeft || moveRight ){
@@ -450,6 +458,7 @@ function renderFrame(){
 
 	//moveKinematic();
 	moveBall();
+	updateCamera();
 	renderer.render( scene, camera );
 }
 //
