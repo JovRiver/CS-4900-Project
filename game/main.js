@@ -32,9 +32,9 @@ function start (){
 	setupPhysicsWorld();
 	setupGraphics();
 	createGround();
-    createGameStage(); //function call from gamestage.js file / creates level objects / rs
-    createTestGround(); //function call to create test ground
-    createStartPoint(); //function call to create a torus
+    //createGameStage(); //function call from gamestage.js file / creates level objects / rs
+    //createTestGround(); //function call to create test ground
+    //createStartPoint(); //function call to create a torus
 	createPlayer();
 	setupControls();
 	setupEventHandlers();
