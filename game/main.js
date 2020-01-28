@@ -1,5 +1,5 @@
 //variable declaration section
-var physicsWorld, scene, camera, stats, controls, raycaster, moveSpeed, renderer, rigidBodies = [], tmpTrans = null
+var physicsWorld, scene, camera, stats, sound, controls, raycaster, moveSpeed, renderer, rigidBodies = [], tmpTrans = null
 var player = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tmpPos = new THREE.Vector3(), tmpQuat = new THREE.Quaternion();
 var ammoTmpPos = null, ammoTmpQuat = null;
 
@@ -30,6 +30,7 @@ function start (){
 
 	setupPhysicsWorld();
 	setupGraphics();
+	playSounds();
 	createGround();
 	createObstacles(); // Added for player movement testing
 	createPlayer();
@@ -45,8 +46,8 @@ function setupControls(){
 	var blocker = document.getElementById( 'blocker' );
 	var instructions = document.getElementById( 'instructions' );
 	instructions.addEventListener( 'click', function () {controls.lock();}, false );
-	controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none';} );
-	controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = '';} );
+	controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();} );
+	controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = ''; sound.pause();} );
 	scene.add( controls.getObject() );
 
 }
@@ -104,10 +105,6 @@ function setupGraphics(){
 
 	renderer.shadowMap.enabled = true;
 }
-
-
-
-
 
 function createObstacles() {
 
@@ -315,12 +312,16 @@ function createPlayer(){
 
 function createGround(){
 	var pos = {x: 0, y: 0, z: 0};
-	var scale = {x: 100, y: 2, z: 100};
+	var scale = {x: 1000, y: 2, z: 1000};
 	var quat = {x: 0, y: 0, z: 0, w: 1};
 	var mass = 0;
 
 	//threeJS Section
-	var blockPlane = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({color: 0xa0afa4}));
+	var groundMaterial = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/TexturesCom_Grass0197_1_seamless_S.jpg')});
+	groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
+	groundMaterial.map.repeat.set( 8, 8 );
+	var blockPlane = new THREE.Mesh(new THREE.BoxBufferGeometry(), groundMaterial);
+
 	blockPlane.position.set(pos.x, pos.y, pos.z);
 	blockPlane.scale.set(scale.x, scale.y, scale.z);
 	blockPlane.castShadow = true;
@@ -382,11 +383,13 @@ function updatePhysics( deltaTime ){
 		}
 	}
 }
+
 function updateCamera(){
 	camera.position.x = player.position.x;
 	camera.position.y = player.position.y;
 	camera.position.z = player.position.z;
 }
+
 function moveBall(){
 
 	let scalingFactor = 20; //move speed
@@ -402,6 +405,24 @@ function moveBall(){
 
 	let physicsBody = player.userData.physicsBody;
 	physicsBody.setLinearVelocity ( resultantImpulse );
+}
+
+function playSounds(){
+	var listener = new THREE.AudioListener();
+	camera.add( listener );
+
+	// create a global audio source
+	sound = new THREE.Audio( listener );
+
+	// load a sound and set it as the Audio object's buffer
+	var audioLoader = new THREE.AudioLoader();
+	audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3', function( buffer ) {
+		sound.setBuffer( buffer );
+		sound.setLoop( true );
+		sound.setVolume( 0.25 );
+	});
+
+
 }
 
 function renderFrame(){
