@@ -17,6 +17,11 @@ unresolved. Sources for collision physics code is the same code used for the bas
 main code provided by Michael. Main purpose of this code is to get a better understanding of collision 
 physics and object placement. No plans to use this code in final build.
 
+Jan/23/2020
+Michael Hayes
+Commit 289654a9509b837736ffe677165b2b500313dc78
+
+Merged my branch with Ryans changes. 
 
 Jan/24/2020
 Ryan Slaybaugh:
@@ -47,6 +52,34 @@ Commit 4:
 number from the for loop and concatenated it to str box. This creates new a new numbered box string. Then I created 
 objects using this str and manipulated the position with some math to place each object in a different location. I also
 created a flat collision plane to encompass all 10 boxes, rather than creating an individual collision plane for each box.
+
+
+Jan/28/2020
+Michael Hayes
+Commit 5736b7705927b67cf36675919cf328ba9842774c
+
+Background music was added to the game. 
+Known issues: Background music does not play when clicking to play too quickly.
+Possible Solution: Create a loader to preload everything before calling functions to draw scene.
+
+
+Jan/28/2020
+Michael Hayes
+Commit 0c6e72d20cc2ce57bd0c49827304181098e30cc0
+
+Added stats js to the game. This will allow us to track the FPS of the game and see how new additions affect framerate. 
+Known issues: None
+Possible Solution: None.
+
+
+Jan/28/2020
+Michael Hayes
+Commit 4d404366deacad46d2d87032bd86e3030aa749a7
+
+Added code for stats js. Linked the camera to the player object. This allows the camera to move to the positions of the playerobject
+as to keep the physics of the player object. Following the player object with the camera is the best way to implement First Person. 
+Known issues: Currently the camera is stationary and cannot be moved with pointerlock controls.
+Possible Solution: Change directional movement based on the angular change of the camera with pointerlock controls.
 
 
 
