@@ -1,5 +1,5 @@
 //variable declaration section
-var physicsWorld, scene, camera, controls, raycaster, moveSpeed, renderer, rigidBodies = [], tmpTrans = null;
+var physicsWorld, scene, camera, stats, sound, controls, raycaster, moveSpeed, renderer, rigidBodies = [], tmpTrans = null
 var player = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tmpPos = new THREE.Vector3(), tmpQuat = new THREE.Quaternion();
 var ammoTmpPos = null, ammoTmpQuat = null;
 
@@ -31,6 +31,7 @@ function start (){
 
 	setupPhysicsWorld();
 	setupGraphics();
+	playSounds();
 	createGround();
     //createGameStage(); //function call from gamestage.js file / creates level objects / rs
     createTestGround(); //function call to create test ground
@@ -38,6 +39,7 @@ function start (){
 	createPlayer();
 	setupControls();
 	setupEventHandlers();
+	showStats();
 	renderFrame();
 }
 
@@ -47,10 +49,9 @@ function setupControls(){
 	var blocker = document.getElementById( 'blocker' );
 	var instructions = document.getElementById( 'instructions' );
 	instructions.addEventListener( 'click', function () {controls.lock();}, false );
-	controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none';} );
-	controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = '';} );
+	controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();} );
+	controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = ''; sound.pause();} );
 	scene.add( controls.getObject() );
-	//player.add(camera);
 
 }
 
@@ -65,12 +66,8 @@ function setupGraphics(){
 
 	//create camera
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.x = 40;
-    camera.position.y = 40;
-	camera.position.z = 40;
-
-	
-    camera.lookAt(0, 0, 0,);
+	camera.position.y = 2;
+	camera.position.z = 10;
 
 	//create raycaster
 	raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
@@ -112,37 +109,42 @@ function setupGraphics(){
 }
 
 function createPlayer(){
-	//var pos = {x: 0, y: 5, z: 0};
-	var pos = {x: 20, y: 30, z: 0};
-	var scale = {x: 2, y: 2, z: 2};
-	var quat = {x: 0 , y: 0, z: 0, w: 1};
-	var mass = 1;
+	//var pos = {x: 0, y: 2, z: 3};
+	let pos = {x: 20, y: 30, z: 0};
+	let radius = 2;
+	let quat = {x: 0 , y: 0, z: 0, w: 1};
+	let mass = 1;
 
-	//threeJS Section
-	player = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({color: 0x30ab78}));
+	player = new THREE.Mesh(new THREE.SphereBufferGeometry(radius), new THREE.MeshPhongMaterial({color: 0xff0505}));
+
 	player.position.set(pos.x, pos.y, pos.z);
-	player.scale.set(scale.x, scale.y, scale.z);
+
 	player.castShadow = true;
 	player.receiveShadow = true;
+
 	scene.add(player);
 
-
-	//Ammojs Section
-	var transform = new Ammo.btTransform();
+	let transform = new Ammo.btTransform();
 	transform.setIdentity();
 	transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
 	transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
-	var motionState = new Ammo.btDefaultMotionState( transform );
-	var colShape = new Ammo.btBoxShape( new Ammo.btVector3( scale.x * 0.5, scale.y * 0.5, scale.z * 0.5 ) );
+	let motionState = new Ammo.btDefaultMotionState( transform );
+
+	let colShape = new Ammo.btSphereShape( radius );
 	colShape.setMargin( 0.05 );
-	var localInertia = new Ammo.btVector3( 0, 0, 0 );
+
+	let localInertia = new Ammo.btVector3( 0, 0, 0 );
 	colShape.calculateLocalInertia( mass, localInertia );
-	var rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
-	var body = new Ammo.btRigidBody( rbInfo );
-	body.setFriction(1);
-	body.setRollingFriction(1000);
-	body.setActivationState( STATE.DISABLE_DEACTIVATION );
+
+	let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+	let body = new Ammo.btRigidBody( rbInfo );
+
+	body.setFriction(4);
+	body.setRollingFriction(10);
+
+
 	physicsWorld.addRigidBody( body );
+
 	player.userData.physicsBody = body;
 	rigidBodies.push(player);
 
@@ -150,12 +152,16 @@ function createPlayer(){
 
 function createGround(){
 	var pos = {x: 0, y: 0, z: 0};
-	var scale = {x: 100, y: 2, z: 100};
+	var scale = {x: 1000, y: 2, z: 1000};
 	var quat = {x: 0, y: 0, z: 0, w: 1};
 	var mass = 0;
 
 	//threeJS Section
-	var blockPlane = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({color: 0xa0afa4}));
+	var groundMaterial = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/TexturesCom_Grass0197_1_seamless_S.jpg')});
+	groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
+	groundMaterial.map.repeat.set( 8, 8 );
+	var blockPlane = new THREE.Mesh(new THREE.BoxBufferGeometry(), groundMaterial);
+
 	blockPlane.position.set(pos.x, pos.y, pos.z);
 	blockPlane.scale.set(scale.x, scale.y, scale.z);
 	blockPlane.castShadow = true;
@@ -192,6 +198,13 @@ function setupPhysicsWorld(){
 	physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
 }
 
+function showStats(){
+	//stats display
+	stats = new Stats();
+	stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+	document.body.appendChild( stats.dom );
+}
+
 function updatePhysics( deltaTime ){
 	// Step world
 	physicsWorld.stepSimulation( deltaTime, 10 );
@@ -211,48 +224,15 @@ function updatePhysics( deltaTime ){
 	}
 }
 
-function moveKinematic(){
-
-	var scalingFactor = 0.3;
-
-	var moveX =  playerMoveDirection.right - playerMoveDirection.left;
-	var moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
-	var moveY =  0;
-
-
-	var translateFactor = tmpPos.set(moveX, moveY, moveZ);
-
-	translateFactor.multiplyScalar(scalingFactor);
-
-	player.translateX(translateFactor.x);
-	player.translateY(translateFactor.y);
-	player.translateZ(translateFactor.z);
-
-	player.getWorldPosition(tmpPos);
-	player.getWorldQuaternion(tmpQuat);
-
-	var physicsBody = player.userData.physicsBody;
-
-	var ms = physicsBody.getMotionState();
-	if ( ms ) {
-
-		ammoTmpPos.setValue(tmpPos.x, tmpPos.y, tmpPos.z);
-		ammoTmpQuat.setValue( tmpQuat.x, tmpQuat.y, tmpQuat.z, tmpQuat.w);
-
-
-		tmpTrans.setIdentity();
-		tmpTrans.setOrigin( ammoTmpPos );
-		tmpTrans.setRotation( ammoTmpQuat );
-
-		ms.setWorldTransform(tmpTrans);
-
-	}
-
+function updateCamera(){
+	camera.position.x = player.position.x;
+	camera.position.y = player.position.y;
+	camera.position.z = player.position.z;
 }
 
-function moveBall(){
+function movePlayer(){
 
-	let scalingFactor = 20;
+	let scalingFactor = 20; //move speed
 
 	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
 	let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
@@ -265,6 +245,23 @@ function moveBall(){
 
 	let physicsBody = player.userData.physicsBody;
 	physicsBody.setLinearVelocity ( resultantImpulse );
+}
+
+function playSounds(){
+	var listener = new THREE.AudioListener();
+	camera.add( listener );
+
+	// create a global audio source
+	sound = new THREE.Audio( listener );
+
+	// load a sound and set it as the Audio object's buffer
+	var audioLoader = new THREE.AudioLoader();
+	audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3', function( buffer ) {
+		sound.setBuffer( buffer );
+		sound.setLoop( true );
+		sound.setVolume( 0.25 );
+	});
+
 
 }
 
@@ -272,6 +269,9 @@ function moveBall(){
 function renderFrame(){
 	var deltaTime = clock.getDelta();
 	updatePhysics( deltaTime );
+
+
+	stats.update();
 
 	requestAnimationFrame( renderFrame );
 
@@ -298,6 +298,7 @@ function renderFrame(){
 			}
 		}else{
 			moveSpeed = 400;
+
 		}
 
 		if ( moveLeft || moveRight ){
@@ -318,8 +319,10 @@ function renderFrame(){
 	}
 
 	//moveKinematic();
-	moveBall();
-    
+
+	movePlayer();
+	updateCamera();
+  
 	renderer.render( scene, camera );
 }
 //
