@@ -83,3 +83,12 @@ Possible Solution: Change directional movement based on the angular change of th
 
 
 
+Jan/28/2020
+Ryan Slaybaugh:
+Commit 5:
+
+  Added a new torus object to be used for future starting platform. Also attempted to add objects to scene after render, but currently
+does not work. Will test further for a solution. Also updated the index.html file, adding <script src="./game/main.js"></script>, in
+order for the program to register the gamestage.js file.
+
+
