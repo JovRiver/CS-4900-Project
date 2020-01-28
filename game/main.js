@@ -4,6 +4,7 @@ var player = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 
 var ammoTmpPos = null, ammoTmpQuat = null;
 
 var objects = [];
+var codeFinished = false;
 var moveForward = false;
 var moveBackward = false;
 var moveLeft = false;
@@ -32,7 +33,9 @@ function start (){
 	setupGraphics();
 	playSounds();
 	createGround();
-	createObstacles(); // Added for player movement testing
+    //createGameStage(); //function call from gamestage.js file / creates level objects / rs
+    createTestGround(); //function call to create test ground
+    createStartPoint(); //function call to create a torus
 	createPlayer();
 	setupControls();
 	setupEventHandlers();
@@ -65,7 +68,6 @@ function setupGraphics(){
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
 	camera.position.y = 2;
 	camera.position.z = 10;
-
 
 	//create raycaster
 	raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
@@ -105,8 +107,6 @@ function setupGraphics(){
 
 	renderer.shadowMap.enabled = true;
 }
-
-
 
 function createPlayer(){
 	//var pos = {x: 0, y: 2, z: 3};
@@ -265,12 +265,13 @@ function playSounds(){
 
 }
 
+
 function renderFrame(){
 	var deltaTime = clock.getDelta();
 	updatePhysics( deltaTime );
 
-	stats.update();
 
+	stats.update();
 
 	requestAnimationFrame( renderFrame );
 
@@ -318,8 +319,10 @@ function renderFrame(){
 	}
 
 	//moveKinematic();
+
 	movePlayer();
 	updateCamera();
+  
 	renderer.render( scene, camera );
 }
 //
@@ -422,4 +425,5 @@ function onKeyUp( event ) {
 
 	}
 }
+
 //
