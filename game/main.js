@@ -34,7 +34,32 @@ function start (){
 	setupControls();
 	setupEventHandlers();
 	showStats();
-	renderFrame();
+	loaders();
+	//renderFrame();
+}
+
+function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
+
+	//enemy models
+	var catLoader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
+	catLoader.load(
+		"objects/catGun.obj",
+		function(obj){//onLoad, obj is an Object3D provided by load()
+			obj.name = "Enemy";
+			obj.position.set(10, 12.5, 5);//moves the mesh
+			//obj.scale.set(5000, 5000, 5000);//too big
+			//obj.add(new THREE.MeshLambertMaterial({color:0xffffff}));//add materials and textures by blender
+			scene.add(obj);
+
+			renderFrame();//stars the loop once the models are loaded
+		},
+		function(xhr){//onProgress
+			console.log("loading...");
+		},
+		function(err){//onError
+			console.log("error in loading enemy model");
+		}
+	);
 }
 
 function setupControls(){
