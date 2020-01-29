@@ -92,3 +92,14 @@ does not work. Will test further for a solution. Also updated the index.html fil
 order for the program to register the gamestage.js file.
 
 
+1/29/2020
+Semira Pinder:
+Commit 1:
+
+I added a loader for the models that we will use later in the game.
+
+1/29/2020
+Semira Pinder
+Commit 2:
+Added a loading percentage in the middle center of the screen while it loads a model. After it hits 100%,
+it clears the message.
