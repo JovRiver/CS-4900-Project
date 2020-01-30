@@ -113,3 +113,6 @@ before the model(s) are loaded in. Also added text for the loader if it runs int
 Commit 4:
 Added texture paint to the catGun.obj model by selecting all the verticies in the UV Editing, right-clicking the left screen and pressing unwrap. Then I could draw and edit on 
 it with the tab Texture Paint.
+
+Commit 5:
+Added texture loader to the main javascript program for the catGun.obj model. Also changes the position of the model in the game so the changes are easier to see.
