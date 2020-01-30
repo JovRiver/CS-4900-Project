@@ -25,16 +25,55 @@ function start (){
 
 	setupPhysicsWorld();
 	setupGraphics();
-	playSounds();
+	loaders();
 	createGround();
     //createGameStage(); //function call from gamestage.js file / creates level objects / rs
     createTestGround(); //function call to create test ground
     createStartPoint(); //function call to create a torus
 	createPlayer();
-	setupControls();
+	//setupControls(); moved to loaders()
 	setupEventHandlers();
 	showStats();
-	renderFrame();
+	//renderFrame(); moved to loaders()
+}
+
+function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
+	let loadBar = document.getElementById( 'load');
+
+	//enemy models
+	let catLoader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
+	catLoader.load(
+		"objects/catGun.obj",
+		function(obj) {//onLoad, obj is an Object3D provided by load()
+		    let tex = new THREE.TextureLoader().load("objects/catGun.png");//possibly 2 quick?
+//https://stackoverflow.com/questions/33809423/how-to-apply-texture-on-an-object-loaded-by-objloader
+            obj.traverse(function (child) {
+                if (child instanceof THREE.Mesh)
+                    child.material.map = tex;
+            });
+
+			obj.name = "Enemy";
+			obj.position.set(5, 12.5, -14);//moves the mesh
+            obj.rotateX(.3);
+            obj.rotateY(-.8);
+            obj.rotateZ(.4);
+			scene.add(obj);
+			loadBar.innerHTML = "";
+			setupControls();//game can start with a click after external files are loaded in
+			renderFrame();//stars the loop once the models are loaded
+		},
+		function(xhr){//onProgress
+			loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+				loadSounds(loadBar);
+			}
+
+		},
+		function(err){//onError
+			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			console.log("error in loading enemy model");
+		}
+	);
 }
 
 function setupControls(){
@@ -242,7 +281,7 @@ function movePlayer(){
 	physicsBody.setLinearVelocity ( resultantImpulse );
 }
 
-function playSounds(){
+function loadSounds(loadBar){
 	let listener = new THREE.AudioListener();
 	camera.add( listener );
 
@@ -251,11 +290,24 @@ function playSounds(){
 
 	// load a sound and set it as the Audio object's buffer
 	let audioLoader = new THREE.AudioLoader();
-	audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3', function( buffer ) {
-		sound.setBuffer( buffer );
-		sound.setLoop( true );
-		sound.setVolume( 0.25 );
-	});
+	audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
+		function( buffer ) {
+			sound.setBuffer( buffer );
+			sound.setLoop( true );
+			sound.setVolume( 0.25 );
+		},
+		function(xhr){//onProgress
+			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+				document.getElementById("load").style.display = "none";
+
+			}
+		},
+		function(err){//onError
+			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			console.log("error in loading enemy model");
+		}
+	);
 
 
 }
@@ -326,7 +378,6 @@ function renderFrame(){
 
 		prevTime = time;
 	}
-
 
 	movePlayer();
 	updateCamera();
