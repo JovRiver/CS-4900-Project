@@ -113,3 +113,13 @@ before the model(s) are loaded in. Also added text for the loader if it runs int
 Commit 4:
 Added texture paint to the catGun.obj model by selecting all the verticies in the UV Editing, right-clicking the left screen and pressing unwrap. Then I could draw and edit on 
 it with the tab Texture Paint.
+
+Jan/30/2020
+Michael Hayes
+Commit 07fc44ad710f667dcbffd45ef086d9168b767963 AND bf11da97e08fe664c3a03d9d3c29ab961f0ef57f
+
+Added code so that different types of objects have their own loader. Each loader is tied to one another to load specific fragments
+of the game. That way we can see what exactly has an issue loading and give a more interesting loading screen to look at. Edited CSS 
+to include features to hide loading text when done loading and to hide instructions when loading.
+Known issues: When loading screen does not properly resize and has scrollbars.
+Possible Solution: Edit CSS to format the load ID to fit and resize into the screen.
