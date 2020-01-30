@@ -44,9 +44,19 @@ function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
 	let catLoader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
 	catLoader.load(
 		"objects/catGun.obj",
-		function(obj){//onLoad, obj is an Object3D provided by load()
+		function(obj) {//onLoad, obj is an Object3D provided by load()
+		    let tex = new THREE.TextureLoader().load("objects/catGun.png");//possibly 2 quick?
+//https://stackoverflow.com/questions/33809423/how-to-apply-texture-on-an-object-loaded-by-objloader
+            obj.traverse(function (child) {
+                if (child instanceof THREE.Mesh)
+                    child.material.map = tex;
+            });
+
 			obj.name = "Enemy";
-			obj.position.set(10, 12.5, 5);//moves the mesh
+			obj.position.set(5, 12.5, -14);//moves the mesh
+            obj.rotateX(.3);
+            obj.rotateY(-.8);
+            obj.rotateZ(.4);
 			scene.add(obj);
 			loadBar.innerHTML = "";
 			setupControls();//game can start with a click after external files are loaded in
