@@ -179,6 +179,7 @@ function createPlayer(){
 	physicsWorld.addRigidBody( body );
 
 	player.userData.physicsBody = body;
+
 	rigidBodies.push(player);
 
 }
@@ -402,38 +403,26 @@ function onKeyDown (event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
 			moveForward = true;
+			playerMoveDirection.forward = 1;
 			break;
 
 		case 65: // a
 			moveLeft = true;
+			playerMoveDirection.left = 1;
 			break;
 
 		case 83: // s
 			moveBackward = true;
+			playerMoveDirection.back = 1;
 			break;
 
 		case 68: // d
 			moveRight = true;
-			break;
-
-		case 38: // up
-			playerMoveDirection.forward = 1;
-			break;
-
-		case 37: // left
-			playerMoveDirection.left = 1;
-			break;
-
-		case 40: // down
-			playerMoveDirection.back = 1;
-			break;
-
-		case 39: // right
 			playerMoveDirection.right = 1;
 			break;
 
 		case 32: // space
-			let resultantImpulse = new Ammo.btVector3( 0, 10, 0 );
+			let resultantImpulse = new Ammo.btVector3( 0, 5, 0 );
 			resultantImpulse.op_mul(2);
 			let physicsBody = player.userData.physicsBody;
 			physicsBody.applyImpulse( resultantImpulse );
@@ -449,33 +438,22 @@ function onKeyUp( event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
 			moveForward = false;
+			playerMoveDirection.forward = 0;
+
 			break;
 
 		case 65: // a
 			moveLeft = false;
+			playerMoveDirection.left = 0;
 			break;
 
 		case 83: // s
 			moveBackward = false;
+			playerMoveDirection.back = 0;
 			break;
 
 		case 68: // d
 			moveRight = false;
-			break;
-
-		case 38: // up
-			playerMoveDirection.forward = 0;
-			break;
-
-		case 37: // left
-			playerMoveDirection.left = 0;
-			break;
-
-		case 40: // down
-			playerMoveDirection.back = 0;
-			break;
-
-		case 39: // right
 			playerMoveDirection.right = 0;
 			break;
 
