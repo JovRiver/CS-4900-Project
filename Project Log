@@ -81,7 +81,14 @@ as to keep the physics of the player object. Following the player object with th
 Known issues: Currently the camera is stationary and cannot be moved with pointerlock controls.
 Possible Solution: Change directional movement based on the angular change of the camera with pointerlock controls.
 
+Jan/28/2020
+Michael Hayes
+Commit 37d9d26a6a245db2e9121215c95a96b47c0f8686
 
+Added a jump feature to player movement.
+Known issues: Jump needs to be disabled when in air and so does movement.
+Possible Solution: Use collision handler to determine when the player is on the ground or object to enable jump, and disable jump 
+after pressing jump key. Disable movement while player does not have any collisions.
 
 Jan/28/2020
 Ryan Slaybaugh:
@@ -91,4 +98,11 @@ Commit 5:
 does not work. Will test further for a solution. Also updated the index.html file, adding <script src="./game/main.js"></script>, in
 order for the program to register the gamestage.js file.
 
+Jan/30/2020
+Michael Hayes
+Commit 37d9d26a6a245db2e9121215c95a96b47c0f8686
 
+Changed movement keys from arrows to wasd and edited jump height.
+Known issues: Jump needs to be disabled when in air and so does movement.
+Possible Solution: Use collision handler to determine when the player is on the ground or object to enable jump, and disable jump 
+after pressing jump key. Disable movement while player does not have any collisions.
