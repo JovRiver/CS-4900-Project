@@ -31,11 +31,11 @@ function start (){
     createTestGround(); //function call to create test ground
     createStartPoint(); //function call to create a torus
 	createPlayer();
-	setupControls();
+	//setupControls(); moved to loaders()
 	setupEventHandlers();
 	showStats();
 	loaders();
-	//renderFrame();
+	//renderFrame(); moved to loaders()
 }
 
 function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
@@ -50,13 +50,14 @@ function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
 			obj.position.set(10, 12.5, 5);//moves the mesh
 			scene.add(obj);
 			loadBar.innerHTML = "";
+			setupControls();//game can start with a click after external files are loaded in
 			renderFrame();//stars the loop once the models are loaded
 		},
 		function(xhr){//onProgress
-			//console.log((xhr.loaded / xhr.total * 100) + "% has loaded so far...");
 			loadBar.innerHTML = "<h2>" + (xhr.loaded / xhr.total * 100) + "% has loaded so far...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 		},
 		function(err){//onError
+			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			console.log("error in loading enemy model");
 		}
 	);

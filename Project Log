@@ -95,11 +95,17 @@ order for the program to register the gamestage.js file.
 1/29/2020
 Semira Pinder:
 Commit 1:
-
-I added a loader for the models that we will use later in the game.
+I added a loader for the models that we will use later in the game, and I added an enemy model to test it (The model's incomplete,
+though.
 
 1/29/2020
 Semira Pinder
 Commit 2:
 Added a loading percentage in the middle center of the screen while it loads a model. After it hits 100%,
 it clears the message.
+
+1/29/2020
+Semira Pinder
+Commit 3:
+Prevented the event listeners for starting the game from being added before the model(s) are loaded in, so the game doesn't start
+before the model(s) are loaded in. Also added text for the loader if it runs into an error.
