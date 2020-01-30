@@ -25,7 +25,7 @@ function start (){
 
 	setupPhysicsWorld();
 	setupGraphics();
-	playSounds();
+	loaders();
 	createGround();
     //createGameStage(); //function call from gamestage.js file / creates level objects / rs
     createTestGround(); //function call to create test ground
@@ -34,12 +34,11 @@ function start (){
 	//setupControls(); moved to loaders()
 	setupEventHandlers();
 	showStats();
-	loaders();
 	//renderFrame(); moved to loaders()
 }
 
 function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
-	let loadBar = document.getElementById( 'loaD');
+	let loadBar = document.getElementById( 'load');
 
 	//enemy models
 	let catLoader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
@@ -54,7 +53,11 @@ function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
 			renderFrame();//stars the loop once the models are loaded
 		},
 		function(xhr){//onProgress
-			loadBar.innerHTML = "<h2>" + (xhr.loaded / xhr.total * 100) + "% has loaded so far...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+				loadSounds(loadBar);
+			}
+
 		},
 		function(err){//onError
 			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
@@ -267,7 +270,7 @@ function movePlayer(){
 	physicsBody.setLinearVelocity ( resultantImpulse );
 }
 
-function playSounds(){
+function loadSounds(loadBar){
 	let listener = new THREE.AudioListener();
 	camera.add( listener );
 
@@ -276,11 +279,24 @@ function playSounds(){
 
 	// load a sound and set it as the Audio object's buffer
 	let audioLoader = new THREE.AudioLoader();
-	audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3', function( buffer ) {
-		sound.setBuffer( buffer );
-		sound.setLoop( true );
-		sound.setVolume( 0.25 );
-	});
+	audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
+		function( buffer ) {
+			sound.setBuffer( buffer );
+			sound.setLoop( true );
+			sound.setVolume( 0.25 );
+		},
+		function(xhr){//onProgress
+			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+				document.getElementById("load").style.display = "none";
+
+			}
+		},
+		function(err){//onError
+			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			console.log("error in loading enemy model");
+		}
+	);
 
 
 }
