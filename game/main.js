@@ -59,8 +59,6 @@ function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
             obj.rotateZ(.4);
 			scene.add(obj);
 			loadBar.innerHTML = "";
-			setupControls();//game can start with a click after external files are loaded in
-			renderFrame();//stars the loop once the models are loaded
 		},
 		function(xhr){//onProgress
 			loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
@@ -132,7 +130,7 @@ function setupGraphics(){
 	dirLight.shadow.camera.far = 13500;
 
 	//Setup the renderer
-	renderer = new THREE.WebGLRenderer( { antialias: true } );
+	renderer = new THREE.WebGLRenderer( { antialias: false } );
 	renderer.setClearColor( 0xbfd1e5 );
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
@@ -295,6 +293,8 @@ function loadSounds(loadBar){
 			sound.setBuffer( buffer );
 			sound.setLoop( true );
 			sound.setVolume( 0.25 );
+			setupControls();//game can start with a click after external files are loaded in
+			renderFrame();//stars the loop once the models are loaded
 		},
 		function(xhr){//onProgress
 			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.

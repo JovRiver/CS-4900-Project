@@ -97,8 +97,8 @@ function createTestGround() {
         
         //ledge1 creation
         var ledge1 = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({ color: 0xa0afa4 }));
-            ledge1.position.set(ledge1Pos.x, ledge1Pos.y, ledge1Pos.z);
-            ledge1.scale.set(ledgeScale.x, ledgeScale.y, ledgeScale.z);
+            ledge1.position.set(ledge1Pos.x, ledge1Pos.y, ledge1Pos.z-40);
+            ledge1.scale.set(ledgeScale.x, ledgeScale.y, 100);
             ledge1.castShadow = true;
             ledge1.receiveShadow = true;
 
@@ -107,10 +107,10 @@ function createTestGround() {
         //ledge1 transform
         var ledge1Transform = new Ammo.btTransform();
             ledge1Transform.setIdentity();
-            ledge1Transform.setOrigin( new Ammo.btVector3( ledge1Pos.x, ledge1Pos.y, ledge1Pos.z ) );
+            ledge1Transform.setOrigin( new Ammo.btVector3( ledge1Pos.x, ledge1Pos.y, ledge1Pos.z-40 ) );
             ledge1Transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
         var ledge1MotionState = new Ammo.btDefaultMotionState( ledge1Transform );
-        var ledge1ColShape = new Ammo.btBoxShape( new Ammo.btVector3( ledgeScale.x * 0.5, ledgeScale.y * 0.5, ledgeScale.z * 0.5 ) );
+        var ledge1ColShape = new Ammo.btBoxShape( new Ammo.btVector3( ledgeScale.x * 0.5, ledgeScale.y * 0.5, 100 * 0.5 ) );
             ledge1ColShape.setMargin( 0.05 );
         var ledge1LocalInertia = new Ammo.btVector3( 0, 0, 0 );
             ledge1ColShape.calculateLocalInertia( mass, ledge1LocalInertia );
