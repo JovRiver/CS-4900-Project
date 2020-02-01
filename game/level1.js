@@ -14,7 +14,7 @@ function createLevel1() {
 
     function createGround() {
 
-        let groundMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/city_Ground_1.jpg')});
+        let groundMaterial = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/city_Ground_1.jpg')});
             groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
             groundMaterial.map.repeat.set(100, 100);
         let ground = new THREE.Mesh(new THREE.BoxBufferGeometry(), groundMaterial);
@@ -31,7 +31,7 @@ function createLevel1() {
         var mass = 0;
 
         //create base of starter platform
-        let base_Texture = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
+        let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
             base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
         let startPlatformBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
             startPlatformBox.position.set(0, 25, 0);
@@ -90,17 +90,17 @@ function createLevel1() {
 
             var t = Math.random() * 4;
             if (t > 3) {
-                var material = new THREE.MeshBasicMaterial({map :new THREE.TextureLoader().load('texture/building_Type_1.jpg')});
+                var material = new THREE.MeshLambertMaterial({map :new THREE.TextureLoader().load('texture/building_Type_1.jpg')});
                 material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
                 material.map.repeat.set(5, 5);
             }
             else if (t > 1) {
-                var material = new THREE.MeshBasicMaterial({map :new THREE.TextureLoader().load('texture/building_Type_2.jpg')});
+                var material = new THREE.MeshLambertMaterial({map :new THREE.TextureLoader().load('texture/building_Type_2.jpg')});
                 material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
                 material.map.repeat.set(5, 5);
             }
             else {
-                var material = new THREE.MeshBasicMaterial({map :new THREE.TextureLoader().load('texture/building_Type_3.jpg')});
+                var material = new THREE.MeshLambertMaterial({map :new THREE.TextureLoader().load('texture/building_Type_3.jpg')});
                 material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
                 material.map.repeat.set(5, 5);
             }
