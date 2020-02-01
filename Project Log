@@ -158,5 +158,13 @@ Jan/31/2020
 Ryan Slaybaugh:
 Commit 7:
 
-  Added skybox to level 1.
+  Added createSkyBox() function to level1.js to create a sky box. I found a cubemap online for free to use as a place holder
+until we decide on an official skybox.
+
+Jan/31/2020
+Ryan Slaybaugh:
+Commit 8:
+
+  Added createCityScape() function to level1.js to randomly generate a city for player movement testing. Level design will be put on hold while
+I begin work on a start menu for our game.
 
