@@ -152,3 +152,11 @@ Commit 6:
 
   Removed initial testing area to begin work on level creation. Created a large platform as the base with a simple texture and
 a lone building to start the player out on. Also implemented textures for the building though they are not final.
+
+
+Jan/31/2020
+Ryan Slaybaugh:
+Commit 7:
+
+  Added skybox to level 1.
+
