@@ -31,17 +31,9 @@ function createLevel1() {
         var mass = 0;
 
         //create base of starter platform
-        let base_Texture = [
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')}), //right
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')}), //left
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Rooftop_1.jpg')}), //up
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')}), //down
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')}), //back
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')}) //front
-        ];
-
-        let base_Material = new THREE.MeshFaceMaterial(base_Texture);
-        let startPlatformBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Material);
+        let base_Texture = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
+            base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
+        let startPlatformBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
             startPlatformBox.position.set(0, 25, 0);
             startPlatformBox.scale.set(25, 50, 25);
             startPlatformBox.receiveShadow = true;
@@ -71,7 +63,78 @@ function createLevel1() {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
+    function createCityScape() {
+        let static_Buildings = [];
+
+        for (var i = 50; i < 100; i++) {
+
+            if (Math.random() * 11 > 5) {
+                var j = -1;
+            }
+            else
+                var j = 1;
+
+            if (Math.random() * 11 > 5)
+                var k = -1;
+            else
+                var k = 1;
+
+            var posX = j * Math.random() * i * 5 / 2;
+            var posZ = k * Math.random() * i * 5 / 2;
+
+            var scaleX = Math.random() * 25 + 10;
+            var sclaeZ = Math.random() * 25 + 10;
+
+            var height = Math.random() * 50 + 20;
+            var mass = 0;
+
+            var t = Math.random() * 4;
+            if (t > 3) {
+                var material = new THREE.MeshBasicMaterial({map :new THREE.TextureLoader().load('texture/building_Type_1.jpg')});
+                material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
+                material.map.repeat.set(5, 5);
+            }
+            else if (t > 1) {
+                var material = new THREE.MeshBasicMaterial({map :new THREE.TextureLoader().load('texture/building_Type_2.jpg')});
+                material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
+                material.map.repeat.set(5, 5);
+            }
+            else {
+                var material = new THREE.MeshBasicMaterial({map :new THREE.TextureLoader().load('texture/building_Type_3.jpg')});
+                material.map.wrapS = material.map.wrapT = THREE.RepeatWrapping;
+                material.map.repeat.set(5, 5);
+            }
+
+            let building = new THREE.Mesh(new THREE.BoxBufferGeometry(), material);
+                building.position.set(posX, height / 2, posZ);
+                building.scale.set(scaleX, height, sclaeZ);
+                building.castShadow = true;
+                building.receiveShadow = true;
+
+            var starterBoxTransform = new Ammo.btTransform();
+                starterBoxTransform.setIdentity();
+                starterBoxTransform.setOrigin(new Ammo.btVector3(posX, height / 2, posZ));
+                starterBoxTransform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
+            var starterBoxMotionState = new Ammo.btDefaultMotionState(starterBoxTransform);
+            var starterBoxColShape = new Ammo.btBoxShape(new Ammo.btVector3(scaleX * 0.5 + 1, height * 0.5 + 1, sclaeZ * 0.5 + 1));
+                starterBoxColShape.setMargin(0.05);
+            var starterBoxLocalInertia = new Ammo.btVector3(0, 0, 0);
+                starterBoxColShape.calculateLocalInertia(mass, starterBoxLocalInertia);
+            var starterBoxRbInfo = new Ammo.btRigidBodyConstructionInfo(mass, starterBoxMotionState, starterBoxColShape, starterBoxLocalInertia);
+            var starterBoxBody = new Ammo.btRigidBody(starterBoxRbInfo);
+                starterBoxBody.setFriction(4);
+                starterBoxBody.setRollingFriction(10);
+                physicsWorld.addRigidBody(starterBoxBody);
+
+            static_Buildings.push(building);
+        }
+        for (x in static_Buildings) {
+            scene.add(static_Buildings[x]);
+        }
+    }
+
     createSkyBox();
     createGround();
     createStartPlatform();
+    createCityScape();
 }
