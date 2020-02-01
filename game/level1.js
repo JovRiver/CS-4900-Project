@@ -2,7 +2,7 @@ function createLevel1() {
     
     function createGround() {
 
-        let groundMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('textures/city_Ground_1.jpg')});
+        let groundMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/city_Ground_1.jpg')});
             groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
             groundMaterial.map.repeat.set(100, 100);
         let ground = new THREE.Mesh(new THREE.BoxBufferGeometry(), groundMaterial);
@@ -20,12 +20,12 @@ function createLevel1() {
 
         //create base of starter platform
         let base_Texture = [
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('textures/building_Type_3.jpg')}), //right
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('textures/building_Type_3.jpg')}), //left
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('textures/building_Rooftop_1.jpg')}), //up
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('textures/building_Type_3.jpg')}), //down
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('textures/building_Type_3.jpg')}), //back
-            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('textures/building_Type_3.jpg')}) //front
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')}), //right
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')}), //left
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Rooftop_1.jpg')}), //up
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')}), //down
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')}), //back
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')}) //front
         ];
 
         let base_Material = new THREE.MeshFaceMaterial(base_Texture);
