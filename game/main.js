@@ -26,10 +26,9 @@ function start (){
 	setupPhysicsWorld();
 	setupGraphics();
 	loaders();
-	createGround();
-    //createGameStage(); //function call from gamestage.js file / creates level objects / rs
-    createTestGround(); //function call to create test ground
-    createStartPoint(); //function call to create a torus
+
+	createLevel1(); //creates level 1
+
 	createPlayer();
 	//setupControls(); moved to loaders()
 	setupEventHandlers();
@@ -96,7 +95,7 @@ function setupGraphics(){
 	scene.background = new THREE.Color( 0xbfd1e5 );
 
 	//create camera
-	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 5000 );
 	camera.position.y = 2;
 	camera.position.z = 10;
 
@@ -141,8 +140,8 @@ function setupGraphics(){
 
 function createPlayer(){
 	//var pos = {x: 0, y: 2, z: 3};
-	let pos = {x: 20, y: 30, z: 0};
-	let radius = 2;
+	let pos = {x: 0, y: 65, z: 0};
+	let radius = 1;
 	let quat = {x: 0 , y: 0, z: 0, w: 1};
 	let mass = 1;
 
@@ -182,41 +181,6 @@ function createPlayer(){
 
 }
 
-function createGround(){
-	let pos = {x: 0, y: 0, z: 0};
-	let scale = {x: 1000, y: 2, z: 1000};
-	let quat = {x: 0, y: 0, z: 0, w: 1};
-	let mass = 0;
-
-	//threeJS Section
-	let groundMaterial = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/TexturesCom_Grass0197_1_seamless_S.jpg')});
-	groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
-	groundMaterial.map.repeat.set( 8, 8 );
-	let blockPlane = new THREE.Mesh(new THREE.BoxBufferGeometry(), groundMaterial);
-
-	blockPlane.position.set(pos.x, pos.y, pos.z);
-	blockPlane.scale.set(scale.x, scale.y, scale.z);
-	blockPlane.castShadow = true;
-	blockPlane.receiveShadow = true;
-	scene.add(blockPlane);
-
-
-	//Ammojs Section
-	let transform = new Ammo.btTransform();
-	transform.setIdentity();
-	transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
-	transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
-	let motionState = new Ammo.btDefaultMotionState( transform );
-	let colShape = new Ammo.btBoxShape( new Ammo.btVector3( scale.x * 0.5, scale.y * 0.5, scale.z * 0.5 ) );
-	colShape.setMargin( 0.05 );
-	let localInertia = new Ammo.btVector3( 0, 0, 0 );
-	colShape.calculateLocalInertia( mass, localInertia );
-	let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
-	let body = new Ammo.btRigidBody( rbInfo );
-	body.setFriction(4);
-	body.setRollingFriction(10);
-	physicsWorld.addRigidBody( body );
-}
 //
 
 //System
@@ -463,5 +427,3 @@ function onKeyUp( event ) {
 
 	}
 }
-
-//
