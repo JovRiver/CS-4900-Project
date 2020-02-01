@@ -1,5 +1,17 @@
 function createLevel1() {
     
+    function createSkyBox() {
+    scene.background = new THREE.CubeTextureLoader().setPath( 'texture/skybox/' ).load(
+        [
+		    'bluecloud_right.jpg',
+		    'bluecloud_left.jpg',
+		    'bluecloud_up.jpg',
+		    'bluecloud_down.jpg',
+		    'bluecloud_back.jpg',
+		    'bluecloud_front.jpg'
+	    ]);
+    }
+
     function createGround() {
 
         let groundMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/city_Ground_1.jpg')});
@@ -59,6 +71,7 @@ function createLevel1() {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
+    createSkyBox();
     createGround();
     createStartPlatform();
 }

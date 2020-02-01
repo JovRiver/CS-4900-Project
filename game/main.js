@@ -181,8 +181,6 @@ function createPlayer(){
 
 }
 
-//
-
 //System
 function setupPhysicsWorld(){
 	let collisionConfiguration  = new Ammo.btDefaultCollisionConfiguration(),
@@ -348,7 +346,6 @@ function renderFrame(){
   
 	renderer.render( scene, camera );
 }
-//
 
 //handlers
 function setupEventHandlers(){
