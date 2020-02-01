@@ -81,7 +81,14 @@ as to keep the physics of the player object. Following the player object with th
 Known issues: Currently the camera is stationary and cannot be moved with pointerlock controls.
 Possible Solution: Change directional movement based on the angular change of the camera with pointerlock controls.
 
+Jan/28/2020
+Michael Hayes
+Commit 37d9d26a6a245db2e9121215c95a96b47c0f8686
 
+Added a jump feature to player movement.
+Known issues: Jump needs to be disabled when in air and so does movement.
+Possible Solution: Use collision handler to determine when the player is on the ground or object to enable jump, and disable jump 
+after pressing jump key. Disable movement while player does not have any collisions.
 
 Jan/28/2020
 Ryan Slaybaugh:
@@ -91,4 +98,49 @@ Commit 5:
 does not work. Will test further for a solution. Also updated the index.html file, adding <script src="./game/main.js"></script>, in
 order for the program to register the gamestage.js file.
 
+1/29/2020
+Semira Pinder:
+Commit 1:
+I added a loader for the models that we will use later in the game, and I added an enemy model to test it (The model's incomplete,
+though.
 
+1/29/2020
+Semira Pinder
+Commit 2:
+Added a loading percentage in the middle center of the screen while it loads a model. After it hits 100%,
+it clears the message.
+
+1/29/2020
+Semira Pinder
+Commit 3:
+Prevented the event listeners for starting the game from being added before the model(s) are loaded in, so the game doesn't start
+before the model(s) are loaded in. Also added text for the loader if it runs into an error.
+
+1/30/20
+Semira Pinder
+Commit 4:
+Added texture paint to the catGun.obj model by selecting all the verticies in the UV Editing, right-clicking the left screen and pressing unwrap. Then I could draw and edit on 
+it with the tab Texture Paint.
+
+Jan/30/2020
+Michael Hayes
+Commit 07fc44ad710f667dcbffd45ef086d9168b767963 AND bf11da97e08fe664c3a03d9d3c29ab961f0ef57f
+
+Added code so that different types of objects have their own loader. Each loader is tied to one another to load specific fragments
+of the game. That way we can see what exactly has an issue loading and give a more interesting loading screen to look at. Edited CSS 
+to include features to hide loading text when done loading and to hide instructions when loading.
+Known issues: When loading screen does not properly resize and has scrollbars.
+Possible Solution: Edit CSS to format the load ID to fit and resize into the screen.
+
+1/30/20
+Semira Pinder
+Commit 5:
+Added texture loader to the main javascript program for the catGun.obj model. Also changes the position of the model in the game so the changes are easier to see.
+
+Jan/30/2020
+Michael Hayes
+Commit 37d9d26a6a245db2e9121215c95a96b47c0f8686
+Changed movement keys from arrows to wasd and edited jump height.
+Known issues: Jump needs to be disabled when in air and so does movement.
+Possible Solution: Use collision handler to determine when the player is on the ground or object to enable jump, and disable jump 
+after pressing jump key. Disable movement while player does not have any collisions.
