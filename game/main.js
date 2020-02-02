@@ -15,6 +15,8 @@ let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
 let color = new THREE.Color();
 
+let level1 = true;
+
 //Ammojs Initialization
 Ammo().then(start);
 
@@ -25,19 +27,172 @@ function start (){
 
 	setupPhysicsWorld();
 	setupGraphics();
-	loaders();
 
-	createLevel1(); //creates level 1
+	if (level1 === false) 
+		start_Menu_Loader();
+	else
+		load_Manager();
 
-	createPlayer();
-	//setupControls(); moved to loaders()
+	load_Manager();
+
+	//setupControls(); //moved to load_Manager() children functions
 	setupEventHandlers();
 	showStats();
-	//renderFrame(); moved to loaders()
+	//renderFrame(); //moved to load_Manager()
 }
 
-function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
-	let loadBar = document.getElementById( 'load');
+function start_Menu_Loader() {
+	document.getElementById("load").style.display = "none";
+	document.getElementById("blocker").style.display = "none";
+
+	start_Menu();
+	load_Manager();
+}
+
+function start_Menu() {
+	var loader = new THREE.FontLoader();
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
+
+			var textGeo = new THREE.TextBufferGeometry( "Grapple Game", {
+
+				font: font,
+
+				size: 10,
+				height: 10,
+				curveSegments: 12,
+
+				bevelThickness: 1,
+				bevelSize: .5,
+				bevelEnabled: true
+
+			} );
+
+				textGeo.computeBoundingBox();
+			var centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+
+			var textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+
+			var mesh = new THREE.Mesh( textGeo, textMaterial );
+				mesh.position.x = centerOffset;
+				mesh.position.y = 10;
+
+				scene.add( mesh );
+		} );
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
+
+			var textGeo = new THREE.TextBufferGeometry( "Select Level", {
+
+				font: font,
+
+				size: 5,
+				height: 5,
+				curveSegments: 12,
+
+				bevelThickness: .5,
+				bevelSize: .3,
+				bevelEnabled: true
+
+			} );
+
+				textGeo.computeBoundingBox();
+			var centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+
+			var textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+
+			var mesh = new THREE.Mesh( textGeo, textMaterial );
+				mesh.position.x = centerOffset;
+				mesh.position.y = -5;
+				mesh.rotation.x = THREE.Math.degToRad(-5);
+
+				scene.add( mesh );
+		} );
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
+
+			var textGeo = new THREE.TextBufferGeometry( "Options", {
+
+				font: font,
+
+				size: 5,
+				height: 5,
+				curveSegments: 12,
+
+				bevelThickness: .5,
+				bevelSize: .3,
+				bevelEnabled: true
+
+			} );
+
+				textGeo.computeBoundingBox();
+			var centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+
+			var textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+
+			var mesh = new THREE.Mesh( textGeo, textMaterial );
+				mesh.position.x = centerOffset;
+				mesh.position.y = -15;
+				mesh.rotation.x = THREE.Math.degToRad(-10);
+
+				scene.add( mesh );
+		} );
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
+
+			var textGeo = new THREE.TextBufferGeometry( "Exit Game", {
+
+				font: font,
+
+				size: 5,
+				height: 5,
+				curveSegments: 12,
+
+				bevelThickness: .5,
+				bevelSize: .3,
+				bevelEnabled: true
+
+			} );
+
+				textGeo.computeBoundingBox();
+			var centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+
+			var textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+
+			var mesh = new THREE.Mesh( textGeo, textMaterial );
+				mesh.position.x = centerOffset;
+				mesh.position.y = -25;
+				mesh.rotation.x = THREE.Math.degToRad(-15);
+
+				scene.add( mesh );
+		} );
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+function load_Manager() {
+
+	if (level1 === true) {
+		createLevel1();
+		createPlayer();
+		object_Loader();
+	}
+	
+	else {
+		renderFrame();
+	}
+}
+
+function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
+	let loadBar = document.getElementById('load');
 
 	//enemy models
 	let catLoader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
@@ -62,13 +217,43 @@ function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
 		function(xhr){//onProgress
 			loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-				loadSounds(loadBar);
+				sound_Loader(loadBar);
 			}
 
 		},
 		function(err){//onError
 			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			console.log("error in loading enemy model");
+		}
+	);
+}
+
+function sound_Loader(loadBar){
+	let listener = new THREE.AudioListener();
+	camera.add( listener );
+
+	// create a global audio source
+	sound = new THREE.Audio( listener );
+
+	// load a sound and set it as the Audio object's buffer
+	let audioLoader = new THREE.AudioLoader();
+	audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
+		function( buffer ) {
+			sound.setBuffer( buffer );
+			sound.setLoop( true );
+			sound.setVolume( 0.25 );
+		},
+		function(xhr){//onProgress
+			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+				document.getElementById("load").style.display = "none";
+				setupControls();//game can start with a click after external files are loaded in
+				renderFrame();//starts the loop once the models are loaded
+			}
+		},
+		function(err){//onError
+			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			console.log("error in loading sound");
 		}
 	);
 }
@@ -92,12 +277,13 @@ function setupGraphics(){
 
 	//create the scene
 	scene = new THREE.Scene();
-	scene.background = new THREE.Color( 0xbfd1e5 );
+	scene.background = new THREE.Color( 0xb0f0f0f );
 
 	//create camera
-	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 5000 );
-	camera.position.y = 2;
-	camera.position.z = 10;
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
+	camera.position.set(0,-10,50)
+	camera.lookAt(0,0,0);
+
 
 	//create raycaster
 	raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
@@ -241,46 +427,29 @@ function movePlayer(){
 	physicsBody.setLinearVelocity ( resultantImpulse );
 }
 
-function loadSounds(loadBar){
-	let listener = new THREE.AudioListener();
-	camera.add( listener );
-
-	// create a global audio source
-	sound = new THREE.Audio( listener );
-
-	// load a sound and set it as the Audio object's buffer
-	let audioLoader = new THREE.AudioLoader();
-	audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
-		function( buffer ) {
-			sound.setBuffer( buffer );
-			sound.setLoop( true );
-			sound.setVolume( 0.25 );
-			setupControls();//game can start with a click after external files are loaded in
-			renderFrame();//stars the loop once the models are loaded
-		},
-		function(xhr){//onProgress
-			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-				document.getElementById("load").style.display = "none";
-
-			}
-		},
-		function(err){//onError
-			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-			console.log("error in loading enemy model");
-		}
-	);
-
-
-}
-
-
 function renderFrame(){
 	let deltaTime = clock.getDelta();
-	updatePhysics( deltaTime );
 
+	if (level1 === true) {
+		updatePhysics( deltaTime );
+		stats.update();
 
-	stats.update();
+		if ( controls.isLocked === true ) {
+			raycaster.ray.origin.copy( controls.getObject().position );
+			raycaster.ray.origin.y -= 10;
+	
+			let intersections = raycaster.intersectObjects( objects );
+			let onObject = intersections.length > 0;
+			let time = performance.now();
+			let delta = ( time - prevTime ) / 1000;
+	
+	
+			prevTime = time;
+		}
+	
+		movePlayer();
+		updateCamera();
+	}
 
 	requestAnimationFrame( renderFrame );
 	/*
@@ -327,23 +496,6 @@ function renderFrame(){
 		prevTime = time;
 	}
 	*/
-
-	if ( controls.isLocked === true ) {
-		raycaster.ray.origin.copy( controls.getObject().position );
-		raycaster.ray.origin.y -= 10;
-
-		let intersections = raycaster.intersectObjects( objects );
-		let onObject = intersections.length > 0;
-		let time = performance.now();
-		let delta = ( time - prevTime ) / 1000;
-
-
-		prevTime = time;
-	}
-
-	movePlayer();
-	updateCamera();
-  
 	renderer.render( scene, camera );
 }
 
