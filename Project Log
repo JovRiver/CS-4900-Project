@@ -168,3 +168,17 @@ Commit 8:
   Added createCityScape() function to level1.js to randomly generate a city for player movement testing. Level design will be put on hold while
 I begin work on a start menu for our game.
 
+
+Feb/2/2020
+Ryan Slaybaugh:
+Commit 9:
+
+  Added new functions start_Menu() and start_Menu_Loader() to handle the start menu and I renamed the loaders() function to object_Loader(),
+and loadSounds() to sound_Loader(). I created a new function called load_Manager() to handle the separation of loaders. I also added code
+to the start_Menu() function to create a basic layout for the menu including a header called Grappling Game, a Select Level button, an Options
+button, and an Exit Game button. They do not have any raycasting or event handlers associated with them yet so for now they are just static
+objects.
+
+
+
+
