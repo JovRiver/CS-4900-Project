@@ -181,4 +181,10 @@ objects.
 
 
 
+Feb/2/2020
+Ryan Slaybaugh:
+Commit 10:
+
+  Added raycasting to highlight start menu elements. Currently working on click eventlistener for selecting the elements of the main menu.
+
 
