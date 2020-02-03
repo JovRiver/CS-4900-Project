@@ -180,11 +180,21 @@ button, and an Exit Game button. They do not have any raycasting or event handle
 objects.
 
 
-
 Feb/2/2020
 Ryan Slaybaugh:
 Commit 10:
 
   Added raycasting to highlight start menu elements. Currently working on click eventlistener for selecting the elements of the main menu.
+
+
+Feb/2/2020
+Ryan Slaybaugh:
+Commit 11:
+
+  Added the ability to select menu elements. I ran into trouble attempting to delete elements from the scene after selecting Select Level
+and will continue to work on a solution to the freeze. I have also worked to tidy up the code a bit, grouping relevant functions together
+with appropriate headers.
+
+
 
 
