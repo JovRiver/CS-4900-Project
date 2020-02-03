@@ -1,5 +1,5 @@
 //variable declaration section
-let physicsWorld, scene, camera, clock, stats, sound, controls, raycaster, renderer, rigidBodies = [], tmpTrans = null;
+let physicsWorld, scene, camera, clock, stats, sound, controls, renderer, rigidBodies = [], tmpTrans = null;
 let player = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
 
@@ -14,12 +14,23 @@ let velocity = new THREE.Vector3();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
 let color = new THREE.Color();
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2(), intersected_Object;
 
-let level1 = true;
+
+//Testing variables
+
+let level_1 = false;
+let rotate_Camera = false;
 
 //Ammojs Initialization
 Ammo().then(start);
 
+///////////////////////////////////////////////////////////////////////////////////////
+//	INITIALIZATION
+///////////////////////////////////////////////////////////////////////////////////////
+
+//Initialization
 function start (){
 	tmpTrans = new Ammo.btTransform();
 	ammoTmpPos = new Ammo.btVector3();
@@ -28,7 +39,7 @@ function start (){
 	setupPhysicsWorld();
 	setupGraphics();
 
-	if (level1 === false) 
+	if (level_1 === false) 
 		start_Menu_Loader();
 	else
 		load_Manager();
@@ -41,6 +52,11 @@ function start (){
 	//renderFrame(); //moved to load_Manager()
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+//	START MENU
+///////////////////////////////////////////////////////////////////////////////////////
+
+//Start Menu
 function start_Menu_Loader() {
 	document.getElementById("load").style.display = "none";
 	document.getElementById("blocker").style.display = "none";
@@ -79,6 +95,8 @@ function start_Menu() {
 				mesh.position.x = centerOffset;
 				mesh.position.y = 10;
 
+				mesh.name = "Grappling_Game";
+
 				scene.add( mesh );
 		} );
 
@@ -109,6 +127,8 @@ function start_Menu() {
 				mesh.position.x = centerOffset;
 				mesh.position.y = -5;
 				mesh.rotation.x = THREE.Math.degToRad(-5);
+
+				mesh.name = "Select_Level";
 
 				scene.add( mesh );
 		} );
@@ -141,6 +161,8 @@ function start_Menu() {
 				mesh.position.y = -15;
 				mesh.rotation.x = THREE.Math.degToRad(-10);
 
+				mesh.name = "Options";
+
 				scene.add( mesh );
 		} );
 
@@ -172,15 +194,58 @@ function start_Menu() {
 				mesh.position.y = -25;
 				mesh.rotation.x = THREE.Math.degToRad(-15);
 
+				mesh.name = "Exit Game";
+
 				scene.add( mesh );
 		} );
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
 
+function start_Menu_Interaction() {
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	if (level_1 === false) {
+
+		raycaster.setFromCamera( mouse, camera );
+	
+		var intersects = raycaster.intersectObjects(scene.children);
+	
+		if (intersects.length > 0) {
+			if (intersects[0].object.name === "Grappling_Game") {
+				intersected_Object = null;
+			}
+			else if (intersected_Object != intersects[0].object) {
+				if (intersected_Object)
+					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
+				
+				if (intersects[0].object.name === "Select_Level") {
+					
+				}
+	
+				intersected_Object = intersects[0].object;
+				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
+				intersected_Object.material.emissive.setHex(0x34abeb);
+			}
+		} 
+		else {
+			if (intersected_Object) 
+				intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
+	
+			intersected_Object = null;
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+//	LOADERS
+///////////////////////////////////////////////////////////////////////////////////////
+
+//Loaders
 function load_Manager() {
 
-	if (level1 === true) {
+	if (level_1 === true) {
 		createLevel1();
 		createPlayer();
 		object_Loader();
@@ -258,17 +323,9 @@ function sound_Loader(loadBar){
 	);
 }
 
-function setupControls(){
-	//create controls
-	controls = new THREE.PointerLockControls( camera, document.body );
-	let blocker = document.getElementById( 'blocker' );
-	let instructions = document.getElementById( 'instructions' );
-	instructions.addEventListener( 'click', function () {controls.lock();}, false );
-	controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();} );
-	controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = ''; sound.pause();} );
-	scene.add( controls.getObject() );
-
-}
+///////////////////////////////////////////////////////////////////////////////////////
+//GRAPHICS
+///////////////////////////////////////////////////////////////////////////////////////
 
 //Graphics
 function setupGraphics(){
@@ -286,7 +343,7 @@ function setupGraphics(){
 
 
 	//create raycaster
-	raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
+	//raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
 
 	//Add hemisphere light
 	let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
@@ -367,6 +424,10 @@ function createPlayer(){
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+//	SYSTEM
+///////////////////////////////////////////////////////////////////////////////////////
+
 //System
 function setupPhysicsWorld(){
 	let collisionConfiguration  = new Ammo.btDefaultCollisionConfiguration(),
@@ -427,10 +488,15 @@ function movePlayer(){
 	physicsBody.setLinearVelocity ( resultantImpulse );
 }
 
+var count;
 function renderFrame(){
 	let deltaTime = clock.getDelta();
 
-	if (level1 === true) {
+	if (level_1 === false) {
+		start_Menu_Interaction();
+	}
+
+	if (level_1 === true) {
 		updatePhysics( deltaTime );
 		stats.update();
 
@@ -499,11 +565,28 @@ function renderFrame(){
 	renderer.render( scene, camera );
 }
 
-//handlers
+///////////////////////////////////////////////////////////////////////////////////////
+//	EVENT HANDLERS / CONTROLLERS
+///////////////////////////////////////////////////////////////////////////////////////
+
+//Event Handlers / Controllers
 function setupEventHandlers(){
+	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'keydown', onKeyDown, false );
 	document.addEventListener( 'keyup', onKeyUp, false );
-	window.addEventListener( 'resize', onWindowResize, false );
+	window.addEventListener( 'mousemove', on_Mouse_Move, false );
+}
+
+function setupControls(){
+	//create controls
+	controls = new THREE.PointerLockControls( camera, document.body );
+	let blocker = document.getElementById( 'blocker' );
+	let instructions = document.getElementById( 'instructions' );
+	instructions.addEventListener( 'click', function () {controls.lock();}, false );
+	controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();} );
+	controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = ''; sound.pause();} );
+	scene.add( controls.getObject() );
+
 }
 
 function onWindowResize() {
@@ -575,4 +658,9 @@ function onKeyUp( event ) {
 			break;
 
 	}
+}
+
+function on_Mouse_Move(event) {
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
