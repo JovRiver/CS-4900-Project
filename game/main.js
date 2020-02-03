@@ -19,9 +19,9 @@ let mouse = new THREE.Vector2(), intersected_Object;
 
 
 //Testing variables
-
 let level_1 = false;
 let rotate_Camera = false;
+let start_Menu_Objects = [];
 
 //Ammojs Initialization
 Ammo().then(start);
@@ -30,7 +30,6 @@ Ammo().then(start);
 //	INITIALIZATION
 ///////////////////////////////////////////////////////////////////////////////////////
 
-//Initialization
 function start (){
 	tmpTrans = new Ammo.btTransform();
 	ammoTmpPos = new Ammo.btVector3();
@@ -44,8 +43,6 @@ function start (){
 	else
 		load_Manager();
 
-	load_Manager();
-
 	//setupControls(); //moved to load_Manager() children functions
 	setupEventHandlers();
 	showStats();
@@ -56,20 +53,11 @@ function start (){
 //	START MENU
 ///////////////////////////////////////////////////////////////////////////////////////
 
-//Start Menu
-function start_Menu_Loader() {
-	document.getElementById("load").style.display = "none";
-	document.getElementById("blocker").style.display = "none";
-
-	start_Menu();
-	load_Manager();
-}
-
 function start_Menu() {
 	var loader = new THREE.FontLoader();
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+		//	Grappling_Game
 		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
 
 			var textGeo = new THREE.TextBufferGeometry( "Grapple Game", {
@@ -97,11 +85,12 @@ function start_Menu() {
 
 				mesh.name = "Grappling_Game";
 
+				start_Menu_Objects.push(mesh);
 				scene.add( mesh );
 		} );
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+		//	Select_Level
 		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
 
 			var textGeo = new THREE.TextBufferGeometry( "Select Level", {
@@ -130,11 +119,12 @@ function start_Menu() {
 
 				mesh.name = "Select_Level";
 
+				start_Menu_Objects.push(mesh);
 				scene.add( mesh );
 		} );
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+		// Options
 		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
 
 			var textGeo = new THREE.TextBufferGeometry( "Options", {
@@ -163,11 +153,12 @@ function start_Menu() {
 
 				mesh.name = "Options";
 
+				start_Menu_Objects.push(mesh);
 				scene.add( mesh );
 		} );
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+		//	Exit_Game
 		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
 
 			var textGeo = new THREE.TextBufferGeometry( "Exit Game", {
@@ -196,53 +187,25 @@ function start_Menu() {
 
 				mesh.name = "Exit Game";
 
+				start_Menu_Objects.push(mesh);
 				scene.add( mesh );
 		} );
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 }
 
-function start_Menu_Interaction() {
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	if (level_1 === false) {
+function start_Menu_Loader() {
+	document.getElementById("load").style.display = "none";
+	document.getElementById("blocker").style.display = "none";
 
-		raycaster.setFromCamera( mouse, camera );
-	
-		var intersects = raycaster.intersectObjects(scene.children);
-	
-		if (intersects.length > 0) {
-			if (intersects[0].object.name === "Grappling_Game") {
-				intersected_Object = null;
-			}
-			else if (intersected_Object != intersects[0].object) {
-				if (intersected_Object)
-					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
-				
-				if (intersects[0].object.name === "Select_Level") {
-					
-				}
-	
-				intersected_Object = intersects[0].object;
-				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
-				intersected_Object.material.emissive.setHex(0x34abeb);
-			}
-		} 
-		else {
-			if (intersected_Object) 
-				intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
-	
-			intersected_Object = null;
-		}
-	}
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	start_Menu();
+	load_Manager();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //	LOADERS
 ///////////////////////////////////////////////////////////////////////////////////////
 
-//Loaders
 function load_Manager() {
 
 	if (level_1 === true) {
@@ -324,10 +287,9 @@ function sound_Loader(loadBar){
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
-//GRAPHICS
+//	GRAPHICS
 ///////////////////////////////////////////////////////////////////////////////////////
 
-//Graphics
 function setupGraphics(){
 	//create clock for timing
 	clock = new THREE.Clock();
@@ -381,6 +343,10 @@ function setupGraphics(){
 	renderer.shadowMap.enabled = true;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+//	PLAYER
+///////////////////////////////////////////////////////////////////////////////////////
+
 function createPlayer(){
 	//var pos = {x: 0, y: 2, z: 3};
 	let pos = {x: 0, y: 65, z: 0};
@@ -424,11 +390,27 @@ function createPlayer(){
 
 }
 
+function movePlayer(){
+
+	let scalingFactor = 20; //move speed
+
+	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
+	let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
+	let moveY =  0;
+
+	if( moveX == 0 && moveY == 0 && moveZ == 0) return;
+
+	let resultantImpulse = new Ammo.btVector3( moveX, moveY, moveZ );
+	resultantImpulse.op_mul(scalingFactor);
+
+	let physicsBody = player.userData.physicsBody;
+	physicsBody.setLinearVelocity ( resultantImpulse );
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 //	SYSTEM
 ///////////////////////////////////////////////////////////////////////////////////////
 
-//System
 function setupPhysicsWorld(){
 	let collisionConfiguration  = new Ammo.btDefaultCollisionConfiguration(),
 		dispatcher              = new Ammo.btCollisionDispatcher(collisionConfiguration),
@@ -471,30 +453,8 @@ function updateCamera(){
 	camera.position.z = player.position.z;
 }
 
-function movePlayer(){
-
-	let scalingFactor = 20; //move speed
-
-	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
-	let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
-	let moveY =  0;
-
-	if( moveX == 0 && moveY == 0 && moveZ == 0) return;
-
-	let resultantImpulse = new Ammo.btVector3( moveX, moveY, moveZ );
-	resultantImpulse.op_mul(scalingFactor);
-
-	let physicsBody = player.userData.physicsBody;
-	physicsBody.setLinearVelocity ( resultantImpulse );
-}
-
-var count;
 function renderFrame(){
 	let deltaTime = clock.getDelta();
-
-	if (level_1 === false) {
-		start_Menu_Interaction();
-	}
 
 	if (level_1 === true) {
 		updatePhysics( deltaTime );
@@ -569,12 +529,12 @@ function renderFrame(){
 //	EVENT HANDLERS / CONTROLLERS
 ///////////////////////////////////////////////////////////////////////////////////////
 
-//Event Handlers / Controllers
 function setupEventHandlers(){
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'keydown', onKeyDown, false );
 	document.addEventListener( 'keyup', onKeyUp, false );
 	window.addEventListener( 'mousemove', on_Mouse_Move, false );
+	document.addEventListener('mousedown', menu_Select, false);
 }
 
 function setupControls(){
@@ -658,6 +618,44 @@ function onKeyUp( event ) {
 			break;
 
 	}
+}
+
+function menu_Select(event) {
+	event.preventDefault();
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	if (level_1 === false) {
+
+		raycaster.setFromCamera( mouse, camera );
+	
+		var intersects = raycaster.intersectObjects(scene.children);
+	
+		if (intersects.length > 0) {
+			if (intersects[0].object.name === "Grappling_Game") {
+				if (intersected_Object)
+					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
+
+				intersected_Object = null;
+			}
+			else if (intersected_Object != intersects[0].object) {
+				if (intersected_Object)
+					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
+
+				if (intersects[0].object.name === "Select_Level") {
+					//Future events
+				}
+				intersected_Object = intersects[0].object;
+				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
+				intersected_Object.material.emissive.setHex(0xdde014);
+			}
+		} 
+		else {
+			if (intersected_Object) 
+				intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
+
+			intersected_Object = null;
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 function on_Mouse_Move(event) {
