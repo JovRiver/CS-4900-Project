@@ -4,16 +4,12 @@ let player = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 
 let ammoTmpPos = null, ammoTmpQuat = null;
 
 let objects = [];
-let moveForward = false;
-let moveBackward = false;
-let moveLeft = false;
-let moveRight = false;
 let canJump = false;
 let prevTime = performance.now();
-let velocity = new THREE.Vector3();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
 let color = new THREE.Color();
+let jumping = false;
 
 //Ammojs Initialization
 Ammo().then(start);
@@ -31,10 +27,10 @@ function start (){
     createTestGround(); //function call to create test ground
     createStartPoint(); //function call to create a torus
 	createPlayer();
-	//setupControls(); moved to loaders()
 	setupEventHandlers();
 	showStats();
-	//renderFrame(); moved to loaders()
+	initDebug();
+
 }
 
 function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
@@ -229,6 +225,18 @@ function setupPhysicsWorld(){
 
 	physicsWorld  = new Ammo.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 	physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
+	physicsWorld.debugDrawWorld();
+
+}
+
+function initDebug() {
+	this.debugDrawer = new THREE.AmmoDebugDrawer(scene, physicsWorld);
+	this.debugDrawer.enable();
+
+	setInterval(() => {
+		var mode = (this.debugDrawer.getDebugMode() + 1) % 3;
+		this.debugDrawer.setDebugMode(mode);
+	}, 1000);
 }
 
 function showStats(){
@@ -261,11 +269,9 @@ function updateCamera(){
 	camera.position.x = player.position.x;
 	camera.position.y = player.position.y;
 	camera.position.z = player.position.z;
-
 }
 
 function movePlayer(){
-
 	let scalingFactor = 20; //move speed
 
 	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
@@ -325,6 +331,7 @@ function renderFrame(){
 	requestAnimationFrame( renderFrame );
 	movePlayer();
 	updateCamera();
+	if (this.debugDrawer) this.debugDrawer.update();
 	renderer.render( scene, camera );
 }
 //
@@ -361,6 +368,11 @@ function onKeyDown (event ) {
 			break;
 
 		case 32: // space
+			playerMoveDirection.forward = 0;
+			playerMoveDirection.left = 0;
+			playerMoveDirection.back = 0;
+			playerMoveDirection.right = 0;
+			console.log(jumping);
 			let resultantImpulse = new Ammo.btVector3( 0, 5, 0 );
 			resultantImpulse.op_mul(2);
 			let physicsBody = player.userData.physicsBody;
@@ -377,7 +389,6 @@ function onKeyUp( event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
 			playerMoveDirection.forward = 0;
-
 			break;
 
 		case 65: // a
