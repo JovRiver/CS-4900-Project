@@ -76,7 +76,7 @@ function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
 
 function setupControls(){
 	//create controls
-	controls = new THREE.PointerLockControls( camera, document.body );
+	controls = new THREE.PointerLockControls(camera, document.body );
 	let blocker = document.getElementById( 'blocker' );
 	let instructions = document.getElementById( 'instructions' );
 	instructions.addEventListener( 'click', function () {controls.lock();}, false );
@@ -178,6 +178,7 @@ function createPlayer(){
 
 	player.userData.physicsBody = body;
 
+
 	rigidBodies.push(player);
 
 }
@@ -260,6 +261,7 @@ function updateCamera(){
 	camera.position.x = player.position.x;
 	camera.position.y = player.position.y;
 	camera.position.z = player.position.z;
+
 }
 
 function movePlayer(){
@@ -270,9 +272,12 @@ function movePlayer(){
 	let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
 	let moveY =  0;
 
+	let vertex = new THREE.Vector3(moveX,moveY,moveZ);
+	vertex.applyQuaternion(camera.quaternion);
+
 	if( moveX == 0 && moveY == 0 && moveZ == 0) return;
 
-	let resultantImpulse = new Ammo.btVector3( moveX, moveY, moveZ );
+	let resultantImpulse = new Ammo.btVector3( vertex.x, 0, vertex.z );
 	resultantImpulse.op_mul(scalingFactor);
 
 	let physicsBody = player.userData.physicsBody;
@@ -316,72 +321,10 @@ function loadSounds(loadBar){
 function renderFrame(){
 	let deltaTime = clock.getDelta();
 	updatePhysics( deltaTime );
-
-
 	stats.update();
-
 	requestAnimationFrame( renderFrame );
-	/*
-	if ( controls.isLocked === true ) {
-		raycaster.ray.origin.copy( controls.getObject().position );
-		raycaster.ray.origin.y -= 10;
-
-		var intersections = raycaster.intersectObjects( objects );
-		var onObject = intersections.length > 0;
-		var time = performance.now();
-		var delta = ( time - prevTime ) / 1000;
-
-		velocity.x -= velocity.x * 10.0 * delta;
-		velocity.z -= velocity.z * 10.0 * delta;
-
-		direction.z = Number( moveForward ) - Number( moveBackward );
-		direction.x = Number( moveRight ) - Number( moveLeft );
-		direction.normalize(); // this ensures consistent movements in all directions
-
-		if ( moveForward || moveBackward ){
-			velocity.z -= direction.z * moveSpeed * delta;
-			if(moveSpeed < 1000){
-				moveSpeed++;
-			}
-		}else{
-			moveSpeed = 400;
-
-		}
-
-		if ( moveLeft || moveRight ){
-			velocity.x -= direction.x * moveSpeed * delta;
-		}
-		/*
-		if ( onObject === true ) {
-			velocity.y = Math.max( 0, velocity.y );
-			canJump = true;
-		}
-
-
-		controls.moveRight( - velocity.x * delta );
-
-		controls.moveForward( - velocity.z * delta );
-
-		prevTime = time;
-	}
-	*/
-
-	if ( controls.isLocked === true ) {
-		raycaster.ray.origin.copy( controls.getObject().position );
-		raycaster.ray.origin.y -= 10;
-
-		let intersections = raycaster.intersectObjects( objects );
-		let onObject = intersections.length > 0;
-		let time = performance.now();
-		let delta = ( time - prevTime ) / 1000;
-
-
-		prevTime = time;
-	}
-
 	movePlayer();
 	updateCamera();
-  
 	renderer.render( scene, camera );
 }
 //
@@ -402,22 +345,18 @@ function onWindowResize() {
 function onKeyDown (event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
-			moveForward = true;
 			playerMoveDirection.forward = 1;
 			break;
 
 		case 65: // a
-			moveLeft = true;
 			playerMoveDirection.left = 1;
 			break;
 
 		case 83: // s
-			moveBackward = true;
 			playerMoveDirection.back = 1;
 			break;
 
 		case 68: // d
-			moveRight = true;
 			playerMoveDirection.right = 1;
 			break;
 
@@ -437,23 +376,19 @@ function onKeyDown (event ) {
 function onKeyUp( event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
-			moveForward = false;
 			playerMoveDirection.forward = 0;
 
 			break;
 
 		case 65: // a
-			moveLeft = false;
 			playerMoveDirection.left = 0;
 			break;
 
 		case 83: // s
-			moveBackward = false;
 			playerMoveDirection.back = 0;
 			break;
 
 		case 68: // d
-			moveRight = false;
 			playerMoveDirection.right = 0;
 			break;
 
