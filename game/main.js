@@ -13,15 +13,13 @@ let prevTime = performance.now();
 let velocity = new THREE.Vector3();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
-let color = new THREE.Color();
+//let color = new THREE.Color();	//I don't see this being used anywhere rs
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2(), intersected_Object;
 
 
 //Testing variables
 let level_1 = false;
-let rotate_Camera = false;
-let start_Menu_Objects = [];
 
 //Ammojs Initialization
 Ammo().then(start);
@@ -38,168 +36,12 @@ function start (){
 	setupPhysicsWorld();
 	setupGraphics();
 
-	if (level_1 === false) 
-		start_Menu_Loader();
-	else
-		load_Manager();
+	create_Start_Menu();
 
 	//setupControls(); //moved to load_Manager() children functions
 	setupEventHandlers();
 	showStats();
 	//renderFrame(); //moved to load_Manager()
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-//	START MENU
-///////////////////////////////////////////////////////////////////////////////////////
-
-function start_Menu() {
-	var loader = new THREE.FontLoader();
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//	Grappling_Game
-		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
-
-			var textGeo = new THREE.TextBufferGeometry( "Grapple Game", {
-
-				font: font,
-
-				size: 10,
-				height: 10,
-				curveSegments: 12,
-
-				bevelThickness: 1,
-				bevelSize: .5,
-				bevelEnabled: true
-
-			} );
-
-				textGeo.computeBoundingBox();
-			var centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-
-			var textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			var mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.y = 10;
-
-				mesh.name = "Grappling_Game";
-
-				start_Menu_Objects.push(mesh);
-				scene.add( mesh );
-		} );
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//	Select_Level
-		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
-
-			var textGeo = new THREE.TextBufferGeometry( "Select Level", {
-
-				font: font,
-
-				size: 5,
-				height: 5,
-				curveSegments: 12,
-
-				bevelThickness: .5,
-				bevelSize: .3,
-				bevelEnabled: true
-
-			} );
-
-				textGeo.computeBoundingBox();
-			var centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-
-			var textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			var mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.y = -5;
-				mesh.rotation.x = THREE.Math.degToRad(-5);
-
-				mesh.name = "Select_Level";
-
-				start_Menu_Objects.push(mesh);
-				scene.add( mesh );
-		} );
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Options
-		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
-
-			var textGeo = new THREE.TextBufferGeometry( "Options", {
-
-				font: font,
-
-				size: 5,
-				height: 5,
-				curveSegments: 12,
-
-				bevelThickness: .5,
-				bevelSize: .3,
-				bevelEnabled: true
-
-			} );
-
-				textGeo.computeBoundingBox();
-			var centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-
-			var textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			var mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.y = -15;
-				mesh.rotation.x = THREE.Math.degToRad(-10);
-
-				mesh.name = "Options";
-
-				start_Menu_Objects.push(mesh);
-				scene.add( mesh );
-		} );
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//	Exit_Game
-		loader.load( "fonts/helvetiker_regular.typeface.json", function ( font ) {
-
-			var textGeo = new THREE.TextBufferGeometry( "Exit Game", {
-
-				font: font,
-
-				size: 5,
-				height: 5,
-				curveSegments: 12,
-
-				bevelThickness: .5,
-				bevelSize: .3,
-				bevelEnabled: true
-
-			} );
-
-				textGeo.computeBoundingBox();
-			var centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-
-			var textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			var mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.y = -25;
-				mesh.rotation.x = THREE.Math.degToRad(-15);
-
-				mesh.name = "Exit Game";
-
-				start_Menu_Objects.push(mesh);
-				scene.add( mesh );
-		} );
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-}
-
-function start_Menu_Loader() {
-	document.getElementById("load").style.display = "none";
-	document.getElementById("blocker").style.display = "none";
-
-	start_Menu();
-	load_Manager();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -212,10 +54,6 @@ function load_Manager() {
 		createLevel1();
 		createPlayer();
 		object_Loader();
-	}
-	
-	else {
-		renderFrame();
 	}
 }
 
@@ -291,56 +129,28 @@ function sound_Loader(loadBar){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 function setupGraphics(){
-	//create clock for timing
 	clock = new THREE.Clock();
 
-	//create the scene
-	scene = new THREE.Scene();
-	scene.background = new THREE.Color( 0xb0f0f0f );
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0f0f0f);
 
-	//create camera
+    //create camera
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
 	camera.position.set(0,-10,50)
 	camera.lookAt(0,0,0);
-
-
-	//create raycaster
-	//raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-
-	//Add hemisphere light
-	let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
-	hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
-	hemiLight.groundColor.setHSL( 0.1, 1, 0.4 );
-	hemiLight.position.set( 0, 50, 0 );
-	scene.add( hemiLight );
-
-	//Add directional light
-	let dirLight = new THREE.DirectionalLight( 0xffffff , 1);
-	dirLight.color.setHSL( 0.1, 1, 0.95 );
-	dirLight.position.set( -1, 1.75, 1 );
-	dirLight.position.multiplyScalar( 100 );
-	scene.add( dirLight );
-
-	dirLight.castShadow = true;
-
-	dirLight.shadow.mapSize.width = 2048;
-	dirLight.shadow.mapSize.height = 2048;
-
-	dirLight.shadow.camera.left = -50;
-	dirLight.shadow.camera.right = 50;
-	dirLight.shadow.camera.top = 50;
-	dirLight.shadow.camera.bottom = -50;
-
-	dirLight.shadow.camera.far = 13500;
-
-	//Setup the renderer
+	
+	//setup point light for the scene
+    let pointLight = new THREE.PointLight(0xffffff, 1.5); 
+		pointLight.position.set(0, 100, 90); 
+		scene.add(pointLight); 
+		pointLight.color.setHSL(.2, 1, 0.5);
+        
+    //Setup the renderer
 	renderer = new THREE.WebGLRenderer( { antialias: false } );
 	renderer.setClearColor( 0xbfd1e5 );
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
-
-	renderer.shadowMap.enabled = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -534,7 +344,7 @@ function setupEventHandlers(){
 	document.addEventListener( 'keydown', onKeyDown, false );
 	document.addEventListener( 'keyup', onKeyUp, false );
 	window.addEventListener( 'mousemove', on_Mouse_Move, false );
-	document.addEventListener('mousedown', menu_Select, false);
+	document.addEventListener('mousedown', menu_Selection, false);
 }
 
 function setupControls(){
@@ -620,14 +430,14 @@ function onKeyUp( event ) {
 	}
 }
 
-function menu_Select(event) {
+function menu_Selection(event) {
 	event.preventDefault();
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if (level_1 === false) {
 
 		raycaster.setFromCamera( mouse, camera );
 	
-		var intersects = raycaster.intersectObjects(scene.children);
+		let intersects = raycaster.intersectObjects(scene.children);
 	
 		if (intersects.length > 0) {
 			if (intersects[0].object.name === "Grappling_Game") {
@@ -641,8 +451,20 @@ function menu_Select(event) {
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 
 				if (intersects[0].object.name === "Select_Level") {
-					//Future events
+					camera.rotation.y = THREE.Math.degToRad(90);
+					camera.position.x -= 40;
 				}
+
+				if (intersects[0].object.name === "Options") {
+					camera.rotation.y = THREE.Math.degToRad(-90);
+					camera.position.x += 40;
+				}
+
+				if (intersects[0].object.name === "Back_Level" || intersects[0].object.name === "Back_Options") {
+					camera.position.set(0,-10,50);
+					camera.lookAt(0, 0, 0);
+				}
+
 				intersected_Object = intersects[0].object;
 				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
 				intersected_Object.material.emissive.setHex(0xdde014);
