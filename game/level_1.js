@@ -28,7 +28,7 @@ function createLevel1() {
     dirLight.shadow.camera.far = 13500;
     
     //let helper = new THREE.CameraHelper( dirLight.shadow.camera );
-    scene.add( helper );
+    //scene.add( helper );
 
     function createSkyBox() {
     scene.background = new THREE.CubeTextureLoader().setPath( 'texture/skybox/' ).load(
