@@ -1,5 +1,5 @@
 //variable declaration section
-let physicsWorld, scene, camera, clock, stats, sound, controls, raycaster, renderer, rigidBodies = [], tmpTrans = null;
+let physicsWorld, scene, camera, clock, stats, sound, controls, renderer, rigidBodies = [], tmpTrans = null;
 let player = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
 
@@ -8,11 +8,24 @@ let canJump = false;
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
-let color = new THREE.Color();
+//let color = new THREE.Color();	//I don't see this being used anywhere rs
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2(), intersected_Object;
 let jumping = false;
+
+//Testing variables
+let playing = false;
+let level_1 = false;
+
+let level_Select_Objects = [];
+
 
 //Ammojs Initialization
 Ammo().then(start);
+
+///////////////////////////////////////////////////////////////////////////////////////
+//	INITIALIZATION
+///////////////////////////////////////////////////////////////////////////////////////
 
 function start (){
 	tmpTrans = new Ammo.btTransform();
@@ -21,20 +34,30 @@ function start (){
 
 	setupPhysicsWorld();
 	setupGraphics();
-	loaders();
-	createGround();
-    //createGameStage(); //function call from gamestage.js file / creates level objects / rs
-    createTestGround(); //function call to create test ground
-    createStartPoint(); //function call to create a torus
-	createPlayer();
+	create_Start_Menu();
+
 	setupEventHandlers();
 	showStats();
-	initDebug();
-
+  initDebug();
 }
 
-function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
-	let loadBar = document.getElementById( 'load');
+///////////////////////////////////////////////////////////////////////////////////////
+//	LOADERS
+///////////////////////////////////////////////////////////////////////////////////////
+
+function load_Manager() {
+	scene = new THREE.Scene();
+	scene.dispose();
+
+	if (level_1) {
+		createLevel1();
+		createPlayer();
+		object_Loader();
+	}
+}
+
+function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
+	let loadBar = document.getElementById('load');
 
 	//enemy models
 	let catLoader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
@@ -49,7 +72,7 @@ function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
             });
 
 			obj.name = "Enemy";
-			obj.position.set(5, 12.5, -14);//moves the mesh
+			obj.position.set(5, 60, -14);//moves the mesh
             obj.rotateX(.3);
             obj.rotateY(-.8);
             obj.rotateZ(.4);
@@ -57,9 +80,9 @@ function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
 			loadBar.innerHTML = "";
 		},
 		function(xhr){//onProgress
-			loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-				loadSounds(loadBar);
+				sound_Loader(loadBar);
 			}
 
 		},
@@ -70,62 +93,59 @@ function loaders(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
 	);
 }
 
-function setupControls(){
-	//create controls
-	controls = new THREE.PointerLockControls(camera, document.body );
-	let blocker = document.getElementById( 'blocker' );
-	let instructions = document.getElementById( 'instructions' );
-	instructions.addEventListener( 'click', function () {controls.lock();}, false );
-	controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();} );
-	controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = ''; sound.pause();} );
-	scene.add( controls.getObject() );
+function sound_Loader(loadBar){
+	let listener = new THREE.AudioListener();
+	camera.add( listener );
 
+	// create a global audio source
+	sound = new THREE.Audio( listener );
+
+
+	// load a sound and set it as the Audio object's buffer
+	let audioLoader = new THREE.AudioLoader();
+	audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
+		function( buffer ) {
+			sound.setBuffer( buffer );
+			sound.setLoop( true );
+			sound.setVolume( 0.25 );
+		},
+		function(xhr){//onProgress
+			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+				document.getElementById("blocker").style.display = "block";
+				setupControls();//game can start with a click after external files are loaded in
+				renderFrame();//starts the loop once the models are loaded
+			}
+		},
+		function(err){//onError
+			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			console.log("error in loading sound");
+		}
+	);
 }
 
-//Graphics
+///////////////////////////////////////////////////////////////////////////////////////
+//	GRAPHICS
+///////////////////////////////////////////////////////////////////////////////////////
+
 function setupGraphics(){
-	//create clock for timing
 	clock = new THREE.Clock();
 
-	//create the scene
-	scene = new THREE.Scene();
-	scene.background = new THREE.Color( 0xbfd1e5 );
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0f0f0f);
 
-	//create camera
-	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.y = 2;
-	camera.position.z = 10;
-
-	//create raycaster
-	raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-
-	//Add hemisphere light
-	let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
-	hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
-	hemiLight.groundColor.setHSL( 0.1, 1, 0.4 );
-	hemiLight.position.set( 0, 50, 0 );
-	scene.add( hemiLight );
-
-	//Add directional light
-	let dirLight = new THREE.DirectionalLight( 0xffffff , 1);
-	dirLight.color.setHSL( 0.1, 1, 0.95 );
-	dirLight.position.set( -1, 1.75, 1 );
-	dirLight.position.multiplyScalar( 100 );
-	scene.add( dirLight );
-
-	dirLight.castShadow = true;
-
-	dirLight.shadow.mapSize.width = 2048;
-	dirLight.shadow.mapSize.height = 2048;
-
-	dirLight.shadow.camera.left = -50;
-	dirLight.shadow.camera.right = 50;
-	dirLight.shadow.camera.top = 50;
-	dirLight.shadow.camera.bottom = -50;
-
-	dirLight.shadow.camera.far = 13500;
-
-	//Setup the renderer
+    //create camera
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
+	camera.position.set(0,-10,50)
+	camera.lookAt(0,0,0);
+	
+	//setup point light for the scene
+    let pointLight = new THREE.PointLight(0xffffff, 1.5); 
+		pointLight.position.set(0, -30, 100); 
+		scene.add(pointLight); 
+		pointLight.color.setHSL(.2, 1, 0.5);
+        
+    //Setup the renderer
 	renderer = new THREE.WebGLRenderer( { antialias: false } );
 	renderer.setClearColor( 0xbfd1e5 );
 	renderer.setPixelRatio( window.devicePixelRatio );
@@ -135,10 +155,14 @@ function setupGraphics(){
 	renderer.shadowMap.enabled = true;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+//	PLAYER
+///////////////////////////////////////////////////////////////////////////////////////
+
 function createPlayer(){
 	//var pos = {x: 0, y: 2, z: 3};
-	let pos = {x: 20, y: 30, z: 0};
-	let radius = 2;
+	let pos = {x: 0, y: 65, z: 0};
+	let radius = 1;
 	let quat = {x: 0 , y: 0, z: 0, w: 1};
 	let mass = 1;
 
@@ -179,44 +203,29 @@ function createPlayer(){
 
 }
 
-function createGround(){
-	let pos = {x: 0, y: 0, z: 0};
-	let scale = {x: 1000, y: 2, z: 1000};
-	let quat = {x: 0, y: 0, z: 0, w: 1};
-	let mass = 0;
+function movePlayer(){
+	let scalingFactor = 20; //move speed
 
-	//threeJS Section
-	let groundMaterial = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/TexturesCom_Grass0197_1_seamless_S.jpg')});
-	groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
-	groundMaterial.map.repeat.set( 8, 8 );
-	let blockPlane = new THREE.Mesh(new THREE.BoxBufferGeometry(), groundMaterial);
+	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
+	let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
+	let moveY =  0;
 
-	blockPlane.position.set(pos.x, pos.y, pos.z);
-	blockPlane.scale.set(scale.x, scale.y, scale.z);
-	blockPlane.castShadow = true;
-	blockPlane.receiveShadow = true;
-	scene.add(blockPlane);
+	let vertex = new THREE.Vector3(moveX,moveY,moveZ);
+	vertex.applyQuaternion(camera.quaternion);
 
+	if( moveX == 0 && moveY == 0 && moveZ == 0) return;
 
-	//Ammojs Section
-	let transform = new Ammo.btTransform();
-	transform.setIdentity();
-	transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
-	transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
-	let motionState = new Ammo.btDefaultMotionState( transform );
-	let colShape = new Ammo.btBoxShape( new Ammo.btVector3( scale.x * 0.5, scale.y * 0.5, scale.z * 0.5 ) );
-	colShape.setMargin( 0.05 );
-	let localInertia = new Ammo.btVector3( 0, 0, 0 );
-	colShape.calculateLocalInertia( mass, localInertia );
-	let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
-	let body = new Ammo.btRigidBody( rbInfo );
-	body.setFriction(4);
-	body.setRollingFriction(10);
-	physicsWorld.addRigidBody( body );
+	let resultantImpulse = new Ammo.btVector3( vertex.x, 0, vertex.z );
+	resultantImpulse.op_mul(scalingFactor);
+
+	let physicsBody = player.userData.physicsBody;
+	physicsBody.setLinearVelocity ( resultantImpulse );
 }
-//
 
-//System
+///////////////////////////////////////////////////////////////////////////////////////
+//	SYSTEM
+///////////////////////////////////////////////////////////////////////////////////////
+
 function setupPhysicsWorld(){
 	let collisionConfiguration  = new Ammo.btDefaultCollisionConfiguration(),
 		dispatcher              = new Ammo.btCollisionDispatcher(collisionConfiguration),
@@ -272,77 +281,63 @@ function updateCamera(){
 	camera.position.z = player.position.z;
 }
 
-function movePlayer(){
-	let scalingFactor = 20; //move speed
-
-	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
-	let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
-	let moveY =  0;
-
-	let vertex = new THREE.Vector3(moveX,moveY,moveZ);
-	vertex.applyQuaternion(camera.quaternion);
-	console.log(vertex);
-
-	if( moveX == 0 && moveY == 0 && moveZ == 0) return;
-
-	let resultantImpulse = new Ammo.btVector3( vertex.x, 0, vertex.z );
-	resultantImpulse.op_mul(scalingFactor);
-
-	let physicsBody = player.userData.physicsBody;
-	physicsBody.setLinearVelocity ( resultantImpulse );
-}
-
-function loadSounds(loadBar){
-	let listener = new THREE.AudioListener();
-	camera.add( listener );
-
-	// create a global audio source
-	sound = new THREE.Audio( listener );
-
-	// load a sound and set it as the Audio object's buffer
-	let audioLoader = new THREE.AudioLoader();
-	audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
-		function( buffer ) {
-			sound.setBuffer( buffer );
-			sound.setLoop( true );
-			sound.setVolume( 0.25 );
-			setupControls();//game can start with a click after external files are loaded in
-			renderFrame();//stars the loop once the models are loaded
-		},
-		function(xhr){//onProgress
-			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-				document.getElementById("load").style.display = "none";
-
-			}
-		},
-		function(err){//onError
-			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-			console.log("error in loading enemy model");
-		}
-	);
-
-
-}
-
-
 function renderFrame(){
 	let deltaTime = clock.getDelta();
-	updatePhysics( deltaTime );
-	stats.update();
-	requestAnimationFrame( renderFrame );
-	movePlayer();
-	updateCamera();
-	if (this.debugDrawer) this.debugDrawer.update();
-	renderer.render( scene, camera );
-}
-//
 
-//handlers
+	if (playing === true) {
+		updatePhysics( deltaTime );
+		stats.update();
+
+		if ( controls.isLocked === true ) {
+			raycaster.ray.origin.copy( controls.getObject().position );
+			raycaster.ray.origin.y -= 10;
+	
+			let intersections = raycaster.intersectObjects( objects );
+			let onObject = intersections.length > 0;
+			let time = performance.now();
+			let delta = ( time - prevTime ) / 1000;
+	
+	
+			prevTime = time;
+		}
+	
+		movePlayer();
+		updateCamera();
+	}
+
+	if (playing === false) {
+		level_Select_Objects[0].rotation.y += 0.01;
+	}
+  
+  if (this.debugDrawer) this.debugDrawer.update();
+	requestAnimationFrame( renderFrame );
+  renderer.render(scene, camera);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+//	EVENT HANDLERS / CONTROLLERS
+///////////////////////////////////////////////////////////////////////////////////////
+
 function setupEventHandlers(){
+	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'keydown', onKeyDown, false );
 	document.addEventListener( 'keyup', onKeyUp, false );
-	window.addEventListener( 'resize', onWindowResize, false );
+	window.addEventListener( 'mousemove', on_Mouse_Move, false );
+	document.addEventListener('mousedown', menu_Selection, false);
+}
+
+function setupControls(){
+	//create controls
+	controls = new THREE.PointerLockControls( camera, document.body );
+	let blocker = document.getElementById( 'blocker' );
+	let instructions = document.getElementById( 'instructions' );
+	instructions.addEventListener( 'click', function () {controls.lock();}, false );
+	controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();} );
+	controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = ''; sound.pause();} );
+	scene.add( controls.getObject() );
+
 }
 
 function onWindowResize() {
@@ -412,4 +407,61 @@ function onKeyUp( event ) {
 	}
 }
 
-//
+function menu_Selection(event) {
+	event.preventDefault();
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	if (playing === false) {
+
+		raycaster.setFromCamera( mouse, camera );
+	
+		let intersects = raycaster.intersectObjects(scene.children);
+	
+		if (intersects.length > 0) {
+			if (intersects[0].object.name === "Grappling_Game") {
+				if (intersected_Object)
+					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
+
+				intersected_Object = null;
+			}
+			else if (intersected_Object != intersects[0].object) {
+				if (intersected_Object)
+					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
+
+				if (intersects[0].object.name === "Select_Level") {
+					camera.position.y += 80;
+				}
+
+				if (intersects[0].object.name === "Level_1" || intersects[0].object.name === "Level_1_Cube") {
+					level_1 = true;
+					playing = true;
+					load_Manager();
+				}
+
+				if (intersects[0].object.name === "Options") {
+					camera.position.y -= 80;
+				}
+
+				if (intersects[0].object.name === "Back_Level" || intersects[0].object.name === "Back_Options") {
+					camera.position.set(0,-10,50);
+					camera.lookAt(0, 0, 0);
+				}
+
+				intersected_Object = intersects[0].object;
+				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
+				intersected_Object.material.emissive.setHex(0xdde014);
+			}
+		} 
+		else {
+			if (intersected_Object) 
+				intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
+
+			intersected_Object = null;
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+function on_Mouse_Move(event) {
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}
