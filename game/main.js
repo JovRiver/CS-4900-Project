@@ -38,7 +38,7 @@ function start (){
 
 	setupEventHandlers();
 	showStats();
-  initDebug();
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -444,6 +444,10 @@ function menu_Selection(event) {
 				if (intersects[0].object.name === "Back_Level" || intersects[0].object.name === "Back_Options") {
 					camera.position.set(0,-10,50);
 					camera.lookAt(0, 0, 0);
+				}
+
+				if (intersects[0].object.name === "Exit_Game") {
+					window.close();
 				}
 
 				intersected_Object = intersects[0].object;

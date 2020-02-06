@@ -163,6 +163,8 @@ function createLevel1() {
         }
     }
 
+    setupPhysicsWorld();
+    initDebug();
     createSkyBox();
     createGround();
     createStartPlatform();

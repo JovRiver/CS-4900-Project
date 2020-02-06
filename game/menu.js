@@ -143,7 +143,7 @@ function create_Start_Menu() {
 				mesh.position.y = -25;
 				mesh.rotation.x = THREE.Math.degToRad(-15);
 
-				mesh.name = "Exit Game";
+				mesh.name = "Exit_Game";
 
 				scene.add( mesh );
         });
