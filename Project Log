@@ -215,3 +215,9 @@ the Select Level and Options menus to above and below the main menu respectively
 appearing in another. Moved new scene creation to the load manager and added an if statement to load level 1 data from the load manager.
 Moved scene graphics initialization to the level_1.js file to consolidate level 1 items/needs.
 
+2/5/2020
+Semira Pinder
+Commit  0f4847276f62bd11ce97bb0b763e5e214ae02788
+
+Added a tail and a body to the catGun object after tweaking the vertices a large amount.
+
