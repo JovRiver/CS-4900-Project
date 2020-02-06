@@ -4,25 +4,21 @@ let player = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 
 let ammoTmpPos = null, ammoTmpQuat = null;
 
 let objects = [];
-let moveForward = false;
-let moveBackward = false;
-let moveLeft = false;
-let moveRight = false;
 let canJump = false;
 let prevTime = performance.now();
-let velocity = new THREE.Vector3();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
 //let color = new THREE.Color();	//I don't see this being used anywhere rs
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2(), intersected_Object;
-
+let jumping = false;
 
 //Testing variables
 let playing = false;
 let level_1 = false;
 
 let level_Select_Objects = [];
+
 
 //Ammojs Initialization
 Ammo().then(start);
@@ -38,13 +34,11 @@ function start (){
 
 	setupPhysicsWorld();
 	setupGraphics();
-
 	create_Start_Menu();
 
-	//setupControls(); //moved to load_Manager() children functions
 	setupEventHandlers();
 	showStats();
-	//renderFrame(); //moved to load_Manager()
+  initDebug();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -105,6 +99,7 @@ function sound_Loader(loadBar){
 
 	// create a global audio source
 	sound = new THREE.Audio( listener );
+
 
 	// load a sound and set it as the Audio object's buffer
 	let audioLoader = new THREE.AudioLoader();
@@ -203,21 +198,24 @@ function createPlayer(){
 
 	player.userData.physicsBody = body;
 
+
 	rigidBodies.push(player);
 
 }
 
 function movePlayer(){
-
 	let scalingFactor = 20; //move speed
 
 	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
 	let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
 	let moveY =  0;
 
+	let vertex = new THREE.Vector3(moveX,moveY,moveZ);
+	vertex.applyQuaternion(camera.quaternion);
+
 	if( moveX == 0 && moveY == 0 && moveZ == 0) return;
 
-	let resultantImpulse = new Ammo.btVector3( moveX, moveY, moveZ );
+	let resultantImpulse = new Ammo.btVector3( vertex.x, 0, vertex.z );
 	resultantImpulse.op_mul(scalingFactor);
 
 	let physicsBody = player.userData.physicsBody;
@@ -236,6 +234,19 @@ function setupPhysicsWorld(){
 
 	physicsWorld  = new Ammo.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 	physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
+	physicsWorld.debugDrawWorld();
+
+}
+
+function initDebug() {
+	this.debugDrawer = new THREE.AmmoDebugDrawer(scene, physicsWorld);
+	this.debugDrawer.enable();
+	this.debugDrawer.setDebugMode(1);
+
+	setInterval(() => {
+		var mode = (this.debugDrawer.getDebugMode() + 1) % 3;
+		this.debugDrawer.setDebugMode(mode);
+	}, 1000);
 }
 
 function showStats(){
@@ -297,54 +308,13 @@ function renderFrame(){
 	if (playing === false) {
 		level_Select_Objects[0].rotation.y += 0.01;
 	}
-
+  
+  if (this.debugDrawer) this.debugDrawer.update();
 	requestAnimationFrame( renderFrame );
-	/*
-	if ( controls.isLocked === true ) {
-		raycaster.ray.origin.copy( controls.getObject().position );
-		raycaster.ray.origin.y -= 10;
-
-		var intersections = raycaster.intersectObjects( objects );
-		var onObject = intersections.length > 0;
-		var time = performance.now();
-		var delta = ( time - prevTime ) / 1000;
-
-		velocity.x -= velocity.x * 10.0 * delta;
-		velocity.z -= velocity.z * 10.0 * delta;
-
-		direction.z = Number( moveForward ) - Number( moveBackward );
-		direction.x = Number( moveRight ) - Number( moveLeft );
-		direction.normalize(); // this ensures consistent movements in all directions
-
-		if ( moveForward || moveBackward ){
-			velocity.z -= direction.z * moveSpeed * delta;
-			if(moveSpeed < 1000){
-				moveSpeed++;
-			}
-		}else{
-			moveSpeed = 400;
-
-		}
-
-		if ( moveLeft || moveRight ){
-			velocity.x -= direction.x * moveSpeed * delta;
-		}
-		/*
-		if ( onObject === true ) {
-			velocity.y = Math.max( 0, velocity.y );
-			canJump = true;
-		}
-
-
-		controls.moveRight( - velocity.x * delta );
-
-		controls.moveForward( - velocity.z * delta );
-
-		prevTime = time;
-	}
-	*/
-	renderer.render( scene, camera );
+  renderer.render(scene, camera);
 }
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //	EVENT HANDLERS / CONTROLLERS
@@ -379,26 +349,27 @@ function onWindowResize() {
 function onKeyDown (event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
-			moveForward = true;
 			playerMoveDirection.forward = 1;
 			break;
 
 		case 65: // a
-			moveLeft = true;
 			playerMoveDirection.left = 1;
 			break;
 
 		case 83: // s
-			moveBackward = true;
 			playerMoveDirection.back = 1;
 			break;
 
 		case 68: // d
-			moveRight = true;
 			playerMoveDirection.right = 1;
 			break;
 
 		case 32: // space
+			playerMoveDirection.forward = 0;
+			playerMoveDirection.left = 0;
+			playerMoveDirection.back = 0;
+			playerMoveDirection.right = 0;
+			console.log(jumping);
 			let resultantImpulse = new Ammo.btVector3( 0, 5, 0 );
 			resultantImpulse.op_mul(2);
 			let physicsBody = player.userData.physicsBody;
@@ -414,23 +385,18 @@ function onKeyDown (event ) {
 function onKeyUp( event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
-			moveForward = false;
 			playerMoveDirection.forward = 0;
-
 			break;
 
 		case 65: // a
-			moveLeft = false;
 			playerMoveDirection.left = 0;
 			break;
 
 		case 83: // s
-			moveBackward = false;
 			playerMoveDirection.back = 0;
 			break;
 
 		case 68: // d
-			moveRight = false;
 			playerMoveDirection.right = 0;
 			break;
 

@@ -144,3 +144,98 @@ Changed movement keys from arrows to wasd and edited jump height.
 Known issues: Jump needs to be disabled when in air and so does movement.
 Possible Solution: Use collision handler to determine when the player is on the ground or object to enable jump, and disable jump 
 after pressing jump key. Disable movement while player does not have any collisions.
+
+
+Jan/31/2020
+Ryan Slaybaugh:
+Commit 6:
+
+  Removed initial testing area to begin work on level creation. Created a large platform as the base with a simple texture and
+a lone building to start the player out on. Also implemented textures for the building though they are not final.
+
+
+Jan/31/2020
+Ryan Slaybaugh:
+Commit 7:
+
+  Added createSkyBox() function to level1.js to create a sky box. I found a cubemap online for free to use as a place holder
+until we decide on an official skybox.
+
+Jan/31/2020
+Ryan Slaybaugh:
+Commit 8:
+
+  Added createCityScape() function to level1.js to randomly generate a city for player movement testing. Level design will be put on hold while
+I begin work on a start menu for our game.
+
+
+Feb/2/2020
+Ryan Slaybaugh:
+Commit 9:
+
+  Added new functions start_Menu() and start_Menu_Loader() to handle the start menu and I renamed the loaders() function to object_Loader(),
+and loadSounds() to sound_Loader(). I created a new function called load_Manager() to handle the separation of loaders. I also added code
+to the start_Menu() function to create a basic layout for the menu including a header called Grappling Game, a Select Level button, an Options
+button, and an Exit Game button. They do not have any raycasting or event handlers associated with them yet so for now they are just static
+objects.
+
+
+Feb/2/2020
+Ryan Slaybaugh:
+Commit 10:
+
+  Added raycasting to highlight start menu elements. Currently working on click eventlistener for selecting the elements of the main menu.
+
+
+Feb/2/2020
+Ryan Slaybaugh:
+Commit 11:
+
+  Added the ability to select menu elements. I ran into trouble attempting to delete elements from the scene after selecting Select Level
+and will continue to work on a solution to it. I have also worked to tidy up the code a bit, grouping relevant functions together with 
+appropriate headers.
+
+
+Feb/4/2020
+Ryan Slaybaugh:
+Commit 12:
+
+  Added selection functionality to the Select Level and Options buttons which will relocate the camera to the left or right of its starting
+position. I have also added Back buttons which return the camera to the original position, looking at the Main Menu. I also moved the 
+menu code to a new menu.js file, to make it easier to separate the menu, level, and core elements of the code. I also added a new font type
+for use by the text objects.
+
+
+Feb/5/2020
+Ryan Slaybaugh:
+Commit 13:
+
+  Added the ability to load level 1 from the start menu after selecting the Select Level button and then the Level 1 button. Also Repositioned
+the Select Level and Options menus to above and below the main menu respectively to account for different resolutions and prevent one menu
+appearing in another. Moved new scene creation to the load manager and added an if statement to load level 1 data from the load manager.
+Moved scene graphics initialization to the level_1.js file to consolidate level 1 items/needs.
+
+2/5/2020 (11:51 until 23:27)
+Semira Pinder
+Commit #1 of the week 
+
+Added a tail and a body to the catGun object after tweaking the vertices a large amount.
+
+2/6/2020 (23:27 pm until 00:17)
+Semira Pinder
+Commit #2 of the week
+
+Remapped the UV map and added a new texture paint for catGun.
+
+
+2/6/2020 (9:02 until 10:43)
+Semira Pinder
+Commit #3 of the week
+
+Added a skeleton to the catGun blender mesh. Didn't export it to an obj yet.
+
+2/6/2020 (11:02 until 12:58)
+Semira Pinder
+Commit #4 of the week
+
+Added a primitive walking animation, but I didn't export/render it.
