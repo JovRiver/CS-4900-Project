@@ -229,6 +229,7 @@ function create_Start_Menu() {
 			Level_1_Cube.scale.set(10, 10, 10);
 
 			Level_1_Cube.name = "Level_1_Cube";
+			level_Select_Objects.push(Level_1_Cube);
             scene.add(Level_1_Cube);
 	}
 

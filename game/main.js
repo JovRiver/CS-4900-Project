@@ -22,6 +22,8 @@ let mouse = new THREE.Vector2(), intersected_Object;
 let playing = false;
 let level_1 = false;
 
+let level_Select_Objects = [];
+
 //Ammojs Initialization
 Ammo().then(start);
 
@@ -76,7 +78,7 @@ function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoad
             });
 
 			obj.name = "Enemy";
-			obj.position.set(5, 12.5, -14);//moves the mesh
+			obj.position.set(5, 60, -14);//moves the mesh
             obj.rotateX(.3);
             obj.rotateY(-.8);
             obj.rotateZ(.4);
@@ -290,6 +292,10 @@ function renderFrame(){
 	
 		movePlayer();
 		updateCamera();
+	}
+
+	if (playing === false) {
+		level_Select_Objects[0].rotation.y += 0.01;
 	}
 
 	requestAnimationFrame( renderFrame );
