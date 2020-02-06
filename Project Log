@@ -215,14 +215,21 @@ the Select Level and Options menus to above and below the main menu respectively
 appearing in another. Moved new scene creation to the load manager and added an if statement to load level 1 data from the load manager.
 Moved scene graphics initialization to the level_1.js file to consolidate level 1 items/needs.
 
-2/5/2020 (11:51 till 23:27)
+2/5/2020 (11:51 until 23:27)
 Semira Pinder
 Commit #1 of the week 
 
 Added a tail and a body to the catGun object after tweaking the vertices a large amount.
 
-2/6/2020 (23:27 pm till 00:17)
+2/6/2020 (23:27 pm until 00:17)
 Semira Pinder
 Commit #2 of the week
 
 Remapped the UV map and added a new texture paint for catGun.
+
+
+2/6/2020 (9:02 until 10:43)
+Semira Pinder
+Commit #3 of the week
+
+Added a skeleton to the catGun blender mesh. Didn't export it to an obj yet.
