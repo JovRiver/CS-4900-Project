@@ -196,7 +196,6 @@ and will continue to work on a solution to it. I have also worked to tidy up the
 appropriate headers.
 
 
-
 Feb/4/2020
 Ryan Slaybaugh:
 Commit 12:
@@ -206,4 +205,13 @@ position. I have also added Back buttons which return the camera to the original
 menu code to a new menu.js file, to make it easier to separate the menu, level, and core elements of the code. I also added a new font type
 for use by the text objects.
 
+
+Feb/5/2020
+Ryan Slaybaugh:
+Commit 13:
+
+  Added the ability to load level 1 from the start menu after selecting the Select Level button and then the Level 1 button. Also Repositioned
+the Select Level and Options menus to above and below the main menu respectively to account for different resolutions and prevent one menu
+appearing in another. Moved new scene creation to the load manager and added an if statement to load level 1 data from the load manager.
+Moved scene graphics initialization to the level_1.js file to consolidate level 1 items/needs.
 
