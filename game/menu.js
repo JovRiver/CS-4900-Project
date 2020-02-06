@@ -1,6 +1,6 @@
 function create_Start_Menu() {
 	let loader = new THREE.FontLoader();
-    let loadBar = document.getElementById('load');
+	let loadBar = document.getElementById('load');
 
     function main_Menu() {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +29,8 @@ function create_Start_Menu() {
 			let mesh = new THREE.Mesh( textGeo, textMaterial );
 				mesh.position.x = centerOffset;
 				mesh.position.y = 10;
+
+				mesh.rotation.x = THREE.Math.degToRad(10);
 
 				mesh.name = "Grappling_Game";
 
@@ -167,27 +169,68 @@ function create_Start_Menu() {
 			} );
 
 				textGeo.computeBoundingBox();
-			//let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 
 			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 
 			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				//mesh.position.x = centerOffset;
-				mesh.position.x = -95;
-				mesh.position.y = 10;
-				mesh.position.z = 110;
+				mesh.position.x = centerOffset;
+				mesh.position.x = -50;
+				mesh.position.y += 110;
 
-				mesh.rotation.x = THREE.Math.degToRad(10);
-				mesh.rotation.y = THREE.Math.degToRad(105);
-				mesh.rotation.z = THREE.Math.degToRad(10);
+				mesh.rotation.x = THREE.Math.degToRad(30);
+				mesh.rotation.y = THREE.Math.degToRad(20);
 
 				mesh.name = "Back_Level";
 
 				scene.add( mesh );
 		});
-		
-		
-    }
+
+		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+
+			let textGeo = new THREE.TextBufferGeometry( "Level 1", {
+
+				font: font,
+
+				size: 5,
+				height: 1,
+				curveSegments: 12,
+
+				bevelThickness: 1,
+				bevelSize: .5,
+				bevelEnabled: true
+
+			} );
+
+				textGeo.computeBoundingBox();
+			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+
+			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+
+			let mesh = new THREE.Mesh( textGeo, textMaterial );
+				mesh.position.x = centerOffset;
+				mesh.position.x = -45;
+				mesh.position.y += 80;
+
+				mesh.rotation.x = THREE.Math.degToRad(30);
+				mesh.rotation.y = THREE.Math.degToRad(20);
+				mesh.rotation.z = THREE.Math.degToRad(-8);
+
+				mesh.name = "Level_1";
+
+				scene.add( mesh );
+		});
+
+		let Level_1_Cube_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')});
+			Level_1_Cube_Texture.map.wrapS = Level_1_Cube_Texture.map.wrapT = THREE.RepeatWrapping;
+			Level_1_Cube_Texture.map.repeat.set(1, 1);
+        let	Level_1_Cube = new THREE.Mesh(new THREE.BoxBufferGeometry(), Level_1_Cube_Texture);
+			Level_1_Cube.position.set(-38, 95, 0);
+			Level_1_Cube.scale.set(10, 10, 10);
+
+			Level_1_Cube.name = "Level_1_Cube";
+            scene.add(Level_1_Cube);
+	}
 
     function options_Menu() {
 		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
@@ -207,19 +250,17 @@ function create_Start_Menu() {
 			} );
 
 				textGeo.computeBoundingBox();
-			//let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 
 			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 
 			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				//mesh.position.x = centerOffset;
-				mesh.position.x = 95;
-				mesh.position.y = 31;
-				mesh.position.z = 2.5;
+				mesh.position.x = centerOffset;
+				mesh.position.x = -50;
+				mesh.position.y -= 50;
 
-				mesh.rotation.x = THREE.Math.degToRad(10);
-				mesh.rotation.y = THREE.Math.degToRad(-70);
-				mesh.rotation.z = THREE.Math.degToRad(10);
+				mesh.rotation.x = THREE.Math.degToRad(30);
+				mesh.rotation.y = THREE.Math.degToRad(20);
 
 				mesh.name = "Back_Options";
 

@@ -19,6 +19,7 @@ let mouse = new THREE.Vector2(), intersected_Object;
 
 
 //Testing variables
+let playing = false;
 let level_1 = false;
 
 //Ammojs Initialization
@@ -49,8 +50,10 @@ function start (){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 function load_Manager() {
+	scene = new THREE.Scene();
+	scene.dispose();
 
-	if (level_1 === true) {
+	if (level_1) {
 		createLevel1();
 		createPlayer();
 		object_Loader();
@@ -81,7 +84,7 @@ function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoad
 			loadBar.innerHTML = "";
 		},
 		function(xhr){//onProgress
-			loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
 				sound_Loader(loadBar);
 			}
@@ -110,9 +113,9 @@ function sound_Loader(loadBar){
 			sound.setVolume( 0.25 );
 		},
 		function(xhr){//onProgress
-			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100) + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-				document.getElementById("load").style.display = "none";
+				document.getElementById("blocker").style.display = "block";
 				setupControls();//game can start with a click after external files are loaded in
 				renderFrame();//starts the loop once the models are loaded
 			}
@@ -141,7 +144,7 @@ function setupGraphics(){
 	
 	//setup point light for the scene
     let pointLight = new THREE.PointLight(0xffffff, 1.5); 
-		pointLight.position.set(0, 100, 90); 
+		pointLight.position.set(0, -30, 100); 
 		scene.add(pointLight); 
 		pointLight.color.setHSL(.2, 1, 0.5);
         
@@ -151,6 +154,8 @@ function setupGraphics(){
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
+
+	renderer.shadowMap.enabled = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -266,7 +271,7 @@ function updateCamera(){
 function renderFrame(){
 	let deltaTime = clock.getDelta();
 
-	if (level_1 === true) {
+	if (playing === true) {
 		updatePhysics( deltaTime );
 		stats.update();
 
@@ -433,7 +438,7 @@ function onKeyUp( event ) {
 function menu_Selection(event) {
 	event.preventDefault();
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	if (level_1 === false) {
+	if (playing === false) {
 
 		raycaster.setFromCamera( mouse, camera );
 	
@@ -451,13 +456,17 @@ function menu_Selection(event) {
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 
 				if (intersects[0].object.name === "Select_Level") {
-					camera.rotation.y = THREE.Math.degToRad(90);
-					camera.position.x -= 40;
+					camera.position.y += 80;
+				}
+
+				if (intersects[0].object.name === "Level_1" || intersects[0].object.name === "Level_1_Cube") {
+					level_1 = true;
+					playing = true;
+					load_Manager();
 				}
 
 				if (intersects[0].object.name === "Options") {
-					camera.rotation.y = THREE.Math.degToRad(-90);
-					camera.position.x += 40;
+					camera.position.y -= 80;
 				}
 
 				if (intersects[0].object.name === "Back_Level" || intersects[0].object.name === "Back_Options") {
