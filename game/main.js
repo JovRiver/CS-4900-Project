@@ -232,6 +232,7 @@ function setupPhysicsWorld(){
 function initDebug() {
 	this.debugDrawer = new THREE.AmmoDebugDrawer(scene, physicsWorld);
 	this.debugDrawer.enable();
+	this.debugDrawer.setDebugMode(1);
 
 	setInterval(() => {
 		var mode = (this.debugDrawer.getDebugMode() + 1) % 3;
@@ -280,6 +281,7 @@ function movePlayer(){
 
 	let vertex = new THREE.Vector3(moveX,moveY,moveZ);
 	vertex.applyQuaternion(camera.quaternion);
+	console.log(vertex);
 
 	if( moveX == 0 && moveY == 0 && moveZ == 0) return;
 
