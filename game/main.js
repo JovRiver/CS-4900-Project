@@ -18,7 +18,7 @@ let playing = false;
 let level_1 = false;
 
 let level_Select_Objects = [];
-
+let menu_Group;
 
 //Ammojs Initialization
 Ammo().then(start);
@@ -38,21 +38,24 @@ function start (){
 
 	setupEventHandlers();
 	showStats();
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //	LOADERS
 ///////////////////////////////////////////////////////////////////////////////////////
 
-function load_Manager() {
+function load_Manager() {	
 	scene = new THREE.Scene();
 	scene.dispose();
 
+	document.getElementById("blocker").style.display = "block";
+	document.getElementById("load").style.display = "";
+	document.getElementById("instructions").style.display = "";
+
 	if (level_1) {
+		object_Loader();
 		createLevel1();
 		createPlayer();
-		object_Loader();
 	}
 }
 
@@ -113,8 +116,11 @@ function sound_Loader(loadBar){
 			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
 				document.getElementById("blocker").style.display = "block";
+				document.getElementById("load").style.display = "none";
+
 				setupControls();//game can start with a click after external files are loaded in
 				renderFrame();//starts the loop once the models are loaded
+				playing = true;
 			}
 		},
 		function(err){//onError
@@ -161,7 +167,7 @@ function setupGraphics(){
 
 function createPlayer(){
 	//var pos = {x: 0, y: 2, z: 3};
-	let pos = {x: 0, y: 65, z: 0};
+	let pos = {x: 0, y: 105, z: 0};
 	let radius = 1;
 	let quat = {x: 0 , y: 0, z: 0, w: 1};
 	let mass = 1;
@@ -243,10 +249,10 @@ function initDebug() {
 	this.debugDrawer.enable();
 	this.debugDrawer.setDebugMode(1);
 
-	setInterval(() => {
-		var mode = (this.debugDrawer.getDebugMode() + 1) % 3;
-		this.debugDrawer.setDebugMode(mode);
-	}, 1000);
+	//setInterval(() => {
+		//let mode = (this.debugDrawer.getDebugMode() + 1) % 3;
+		//this.debugDrawer.setDebugMode(mode);
+	//}, 1000);
 }
 
 function showStats(){
@@ -304,17 +310,13 @@ function renderFrame(){
 		movePlayer();
 		updateCamera();
 	}
-
-	if (playing === false) {
-		level_Select_Objects[0].rotation.y += 0.01;
-	}
   
-  if (this.debugDrawer) this.debugDrawer.update();
+	if (this.debugDrawer) 
+		this.debugDrawer.update();
+	
 	requestAnimationFrame( renderFrame );
-  renderer.render(scene, camera);
+	renderer.render(scene, camera);
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //	EVENT HANDLERS / CONTROLLERS
@@ -337,7 +339,6 @@ function setupControls(){
 	controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();} );
 	controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = ''; sound.pause();} );
 	scene.add( controls.getObject() );
-
 }
 
 function onWindowResize() {
@@ -408,14 +409,45 @@ function onKeyUp( event ) {
 }
 
 function menu_Selection(event) {
-	event.preventDefault();
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if (playing === false) {
+		event.preventDefault();
+		raycaster.setFromCamera( mouse, camera );
+		let intersects = raycaster.intersectObject(menu_Group, true);
+
+		if (intersects.length > 0) {
+			if (intersects[0].object.name === "Select_Level") {
+				camera.position.y += 80;
+			}
+
+			if (intersects[0].object.name === "Level_1" || intersects[0].object.name === "Level_1_Cube") {
+				level_1 = true;
+				load_Manager();
+			}
+
+			if (intersects[0].object.name === "Options") {
+				camera.position.y -= 80;
+			}
+
+			if (intersects[0].object.name === "Back_Level" || intersects[0].object.name === "Back_Options") {
+				camera.position.set(0,-10,50);
+				camera.lookAt(0, 0, 0);
+			}
+
+			if (intersects[0].object.name === "Exit_Game") {
+				window.close();
+			}
+		}
+	}
+}
+
+function on_Mouse_Move(event) {
+	if (playing === false) {
+		mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+		mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
 		raycaster.setFromCamera( mouse, camera );
-	
-		let intersects = raycaster.intersectObjects(scene.children);
-	
+		let intersects = raycaster.intersectObject(menu_Group, true);
+
 		if (intersects.length > 0) {
 			if (intersects[0].object.name === "Grappling_Game") {
 				if (intersected_Object)
@@ -423,32 +455,14 @@ function menu_Selection(event) {
 
 				intersected_Object = null;
 			}
+
+			else if (intersects[0].object.name === "Level_1_Cube") {
+				level_Select_Objects[0].rotation.y += 0.01;
+			}
+
 			else if (intersected_Object != intersects[0].object) {
 				if (intersected_Object)
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
-
-				if (intersects[0].object.name === "Select_Level") {
-					camera.position.y += 80;
-				}
-
-				if (intersects[0].object.name === "Level_1" || intersects[0].object.name === "Level_1_Cube") {
-					level_1 = true;
-					playing = true;
-					load_Manager();
-				}
-
-				if (intersects[0].object.name === "Options") {
-					camera.position.y -= 80;
-				}
-
-				if (intersects[0].object.name === "Back_Level" || intersects[0].object.name === "Back_Options") {
-					camera.position.set(0,-10,50);
-					camera.lookAt(0, 0, 0);
-				}
-
-				if (intersects[0].object.name === "Exit_Game") {
-					window.close();
-				}
 
 				intersected_Object = intersects[0].object;
 				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
@@ -462,10 +476,4 @@ function menu_Selection(event) {
 			intersected_Object = null;
 		}
 	}
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-}
-
-function on_Mouse_Move(event) {
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
