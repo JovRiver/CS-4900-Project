@@ -86,7 +86,7 @@ function createLevel1() {
         var starterBoxBody = new Ammo.btRigidBody(starterBoxRbInfo);
             starterBoxBody.setFriction(4);
             starterBoxBody.setRollingFriction(10);
-            physicsWorld.addRigidBody(starterBoxBody);
+            physicsWorld.addRigidBody(starterBoxBody, buildingGroup, playerGroup);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -156,7 +156,7 @@ function createLevel1() {
             var starterBoxBody = new Ammo.btRigidBody(starterBoxRbInfo);
                 starterBoxBody.setFriction(4);
                 starterBoxBody.setRollingFriction(10);
-                physicsWorld.addRigidBody(starterBoxBody);
+                physicsWorld.addRigidBody(starterBoxBody, buildingGroup, playerGroup);
 
             static_Buildings.push(building);
         }
