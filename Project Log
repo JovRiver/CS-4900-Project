@@ -256,3 +256,34 @@ Commit 15:
 
   Changed around a few things about level 1, removed random city generation and manually added some "buildings" to play around with. 
 Still unsure of the direction for the level as original city design will be massively time consuming. 
+
+
+2/12/2020 (11:09pm -12:29am)
+Semira Pinder
+Commit #1 of the week
+
+Added a new skeleton to the catGun model.
+
+2/13/2020 (8:29pm-11:28pm)
+Semira Pinder
+Commit #2 of the week
+
+Added a better walking animation to the catGun model.
+
+2/13/2020 (11:31pm-12:42am)
+Semira Pinder
+Commit #3 of the week
+
+Added a shooting animation to the catGun model.
+
+3/13/2020 (10am-11:54am)
+Semira Pinder
+Commit #4 of this week
+
+Added a jumping animation to the model.
+
+3/13/2020 (12:21pm-12:24pm)
+Semira Pinder
+Commit #5 of this week
+
+Exported the file as a glb type, to be used in the program later.
