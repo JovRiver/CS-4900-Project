@@ -33,7 +33,7 @@ function createLevel1() {
     scene.add( helper );
 
     function createSkyBox() {
-    scene.background = new THREE.CubeTextureLoader().setPath( 'texture/skybox/' ).load(
+    scene.background = new THREE.CubeTextureLoader().setPath( './texture/skybox/' ).load(
         [
 		    'bluecloud_right.jpg',
 		    'bluecloud_left.jpg',
@@ -58,17 +58,23 @@ function createLevel1() {
     }
 
     function createStartPlatform() {
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         let pos = {x: 0, y: 50, z: 0};
-        let scale = {x: 50, y: 100, z: 50};
+        let scale = {x: 15, y: 100, z: 15};
 
         let mass = 0;
 
         //create base of starter platform
-        let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
+        //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
+        let base_Texture = [
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg'), side: THREE.FrontSide }),  //Right
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg'), side: THREE.FrontSide }),  //Left
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/base_Texture.jpg'), side: THREE.FrontSide }),  //Top
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg'), side: THREE.FrontSide }),  //Bottom
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg'), side: THREE.FrontSide }),  //Front
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg'), side: THREE.FrontSide }),  //Back
+        ];
             base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
-            base_Texture.map.repeat.set(5, 5);
+            //base_Texture.map.repeat.set(5, 5);
         let startPlatformBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
             startPlatformBox.position.set(pos.x, pos.y, pos.z);
             startPlatformBox.scale.set(scale.x, scale.y, scale.z);
@@ -93,24 +99,21 @@ function createLevel1() {
             starterBoxBody.setFriction(4);
             starterBoxBody.setRollingFriction(10);
             physicsWorld.addRigidBody(starterBoxBody);
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     function createCityScape() {
-        let pos = {x: -150, y: 75, z: -150};
-        let scale = {x: 100, y: 150, z: 100};
+        let pos = {x: 0, y: 45, z: -75};
+        let scale = {x: 40, y: 90, z: 60};
 
         let mass = 0;
 
-        //create base of starter platform
-        let building_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_8.jpg')})
-            building_Texture.map.wrapS = building_Texture.map.wrapT = THREE.RepeatWrapping;
-            building_Texture.map.repeat.set(5, 5);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BUILDING 1
+
+        //let building_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_8.jpg')})
+        let building_Texture = new THREE.MeshLambertMaterial({color: 0xcbd1d1});    
+            //building_Texture.map.wrapS = building_Texture.map.wrapT = THREE.RepeatWrapping;
+            //building_Texture.map.repeat.set(5, 5);
         let building = new THREE.Mesh(new THREE.BoxBufferGeometry(), building_Texture);
             building.position.set(pos.x, pos.y, pos.z);
             building.scale.set(scale.x, scale.y, scale.z);
@@ -135,6 +138,89 @@ function createLevel1() {
             building_Body.setFriction(4);
             building_Body.setRollingFriction(10);
             physicsWorld.addRigidBody(building_Body);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BUILDING 2
+
+        //let building_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_8.jpg')})
+        let building_Texture2 = new THREE.MeshLambertMaterial({color: 0xcbd1d1});    
+            //building_Texture.map.wrapS = building_Texture.map.wrapT = THREE.RepeatWrapping;
+            //building_Texture.map.repeat.set(5, 5);
+        let building2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), building_Texture2);
+            building2.position.set(-42, 50, pos.z - 10);
+            building2.scale.set(40, 100, 80);
+
+            scene.add(building2);
+
+        let building_Transform2 = new Ammo.btTransform();
+            building_Transform2.setIdentity();
+            building_Transform2.setOrigin(new Ammo.btVector3(-42, 50, pos.z - 10));
+            building_Transform2.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
+        let building_MotionState2 = new Ammo.btDefaultMotionState(building_Transform2);
+        let building_ColShape2 = new Ammo.btBoxShape(new Ammo.btVector3(40 * 0.5 + 1, 100 * 0.5 + 0.5, 80 * 0.5 + 1));
+            building_ColShape2.setMargin(0.05);
+        let building_LocalInertia2 = new Ammo.btVector3(0, 0, 0);
+            building_ColShape2.calculateLocalInertia(mass, building_LocalInertia2);
+        let building_RbInfo2 = new Ammo.btRigidBodyConstructionInfo(mass, building_MotionState2, building_ColShape2, building_LocalInertia2);
+        let building_Body2 = new Ammo.btRigidBody(building_RbInfo2);
+            building_Body2.setFriction(4);
+            building_Body2.setRollingFriction(10);
+            physicsWorld.addRigidBody(building_Body2);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BUILDING 3
+
+        let building_Texture3 = new THREE.MeshLambertMaterial({color: 0xcbd1d1});    
+            //building_Texture.map.wrapS = building_Texture.map.wrapT = THREE.RepeatWrapping;
+            //building_Texture.map.repeat.set(5, 5);
+        let building3 = new THREE.Mesh(new THREE.BoxBufferGeometry(), building_Texture3);
+            building3.position.set(-5, 90, pos.z - 20);
+            building3.scale.set(30, 10, 20);
+
+            scene.add(building3);
+
+        let building_Transform3 = new Ammo.btTransform();
+            building_Transform3.setIdentity();
+            building_Transform3.setOrigin(new Ammo.btVector3(-5, 90, pos.z - 20));
+            building_Transform3.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
+        let building_MotionState3 = new Ammo.btDefaultMotionState(building_Transform3);
+        let building_ColShape3 = new Ammo.btBoxShape(new Ammo.btVector3(30 * 0.5 + 1, 10 * 0.5 + 0.5, 20 * 0.5 + 1));
+            building_ColShape3.setMargin(0.05);
+        let building_LocalInertia3 = new Ammo.btVector3(0, 0, 0);
+            building_ColShape3.calculateLocalInertia(mass, building_LocalInertia3);
+        let building_RbInfo3 = new Ammo.btRigidBodyConstructionInfo(mass, building_MotionState3, building_ColShape3, building_LocalInertia3);
+        let building_Body3 = new Ammo.btRigidBody(building_RbInfo3);
+            building_Body3.setFriction(4);
+            building_Body3.setRollingFriction(10);
+            physicsWorld.addRigidBody(building_Body3);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BUILDING 4
+
+        let building_Texture4 = new THREE.MeshLambertMaterial({color: 0xcbd1d1});    
+        let building4 = new THREE.Mesh(new THREE.BoxBufferGeometry(), building_Texture4);
+        building4.position.set(50, 60, pos.z);
+        building4.scale.set(50, 120, 60);
+
+        scene.add(building4);
+
+        let building_Transform4 = new Ammo.btTransform();
+            building_Transform4.setIdentity();
+            building_Transform4.setOrigin(new Ammo.btVector3(50, 60, pos.z));
+            building_Transform4.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
+        let building_MotionState4 = new Ammo.btDefaultMotionState(building_Transform4);
+        let building_ColShape4 = new Ammo.btBoxShape(new Ammo.btVector3(50 * 0.5 + 1, 120 * 0.5 + 0.5, 60 * 0.5 + 1));
+            building_ColShape4.setMargin(0.05);
+        let building_LocalInertia4 = new Ammo.btVector3(0, 0, 0);
+            building_ColShape4.calculateLocalInertia(mass, building_LocalInertia4);
+        let building_RbInfo4 = new Ammo.btRigidBodyConstructionInfo(mass, building_MotionState4, building_ColShape4, building_LocalInertia4);
+        let building_Body4 = new Ammo.btRigidBody(building_RbInfo4);
+            building_Body4.setFriction(4);
+            building_Body4.setRollingFriction(10);
+            physicsWorld.addRigidBody(building_Body4);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
     }
 
     setupPhysicsWorld();

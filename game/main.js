@@ -14,8 +14,10 @@ let mouse = new THREE.Vector2(), intersected_Object;
 let jumping = false;
 
 //Testing variables
-let playing = false;
-let level_1 = false;
+let playing = false;	//set to true for level creation
+let level_1 = false;	//set to true for level creation
+
+//document.getElementById("load_Menu").style.display = "none";	//used to immediately go to level 1
 
 let level_Select_Objects = [];
 let menu_Group;
@@ -34,7 +36,8 @@ function start (){
 
 	setupPhysicsWorld();
 	setupGraphics();
-	create_Start_Menu();
+	create_Start_Menu();	//comment out for level creation
+	//load_Manager();	//uncomment for level creation
 
 	setupEventHandlers();
 	showStats();
@@ -75,7 +78,7 @@ function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoad
             });
 
 			obj.name = "Enemy";
-			obj.position.set(5, 60, -14);//moves the mesh
+			obj.position.set(5, 105, -14);//moves the mesh
             obj.rotateX(.3);
             obj.rotateY(-.8);
             obj.rotateZ(.4);
