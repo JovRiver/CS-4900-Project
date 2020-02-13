@@ -35,9 +35,10 @@ function start (){
 	ammoTmpQuat = new Ammo.btQuaternion();
 	flagCallBack = new Ammo.ConcreteContactResultCallback();
 
-	load_Manager();	//comment out for level creation
+
 	setupEventHandlers();
 	showStats();
+	load_Manager();	//comment out for level creation
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +47,7 @@ function start (){
 
 function load_Manager() {	
 	scene = new THREE.Scene();
-	scene.dispose();
+	//scene.dispose();
 
 	document.getElementById("blocker").style.display = "block";
 	document.getElementById("load").style.display = "";
@@ -102,8 +103,8 @@ function updatePhysics( deltaTime ){
 
 flagCallBack.addSingleResult = function () {
 	console.log("COLLIDE");
-	level = 0;
-	load_Manager();
+	//level = 0;
+	//load_Manager();
 };
 
 function movePlayer(){
