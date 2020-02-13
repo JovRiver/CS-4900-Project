@@ -227,9 +227,213 @@ function createLevel1() {
    
     }
 
+
+    function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
+        let loadBar = document.getElementById('load');
+
+        //enemy models
+        let catLoader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
+        catLoader.load(
+            "objects/cat/catGun.obj",
+            function(obj) {//onLoad, obj is an Object3D provided by load()
+                let tex = new THREE.TextureLoader().load("objects/cat/catGun.png");//possibly 2 quick?
+//https://stackoverflow.com/questions/33809423/how-to-apply-texture-on-an-object-loaded-by-objloader
+                obj.traverse(function (child) {
+                    if (child instanceof THREE.Mesh)
+                        child.material.map = tex;
+                });
+
+                obj.name = "Enemy";
+                obj.position.set(5, 105, -14);//moves the mesh
+                obj.rotateX(.3);
+                obj.rotateY(-.8);
+                obj.rotateZ(.4);
+                scene.add(obj);
+                loadBar.innerHTML = "";
+            },
+            function(xhr){//onProgress
+                loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                    flag_Loader(loadBar);
+
+                }
+
+            },
+            function(err){//onError
+                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                console.log("error in loading enemy model");
+            }
+        );
+    }
+
+    function flag_Loader(loadBar){
+        let listener = new THREE.AudioListener();
+        camera.add( listener );
+
+        // create a global audio source
+        sound = new THREE.Audio( listener );
+
+
+        // load a sound and set it as the Audio object's buffer
+        let loader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
+        loader.load(
+            "objects/flag/objFlag.obj",
+            function(obj) {//onLoad, obj is an Object3D provided by load()
+                //let tex = new THREE.TextureLoader().load("objects/flag/objFlag.png");//possibly 2 quick?
+                //https://stackoverflow.com/questions/33809423/how-to-apply-texture-on-an-object-loaded-by-objloader
+                //obj.traverse(function (child) {
+                //	if (child instanceof THREE.Mesh)
+                //		child.material.map = tex;
+                //});
+
+                obj.name = "Flag";
+                obj.position.set(0, 95, -100);//moves the mesh
+                obj.scale.set( .3, .3, .3 );
+
+                let geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
+                let material = new THREE.MeshBasicMaterial( { color: 0xffff00} );
+                flag = new THREE.Mesh( geometry, material );
+                flag.visible = false;
+
+                scene.add(obj);
+                scene.add( flag );
+                //flag.add(obj);
+
+
+
+
+                //scene.add(obj);
+
+                let transform = new Ammo.btTransform();
+                transform.setIdentity();
+                transform.setOrigin( new Ammo.btVector3( 0, 98, -100 ) );
+                transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
+                let motionState = new Ammo.btDefaultMotionState( transform );
+
+                colShape = new Ammo.btBoxShape(new Ammo.btVector3(3, 3, 3));
+                colShape.setMargin( 0.05 );
+
+                let localInertia = new Ammo.btVector3( 0, 0, 0 );
+                colShape.calculateLocalInertia( 1, localInertia );
+
+                let rbInfo = new Ammo.btRigidBodyConstructionInfo( 0, motionState, colShape, localInertia );
+                let flagBody = new Ammo.btRigidBody( rbInfo );
+
+                flagBody.setFriction(4);
+                flagBody.setRollingFriction(10);
+
+                physicsWorld.addRigidBody( flagBody, flagGroup, ghostGroup );
+
+                flag.userData.physicsBody = flagBody;
+
+
+                rigidBodies.push(flag);
+
+
+
+                loadBar.innerHTML = "";
+            },
+            function(xhr){//onProgress
+                loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                    document.getElementById("blocker").style.display = "block";
+                    sound_Loader(loadBar);
+                    b = true;
+                }
+            },
+            function(err){//onError
+                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                console.log("error in loading sound");
+            }
+        );
+    }
+
+    function sound_Loader(loadBar){
+        let listener = new THREE.AudioListener();
+        camera.add( listener );
+
+        // create a global audio source
+        sound = new THREE.Audio( listener );
+
+
+        // load a sound and set it as the Audio object's buffer
+        let audioLoader = new THREE.AudioLoader();
+        audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
+            function( buffer ) {
+                sound.setBuffer( buffer );
+                sound.setLoop( true );
+                sound.setVolume( 0.25 );
+            },
+            function(xhr){//onProgress
+                loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                    document.getElementById("blocker").style.display = "block";
+                    document.getElementById("load").style.display = "none";
+
+                    setupControls();//game can start with a click after external files are loaded in
+                    renderFrame();//starts the loop once the models are loaded
+                    playing = true;
+                }
+            },
+            function(err){//onError
+                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                console.log("error in loading sound");
+            }
+        );
+    }
+
+    function createPlayer(){
+        //var pos = {x: 0, y: 2, z: 3};
+        let pos = {x: 0, y: 105, z: 0};
+        let radius = 1;
+        let quat = {x: 0 , y: 0, z: 0, w: 1};
+        let mass = 1;
+
+        player = new THREE.Mesh(new THREE.SphereBufferGeometry(radius), new THREE.MeshPhongMaterial({color: 0xff0505}));
+
+        player.position.set(pos.x, pos.y, pos.z);
+
+        player.castShadow = true;
+        player.receiveShadow = true;
+
+        scene.add(player);
+
+        let transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+        transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+        let motionState = new Ammo.btDefaultMotionState( transform );
+
+        let colShape = new Ammo.btSphereShape( radius );
+        colShape.setMargin( 0.05 );
+
+        let localInertia = new Ammo.btVector3( 0, 0, 0 );
+        colShape.calculateLocalInertia( mass, localInertia );
+
+        let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+        let body = new Ammo.btRigidBody( rbInfo );
+
+        body.setFriction(4);
+        body.setRollingFriction(10);
+
+
+        physicsWorld.addRigidBody( body, playerGroup, buildingGroup );
+
+        player.userData.physicsBody = body;
+        player.userData.physicsBody.set
+
+
+
+        rigidBodies.push(player);
+        a = true;
+
+    }
+
+
     setupPhysicsWorld();
     initDebug();
-    
+    object_Loader();
+    createPlayer();
     createSkyBox();
     createGround();
     createStartPlatform();
