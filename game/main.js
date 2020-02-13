@@ -56,39 +56,40 @@ function load_Manager() {
 	}
 }
 
-function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
+function object_Loader(){//
 	let loadBar = document.getElementById('load');
 
 	//enemy models
-	let catLoader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
+	let catLoader = new THREE.GLTFLoader();
 	catLoader.load(
-		"objects/catGun.obj",
-		function(obj) {//onLoad, obj is an Object3D provided by load()
-		    let tex = new THREE.TextureLoader().load("objects/catGun.png");//possibly 2 quick?
-//https://stackoverflow.com/questions/33809423/how-to-apply-texture-on-an-object-loaded-by-objloader
-            obj.traverse(function (child) {
-                if (child instanceof THREE.Mesh)
-                    child.material.map = tex;
-            });
+		"objects/catGun.glb",
+		function(obj) {//onLoad, obj is a GLTF
 
 			obj.name = "Enemy";
-			obj.position.set(5, 60, -14);//moves the mesh
-            obj.rotateX(.3);
-            obj.rotateY(-.8);
-            obj.rotateZ(.4);
-			scene.add(obj);
+
+			obj.scene.position.y = 85;
+			obj.scene.position.x = -8;
+			obj.scene.position.z = 8;
+			//obj.scene.rotation.y = .8;
+			/*obj.asset.position.set(5, 60, -14);//moves the mesh
+            obj.asset.rotateX(.3);
+            obj.asset.rotateY(-.8);
+            obj.asset.rotateZ(.4);*/
+			scene.add(obj.scene);
+			//console.log("Made to onload");
 			loadBar.innerHTML = "";
 		},
 		function(xhr){//onProgress
 			loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
 				sound_Loader(loadBar);
+				//console.warn(xhr.responseText);
 			}
-
+			//console.log("Made to loading");
 		},
 		function(err){//onError
 			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-			console.log("error in loading enemy model");
+			//console.log(err);
 		}
 	);
 }
