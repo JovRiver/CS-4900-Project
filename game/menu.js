@@ -6,6 +6,32 @@ function create_Start_Menu() {
 	let loadBar = document.getElementById('load_Menu');
 
 	menu_Group = new THREE.Group();
+	function setupGraphics(){
+		clock = new THREE.Clock();
+
+		scene = new THREE.Scene();
+		scene.background = new THREE.Color(0x0f0f0f);
+
+		//create camera
+		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
+		camera.position.set(0,-10,50)
+		camera.lookAt(0,0,0);
+
+		//setup point light for the scene
+		let pointLight = new THREE.PointLight(0xffffff, 1.5);
+		pointLight.position.set(0, -30, 100);
+		scene.add(pointLight);
+		pointLight.color.setHSL(.2, 1, 0.5);
+
+		//Setup the renderer
+		renderer = new THREE.WebGLRenderer( { antialias: false } );
+		renderer.setClearColor( 0xbfd1e5 );
+		renderer.setPixelRatio( window.devicePixelRatio );
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		document.body.appendChild( renderer.domElement );
+
+		renderer.shadowMap.enabled = true;
+	}
 
     function main_Menu() {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -278,6 +304,7 @@ function create_Start_Menu() {
 		scene.add(menu_Group);
     }
 
+	setupGraphics();
     main_Menu();
     level_Select_Menu();
     options_Menu();
