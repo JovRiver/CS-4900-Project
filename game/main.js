@@ -351,8 +351,6 @@ function updatePhysics( deltaTime ){
 	physicsWorld.stepSimulation( deltaTime, 10 );
 	if(a && b){
 		physicsWorld.contactPairTest(player.userData.physicsBody, flag.userData.physicsBody, callback );
-		//physicsWorld.contactPairTest(player.userData.physicsBody, flag.userData.physicsBody, ammoContactPairTestCallback);
-
 	}
 
 	// Update rigid bodies
