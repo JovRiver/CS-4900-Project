@@ -2,7 +2,7 @@
 let physicsWorld, scene, camera, clock, stats, sound, controls, renderer, rigidBodies = [], tmpTrans = null;
 let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
-let playerGroup = 1, flagGroup = 2, ghostGroup = 4;
+let playerGroup = 1, flagGroup = 2, buildingGroup = 3, ghostGroup = 4;
 let a = false;
 let b = false;
 let callback = null;
@@ -35,9 +35,9 @@ function start (){
 	tmpTrans = new Ammo.btTransform();
 	ammoTmpPos = new Ammo.btVector3();
 	ammoTmpQuat = new Ammo.btQuaternion();
+	callback = new Ammo.ConcreteContactResultCallback();
 
 	setupPhysicsWorld();
-	callback = new Ammo.ConcreteContactResultCallback();
 	setupGraphics();
 	create_Start_Menu();
 
@@ -120,7 +120,7 @@ function flag_Loader(loadBar){
 			//});
 
 			obj.name = "Flag";
-			obj.position.set(10, 60, 0);//moves the mesh
+			obj.position.set(2, 60, 0);//moves the mesh
 			obj.scale.set( 0.1, 0.1, 0.1 );
 
 			let geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
@@ -138,7 +138,7 @@ function flag_Loader(loadBar){
 
 			let transform = new Ammo.btTransform();
 			transform.setIdentity();
-			transform.setOrigin( new Ammo.btVector3( 10, 60, 0 ) );
+			transform.setOrigin( new Ammo.btVector3( 2, 60, 0 ) );
 			transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
 			let motionState = new Ammo.btDefaultMotionState( transform );
 
@@ -166,7 +166,7 @@ function flag_Loader(loadBar){
 			loadBar.innerHTML = "";
 		},
 		function(xhr){//onProgress
-			loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
 				document.getElementById("blocker").style.display = "block";
 				sound_Loader(loadBar);
@@ -281,7 +281,7 @@ function createPlayer(){
 	body.setRollingFriction(10);
 
 
-	physicsWorld.addRigidBody( body, playerGroup, flagGroup );
+	physicsWorld.addRigidBody( body, playerGroup, buildingGroup );
 
 	player.userData.physicsBody = body;
 	player.userData.physicsBody.set
@@ -351,8 +351,6 @@ function updatePhysics( deltaTime ){
 	physicsWorld.stepSimulation( deltaTime, 10 );
 	if(a && b){
 		physicsWorld.contactPairTest(player.userData.physicsBody, flag.userData.physicsBody, callback );
-		//physicsWorld.contactPairTest(player.userData.physicsBody, flag.userData.physicsBody, ammoContactPairTestCallback);
-
 	}
 
 	// Update rigid bodies
