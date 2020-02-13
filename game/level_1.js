@@ -68,34 +68,15 @@ function createLevel1() {
         let mass = 0;
 
         //create base of starter platform
-        //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')})
+        //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
         let base_Texture = [
-            new THREE.MeshLambertMaterial({
-                map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'),
-                side: THREE.FrontSide
-            }),  //Right
-            new THREE.MeshLambertMaterial({
-                map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'),
-                side: THREE.FrontSide
-            }),  //Left
-            new THREE.MeshLambertMaterial({
-                map: new THREE.TextureLoader().load('texture/buildings/base_Texture.jpg'),
-                side: THREE.FrontSide
-            }),  //Top
-            new THREE.MeshLambertMaterial({
-                map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'),
-                side: THREE.FrontSide
-            }),  //Bottom
-            new THREE.MeshLambertMaterial({
-                map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'),
-                side: THREE.FrontSide
-            }),  //Front
-            new THREE.MeshLambertMaterial({
-                map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'),
-                side: THREE.FrontSide
-            }),  //Back
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Right
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Left
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/base_Texture.jpg'), side: THREE.FrontSide }),  //Top
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Bottom
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Front
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Back
         ];
-
         base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
         //base_Texture.map.repeat.set(5, 5);
         let startPlatformBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
@@ -121,8 +102,7 @@ function createLevel1() {
         let starterBoxBody = new Ammo.btRigidBody(starterBoxRbInfo);
         starterBoxBody.setFriction(4);
         starterBoxBody.setRollingFriction(10);
-
-        physicsWorld.addRigidBody(starterBoxBody, buildingGroup, playerGroup);
+        physicsWorld.addRigidBody(starterBoxBody);
     }
     function createCityScape() {
         let pos = {x: 0, y: 45, z: -75};

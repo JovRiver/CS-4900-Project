@@ -126,12 +126,13 @@ function flag_Loader(loadBar){
 			//});
 
 			obj.name = "Flag";
-			obj.position.set(2, 60, 0);//moves the mesh
-			obj.scale.set( 0.1, 0.1, 0.1 );
+			obj.position.set(0, 95, -100);//moves the mesh
+			obj.scale.set( .3, .3, .3 );
 
 			let geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-			let material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+			let material = new THREE.MeshBasicMaterial( { color: 0xffff00} );
 			flag = new THREE.Mesh( geometry, material );
+			flag.visible = false;
 
 			scene.add(obj);
 			scene.add( flag );
@@ -144,7 +145,7 @@ function flag_Loader(loadBar){
 
 			let transform = new Ammo.btTransform();
 			transform.setIdentity();
-			transform.setOrigin( new Ammo.btVector3( 2, 60, 0 ) );
+			transform.setOrigin( new Ammo.btVector3( 0, 98, -100 ) );
 			transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
 			let motionState = new Ammo.btDefaultMotionState( transform );
 
@@ -340,7 +341,7 @@ function setupPhysicsWorld(){
 function initDebug() {
 	this.debugDrawer = new THREE.AmmoDebugDrawer(scene, physicsWorld);
 	this.debugDrawer.enable();
-	this.debugDrawer.setDebugMode(1);
+	this.debugDrawer.setDebugMode(2);
 
 	//setInterval(() => {
 		//let mode = (this.debugDrawer.getDebugMode() + 1) % 3;
@@ -399,14 +400,6 @@ function renderFrame(){
 		if ( controls.isLocked === true ) {
 			raycaster.ray.origin.copy( controls.getObject().position );
 			raycaster.ray.origin.y -= 10;
-	
-			let intersections = raycaster.intersectObjects( objects );
-			let onObject = intersections.length > 0;
-			let time = performance.now();
-			let delta = ( time - prevTime ) / 1000;
-	
-	
-			prevTime = time;
 		}
 	
 		movePlayer();
