@@ -1,6 +1,11 @@
 function create_Start_Menu() {
+	document.getElementById("instructions").style.display = "none";
+	document.getElementById("load").style.display = "none";
+	
 	let loader = new THREE.FontLoader();
-	let loadBar = document.getElementById('load');
+	let loadBar = document.getElementById('load_Menu');
+
+	menu_Group = new THREE.Group();
 
     function main_Menu() {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,18 +39,18 @@ function create_Start_Menu() {
 
 				mesh.name = "Grappling_Game";
 
-				scene.add( mesh );
+				menu_Group.add(mesh);
         	}, 
         	function(xhr){//onProgress
 			loadBar.innerHTML = "<h2>Loading Fonts " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-				document.getElementById("load").style.display = "none";
+				document.getElementById("load_Menu").style.display = "none";
 				document.getElementById("blocker").style.display = "none";
 			}
 			},
 			function(err){//onError
 			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-			console.log("error in loading enemy model");
+			console.log("error in loading fonts");
 			}
 		);
 
@@ -79,7 +84,7 @@ function create_Start_Menu() {
 
 				mesh.name = "Select_Level";
 
-				scene.add( mesh );
+				menu_Group.add(mesh);
         });
 
 	    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +117,7 @@ function create_Start_Menu() {
 
 				mesh.name = "Options";
 
-				scene.add( mesh );
+				menu_Group.add(mesh);
         });
 
 	    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,9 +150,10 @@ function create_Start_Menu() {
 
 				mesh.name = "Exit_Game";
 
-				scene.add( mesh );
+				menu_Group.add(mesh);
         });
 
+		scene.add(menu_Group);
 	    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -183,7 +189,7 @@ function create_Start_Menu() {
 
 				mesh.name = "Back_Level";
 
-				scene.add( mesh );
+				menu_Group.add(mesh);
 		});
 
 		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
@@ -218,7 +224,7 @@ function create_Start_Menu() {
 
 				mesh.name = "Level_1";
 
-				scene.add( mesh );
+				menu_Group.add(mesh);
 		});
 
 		let Level_1_Cube_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')});
@@ -230,7 +236,9 @@ function create_Start_Menu() {
 
 			Level_1_Cube.name = "Level_1_Cube";
 			level_Select_Objects.push(Level_1_Cube);
-            scene.add(Level_1_Cube);
+
+			menu_Group.add(Level_1_Cube);
+		scene.add(menu_Group);
 	}
 
     function options_Menu() {
@@ -265,12 +273,13 @@ function create_Start_Menu() {
 
 				mesh.name = "Back_Options";
 
-				scene.add( mesh );
-        });
+				menu_Group.add(mesh);
+		});
+		scene.add(menu_Group);
     }
 
     main_Menu();
     level_Select_Menu();
     options_Menu();
-    renderFrame();
+	renderFrame();
 }
