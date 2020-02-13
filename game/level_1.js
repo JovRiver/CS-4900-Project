@@ -1,6 +1,8 @@
 function createLevel1() {
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
 
+
+
     //Add hemisphere light
 	let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
 	hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
