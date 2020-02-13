@@ -68,44 +68,62 @@ function createLevel1() {
         let mass = 0;
 
         //create base of starter platform
-        //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
+        //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')})
         let base_Texture = [
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Right
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Left
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/base_Texture.jpg'), side: THREE.FrontSide }),  //Top
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Bottom
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Front
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Back
+            new THREE.MeshLambertMaterial({
+                map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'),
+                side: THREE.FrontSide
+            }),  //Right
+            new THREE.MeshLambertMaterial({
+                map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'),
+                side: THREE.FrontSide
+            }),  //Left
+            new THREE.MeshLambertMaterial({
+                map: new THREE.TextureLoader().load('texture/buildings/base_Texture.jpg'),
+                side: THREE.FrontSide
+            }),  //Top
+            new THREE.MeshLambertMaterial({
+                map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'),
+                side: THREE.FrontSide
+            }),  //Bottom
+            new THREE.MeshLambertMaterial({
+                map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'),
+                side: THREE.FrontSide
+            }),  //Front
+            new THREE.MeshLambertMaterial({
+                map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'),
+                side: THREE.FrontSide
+            }),  //Back
         ];
 
-            base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
-            //base_Texture.map.repeat.set(5, 5);
+        base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
+        //base_Texture.map.repeat.set(5, 5);
         let startPlatformBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
-            startPlatformBox.position.set(pos.x, pos.y, pos.z);
-            startPlatformBox.scale.set(scale.x, scale.y, scale.z);
+        startPlatformBox.position.set(pos.x, pos.y, pos.z);
+        startPlatformBox.scale.set(scale.x, scale.y, scale.z);
 
-            startPlatformBox.castShadow = true;
-            startPlatformBox.receiveShadow = true;
+        startPlatformBox.castShadow = true;
+        startPlatformBox.receiveShadow = true;
 
-            scene.add(startPlatformBox);
+        scene.add(startPlatformBox);
 
         //physics for base
         let starterBoxTransform = new Ammo.btTransform();
-            starterBoxTransform.setIdentity();
-            starterBoxTransform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
-            starterBoxTransform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
+        starterBoxTransform.setIdentity();
+        starterBoxTransform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+        starterBoxTransform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
         let starterBoxMotionState = new Ammo.btDefaultMotionState(starterBoxTransform);
         let starterBoxColShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 1, scale.y * 0.5 + 0.5, scale.z * 0.5 + 1));
-            starterBoxColShape.setMargin(0.05);
+        starterBoxColShape.setMargin(0.05);
         let starterBoxLocalInertia = new Ammo.btVector3(0, 0, 0);
-            starterBoxColShape.calculateLocalInertia(mass, starterBoxLocalInertia);
+        starterBoxColShape.calculateLocalInertia(mass, starterBoxLocalInertia);
         let starterBoxRbInfo = new Ammo.btRigidBodyConstructionInfo(mass, starterBoxMotionState, starterBoxColShape, starterBoxLocalInertia);
         let starterBoxBody = new Ammo.btRigidBody(starterBoxRbInfo);
-            starterBoxBody.setFriction(4);
-            starterBoxBody.setRollingFriction(10);
+        starterBoxBody.setFriction(4);
+        starterBoxBody.setRollingFriction(10);
 
-            physicsWorld.addRigidBody(starterBoxBody, buildingGroup, playerGroup);
-
+        physicsWorld.addRigidBody(starterBoxBody, buildingGroup, playerGroup);
+    }
     function createCityScape() {
         let pos = {x: 0, y: 45, z: -75};
         let scale = {x: 40, y: 90, z: 60};
@@ -115,7 +133,7 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BUILDING 1
 
-        //let building_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_8.jpg')})
+        //let building_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_8.jpg')})
         let building_Texture = new THREE.MeshLambertMaterial({color: 0xcbd1d1});    
             //building_Texture.map.wrapS = building_Texture.map.wrapT = THREE.RepeatWrapping;
             //building_Texture.map.repeat.set(5, 5);
