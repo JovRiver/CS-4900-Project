@@ -12,16 +12,12 @@ let canJump = false;
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
-//let color = new THREE.Color();	//I don't see this being used anywhere rs
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2(), intersected_Object;
-let jumping = false;
 
-//Testing variables
-let playing = false;	//set to true for level creation
+let playing = false; //set to true for level creation
 let level = 0;	//set to true for level creation
 
-//document.getElementById("load_Menu").style.display = "none";	//used to immediately go to level 1
 
 let level_Select_Objects = [];
 let menu_Group;
@@ -39,7 +35,7 @@ function start (){
 	ammoTmpQuat = new Ammo.btQuaternion();
 	flagCallBack = new Ammo.ConcreteContactResultCallback();
 
-	create_Start_Menu();	//comment out for level creation
+	load_Manager();	//comment out for level creation
 	setupEventHandlers();
 	showStats();
 }
@@ -57,6 +53,9 @@ function load_Manager() {
 	document.getElementById("instructions").style.display = "";
 
 	switch (level){
+		case 0:
+			create_Start_Menu();
+			break;
 		case 1:
 			createLevel1();
 			break;
@@ -75,9 +74,6 @@ function load_Manager() {
 
 	}
 }
-
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //	SYSTEM
@@ -106,6 +102,8 @@ function updatePhysics( deltaTime ){
 
 flagCallBack.addSingleResult = function () {
 	console.log("COLLIDE");
+	level = 0;
+	load_Manager();
 };
 
 function movePlayer(){
