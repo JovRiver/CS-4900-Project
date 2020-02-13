@@ -3,6 +3,8 @@ function createLevel1() {
     
     scene.fog = new THREE.Fog(0x6c7578, 150, 750);
 
+
+
     //Add hemisphere light
 	let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
 	hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
@@ -46,7 +48,9 @@ function createLevel1() {
 
     function createGround() {
 
-        let groundMaterial = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/base_Texture.jpg')});
+
+
+        let groundMaterial = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/city_Ground_1.jpg')});
             groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
             groundMaterial.map.repeat.set(10, 10);
         let ground = new THREE.Mesh(new THREE.BoxBufferGeometry(), groundMaterial);
@@ -66,13 +70,14 @@ function createLevel1() {
         //create base of starter platform
         //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
         let base_Texture = [
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg'), side: THREE.FrontSide }),  //Right
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg'), side: THREE.FrontSide }),  //Left
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/base_Texture.jpg'), side: THREE.FrontSide }),  //Top
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg'), side: THREE.FrontSide }),  //Bottom
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg'), side: THREE.FrontSide }),  //Front
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg'), side: THREE.FrontSide }),  //Back
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Right
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Left
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/base_Texture.jpg'), side: THREE.FrontSide }),  //Top
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Bottom
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Front
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Back
         ];
+
             base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
             //base_Texture.map.repeat.set(5, 5);
         let startPlatformBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
@@ -98,8 +103,8 @@ function createLevel1() {
         let starterBoxBody = new Ammo.btRigidBody(starterBoxRbInfo);
             starterBoxBody.setFriction(4);
             starterBoxBody.setRollingFriction(10);
-            physicsWorld.addRigidBody(starterBoxBody);
-    }
+
+            physicsWorld.addRigidBody(starterBoxBody, buildingGroup, playerGroup);
 
     function createCityScape() {
         let pos = {x: 0, y: 45, z: -75};
@@ -117,6 +122,7 @@ function createLevel1() {
         let building = new THREE.Mesh(new THREE.BoxBufferGeometry(), building_Texture);
             building.position.set(pos.x, pos.y, pos.z);
             building.scale.set(scale.x, scale.y, scale.z);
+
 
             building.castShadow = true;
             building.receiveShadow = true;
@@ -137,7 +143,7 @@ function createLevel1() {
         let building_Body = new Ammo.btRigidBody(building_RbInfo);
             building_Body.setFriction(4);
             building_Body.setRollingFriction(10);
-            physicsWorld.addRigidBody(building_Body);
+            physicsWorld.addRigidBody(building_Body, buildingGroup, playerGroup);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BUILDING 2
@@ -165,7 +171,7 @@ function createLevel1() {
         let building_Body2 = new Ammo.btRigidBody(building_RbInfo2);
             building_Body2.setFriction(4);
             building_Body2.setRollingFriction(10);
-            physicsWorld.addRigidBody(building_Body2);
+            physicsWorld.addRigidBody(building_Body2, buildingGroup, playerGroup);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BUILDING 3
@@ -192,7 +198,7 @@ function createLevel1() {
         let building_Body3 = new Ammo.btRigidBody(building_RbInfo3);
             building_Body3.setFriction(4);
             building_Body3.setRollingFriction(10);
-            physicsWorld.addRigidBody(building_Body3);
+            physicsWorld.addRigidBody(building_Body3, buildingGroup, playerGroup);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BUILDING 4
@@ -217,7 +223,7 @@ function createLevel1() {
         let building_Body4 = new Ammo.btRigidBody(building_RbInfo4);
             building_Body4.setFriction(4);
             building_Body4.setRollingFriction(10);
-            physicsWorld.addRigidBody(building_Body4);
+            physicsWorld.addRigidBody(building_Body4, buildingGroup, playerGroup);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    

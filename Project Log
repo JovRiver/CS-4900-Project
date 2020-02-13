@@ -239,3 +239,20 @@ Semira Pinder
 Commit #4 of the week
 
 Added a primitive walking animation, but I didn't export/render it.
+
+
+Feb/11/2020
+Ryan Slaybaugh:
+Commit 14:
+
+  Added highlighting to menu elements when hovering over them. Also changed the rotation of the Level_1_Cube to only rotate when you 
+are hovering over it. Currently it only rotates when you move the mouse on it so I will try to find a workaround so that we don't have
+to use the render frame to keep the cube rotating.
+
+
+Feb/12/2020
+Ryan Slaybaugh:
+Commit 15:
+
+  Changed around a few things about level 1, removed random city generation and manually added some "buildings" to play around with. 
+Still unsure of the direction for the level as original city design will be massively time consuming. 

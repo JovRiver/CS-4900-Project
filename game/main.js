@@ -1,7 +1,11 @@
 //variable declaration section
 let physicsWorld, scene, camera, clock, stats, sound, controls, renderer, rigidBodies = [], tmpTrans = null;
-let player = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
+let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
+let playerGroup = 1, flagGroup = 2, buildingGroup = 3, ghostGroup = 4;
+let a = false;
+let b = false;
+let callback = null;
 
 let objects = [];
 let canJump = false;
@@ -33,6 +37,7 @@ function start (){
 	tmpTrans = new Ammo.btTransform();
 	ammoTmpPos = new Ammo.btVector3();
 	ammoTmpQuat = new Ammo.btQuaternion();
+	callback = new Ammo.ConcreteContactResultCallback();
 
 	setupPhysicsWorld();
 	setupGraphics();
@@ -68,9 +73,9 @@ function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoad
 	//enemy models
 	let catLoader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
 	catLoader.load(
-		"objects/catGun.obj",
+		"objects/cat/catGun.obj",
 		function(obj) {//onLoad, obj is an Object3D provided by load()
-		    let tex = new THREE.TextureLoader().load("objects/catGun.png");//possibly 2 quick?
+		    let tex = new THREE.TextureLoader().load("objects/cat/catGun.png");//possibly 2 quick?
 //https://stackoverflow.com/questions/33809423/how-to-apply-texture-on-an-object-loaded-by-objloader
             obj.traverse(function (child) {
                 if (child instanceof THREE.Mesh)
@@ -88,13 +93,95 @@ function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoad
 		function(xhr){//onProgress
 			loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-				sound_Loader(loadBar);
+				flag_Loader(loadBar);
+
 			}
 
 		},
 		function(err){//onError
 			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			console.log("error in loading enemy model");
+		}
+	);
+}
+
+function flag_Loader(loadBar){
+	let listener = new THREE.AudioListener();
+	camera.add( listener );
+
+	// create a global audio source
+	sound = new THREE.Audio( listener );
+
+
+	// load a sound and set it as the Audio object's buffer
+	let loader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
+	loader.load(
+		"objects/flag/objFlag.obj",
+		function(obj) {//onLoad, obj is an Object3D provided by load()
+			//let tex = new THREE.TextureLoader().load("objects/flag/objFlag.png");//possibly 2 quick?
+			//https://stackoverflow.com/questions/33809423/how-to-apply-texture-on-an-object-loaded-by-objloader
+			//obj.traverse(function (child) {
+			//	if (child instanceof THREE.Mesh)
+			//		child.material.map = tex;
+			//});
+
+			obj.name = "Flag";
+			obj.position.set(2, 60, 0);//moves the mesh
+			obj.scale.set( 0.1, 0.1, 0.1 );
+
+			let geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
+			let material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+			flag = new THREE.Mesh( geometry, material );
+
+			scene.add(obj);
+			scene.add( flag );
+			//flag.add(obj);
+
+
+
+
+			//scene.add(obj);
+
+			let transform = new Ammo.btTransform();
+			transform.setIdentity();
+			transform.setOrigin( new Ammo.btVector3( 2, 60, 0 ) );
+			transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
+			let motionState = new Ammo.btDefaultMotionState( transform );
+
+			colShape = new Ammo.btBoxShape(new Ammo.btVector3(3, 3, 3));
+			colShape.setMargin( 0.05 );
+
+			let localInertia = new Ammo.btVector3( 0, 0, 0 );
+			colShape.calculateLocalInertia( 1, localInertia );
+
+			let rbInfo = new Ammo.btRigidBodyConstructionInfo( 0, motionState, colShape, localInertia );
+			let flagBody = new Ammo.btRigidBody( rbInfo );
+
+			flagBody.setFriction(4);
+			flagBody.setRollingFriction(10);
+
+			physicsWorld.addRigidBody( flagBody, flagGroup, ghostGroup );
+
+			flag.userData.physicsBody = flagBody;
+
+
+			rigidBodies.push(flag);
+
+
+
+			loadBar.innerHTML = "";
+		},
+		function(xhr){//onProgress
+			loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+				document.getElementById("blocker").style.display = "block";
+				sound_Loader(loadBar);
+				b = true;
+			}
+		},
+		function(err){//onError
+			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+			console.log("error in loading sound");
 		}
 	);
 }
@@ -203,12 +290,15 @@ function createPlayer(){
 	body.setRollingFriction(10);
 
 
-	physicsWorld.addRigidBody( body );
+	physicsWorld.addRigidBody( body, playerGroup, buildingGroup );
 
 	player.userData.physicsBody = body;
+	player.userData.physicsBody.set
+
 
 
 	rigidBodies.push(player);
+	a = true;
 
 }
 
@@ -268,6 +358,9 @@ function showStats(){
 function updatePhysics( deltaTime ){
 	// Step world
 	physicsWorld.stepSimulation( deltaTime, 10 );
+	if(a && b){
+		physicsWorld.contactPairTest(player.userData.physicsBody, flag.userData.physicsBody, callback );
+	}
 
 	// Update rigid bodies
 	for ( let i = 0; i < rigidBodies.length; i++ ) {
@@ -283,6 +376,12 @@ function updatePhysics( deltaTime ){
 		}
 	}
 }
+
+callback.addSingleResult = function () {
+	console.log("COLLIDE");
+
+
+};
 
 function updateCamera(){
 	camera.position.x = player.position.x;
@@ -373,7 +472,6 @@ function onKeyDown (event ) {
 			playerMoveDirection.left = 0;
 			playerMoveDirection.back = 0;
 			playerMoveDirection.right = 0;
-			console.log(jumping);
 			let resultantImpulse = new Ammo.btVector3( 0, 5, 0 );
 			resultantImpulse.op_mul(2);
 			let physicsBody = player.userData.physicsBody;
