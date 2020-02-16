@@ -1,4 +1,5 @@
 function create_Start_Menu() {
+	document.getElementById("load_Menu").style.display = "blocker";
 	document.getElementById("instructions").style.display = "none";
 	document.getElementById("load").style.display = "none";
 	
@@ -6,32 +7,20 @@ function create_Start_Menu() {
 	let loadBar = document.getElementById('load_Menu');
 
 	menu_Group = new THREE.Group();
-	function setupGraphics(){
-		clock = new THREE.Clock();
 
-		scene = new THREE.Scene();
-		scene.background = new THREE.Color(0x0f0f0f);
+	scene.background = new THREE.Color(0x0f0f0f);
 
-		//create camera
-		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
-		camera.position.set(0,-10,50)
-		camera.lookAt(0,0,0);
+	//create camera
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
+	camera.position.set(0,-10,50)
+	camera.lookAt(0,0,0);
 
-		//setup point light for the scene
-		let pointLight = new THREE.PointLight(0xffffff, 1.5);
+	//setup point light for the scene
+	let pointLight = new THREE.PointLight(0xffffff, 1.5);
 		pointLight.position.set(0, -30, 100);
-		scene.add(pointLight);
 		pointLight.color.setHSL(.2, 1, 0.5);
 
-		//Setup the renderer
-		renderer = new THREE.WebGLRenderer( { antialias: false } );
-		renderer.setClearColor( 0xbfd1e5 );
-		renderer.setPixelRatio( window.devicePixelRatio );
-		renderer.setSize( window.innerWidth, window.innerHeight );
-		document.body.appendChild( renderer.domElement );
-
-		renderer.shadowMap.enabled = true;
-	}
+	scene.add(pointLight);
 
     function main_Menu() {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +54,7 @@ function create_Start_Menu() {
 
 				mesh.name = "Grappling_Game";
 
-				menu_Group.add(mesh);
+				scene.add(mesh);
         	}, 
         	function(xhr){//onProgress
 			loadBar.innerHTML = "<h2>Loading Fonts " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
@@ -261,9 +250,9 @@ function create_Start_Menu() {
 			Level_1_Cube.scale.set(10, 10, 10);
 
 			Level_1_Cube.name = "Level_1_Cube";
-			level_Select_Objects.push(Level_1_Cube);
 
 			menu_Group.add(Level_1_Cube);
+			
 		scene.add(menu_Group);
 	}
 
@@ -304,7 +293,6 @@ function create_Start_Menu() {
 		scene.add(menu_Group);
     }
 
-	setupGraphics();
     main_Menu();
     level_Select_Menu();
     options_Menu();
