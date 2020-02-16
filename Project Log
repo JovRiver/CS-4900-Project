@@ -287,3 +287,11 @@ Semira Pinder
 Commit #5 of this week
 
 Exported the file as a glb type, to be used in the program later.
+
+
+Feb/16/2020
+Ryan Slaybaugh:
+Commit: 16
+
+  Fixed immediate loading of level 1 by changing level variable to 1 from 0. There were a few issues preventing level 1 from loading 
+correctly. I also added more objects to level 1 and have been working with graph paper to map out the level.
