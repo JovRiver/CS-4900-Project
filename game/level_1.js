@@ -235,12 +235,12 @@ function createLevel1() {
         //enemy models
         let catLoader = new THREE.GLTFLoader();
         catLoader.load(
-            "objects/catGun.glb",
+            "objects/cat/catGun.glb",
             function(obj) {//onLoad, obj is a GLTF
 
                 obj.name = "Enemy";
 
-                obj.scene.position.y = 85;
+                obj.scene.position.y = 111;
                 obj.scene.position.x = -8;
                 obj.scene.position.z = 8;
                 //obj.scene.rotation.y = .8;
