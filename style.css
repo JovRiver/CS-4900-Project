@@ -89,3 +89,11 @@ body {
 
 	cursor: pointer;
 }
+
+#clock {
+	position: fixed;
+	bottom: 95%;
+	right: 50%;
+	display: block;
+
+}

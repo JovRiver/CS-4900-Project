@@ -15,8 +15,12 @@ let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
 let clock = new THREE.Clock();
+let gameClock =  new THREE.Clock();
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2(), intersected_Object;
+let startClock = true;
+let gamePlay = true; // Set this value someone when game starts.
+let timer = document.getElementById('clock');
 //const STATE = { DISABLE_DEACTIVATION : 4 };
 
 let level = 1;	//set to 0 for main menu, 1 or higher for levels
@@ -105,9 +109,13 @@ function updatePhysics( deltaTime ){
 }
 
 flagCallBack.addSingleResult = function () {
-	console.log("COLLIDE");
-	//level = 0;
-	//load_Manager();
+	if(gamePlay){
+		let gameTime = gameClock.getDelta();
+		console.log("COLLIDE");
+		console.log(gameTime);
+		gamePlay = false;
+	}
+
 };
 
 function movePlayer(){
@@ -141,6 +149,21 @@ function renderFrame(){
 	if (level > 0) {
 		updatePhysics( deltaTime );
 		stats.update();
+
+		if(!startClock){
+			let hours =  Math.floor(gameClock.getElapsedTime()/60)
+			let mins;
+			if( Math.floor(gameClock.getElapsedTime()%60) < 10){
+				mins =  "0" + Math.floor(gameClock.getElapsedTime()%60);
+			}else{
+				mins =  Math.floor(gameClock.getElapsedTime()%60);
+			}
+
+			if(gamePlay)
+				timer.innerHTML = "<h1>"+ hours +":" + mins + "</h1>";
+
+
+		}
 
 		if ( controls.isLocked === true ) {
 			raycaster.ray.origin.copy( controls.getObject().position );

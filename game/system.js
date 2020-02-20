@@ -11,12 +11,17 @@ function setupPhysicsWorld(){
 }
 
 function setupControls(){
+
     //create controls
     controls = new THREE.PointerLockControls( camera, document.body );
     let blocker = document.getElementById( 'blocker' );
     let instructions = document.getElementById( 'instructions' );
     instructions.addEventListener( 'click', function () {controls.lock();}, false );
-    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();} );
+    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();
+        if(startClock){
+            gameClock.start();
+            startClock = false;
+        }} );
     controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = ''; sound.pause();} );
     scene.add( controls.getObject() );
 }
