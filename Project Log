@@ -284,7 +284,7 @@ Added a jumping animation to the model.
 
 3/13/2020 (12:21pm-12:24pm)
 Semira Pinder
-Commit #5 of this week
+Commit #5 of this week (3)
 
 Exported the file as a glb type, to be used in the program later.
 
@@ -295,3 +295,15 @@ Commit: 16
 
   Fixed immediate loading of level 1 by changing level variable to 1 from 0. There were a few issues preventing level 1 from loading 
 correctly. I also added more objects to level 1 and have been working with graph paper to map out the level.
+
+2/19/2020 (2:35 pm - 2:45 pm)
+Semira Pinder
+Commit #1 of week 4
+
+Fixed the location to load the catGun.glb from in the object_Loader function, then changed the position of it in the game scene so it's visible.
+
+2/20/2020 12:38 am - 2:51 am 
+Semira Pinder
+Commit #2 of week 4
+
+After playing with the dope sheet, added a death animation for catGun and I re-exported the model in a glb format.
