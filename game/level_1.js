@@ -417,7 +417,6 @@ function createLevel1() {
     }
 
     function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
-        //enemy models
         let loadBar = document.getElementById('load');
 
         //enemy models
@@ -425,8 +424,9 @@ function createLevel1() {
         catLoader.load(
             "objects/cat/catGun.glb",
             function(obj) {//onLoad, obj is a GLTF
-
+                theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
                 obj.name = "Enemy";
+
 
                 obj.scene.position.y = 110;
                 obj.scene.position.x = -10;
@@ -438,6 +438,20 @@ function createLevel1() {
                 obj.asset.rotateZ(.4);*/
                 scene.add(obj.scene);
                 //console.log("Made to onload");
+
+                //animation for catGun
+                let anims = obj.animations;
+                //let aClip = THEE.AnimationClip.findByName(anims, "Walk");...
+
+                anims.forEach(function(aClip){
+                    theMixer.clipAction(aClip).play();//returns an Animation Action that's played with play()
+                });
+                //theMixer.clipAction(anims[1]).play();//"death" doesn't play for some reason
+
+
+
+
+
                 loadBar.innerHTML = "";
             },
             function(xhr){//onProgress
@@ -451,6 +465,7 @@ function createLevel1() {
             function(err){//onError
                 loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 console.log("error in loading enemy model");
+                console.log(err);
             }
         );
     }
