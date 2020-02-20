@@ -1,58 +1,91 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  RELIC CODE / MAY REUSE
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
+    /*    let base_Texture = [
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Right
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Left
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/base_Texture.jpg'), side: THREE.FrontSide }),  //Top
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Bottom
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Front
+            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Back
+        ];
+            base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
+            base_Texture.map.repeat.set(5, 5);
+    */
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function createLevel1() {
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
-    
-    scene.fog = new THREE.Fog(0x6c7578, 150, 750);
+    // sets load_Menu to be invisible, and all other css styles to be visible
+    document.getElementById("load_Menu").style.display = "none";
+	document.getElementById("blocker").style.display = "block";
+	document.getElementById("load").style.display = "";
+    document.getElementById("instructions").style.display = "";
 
+    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+    //scene.fog = new THREE.Fog(0x6c7578, 150, 750);
 
-
-    //Add hemisphere light
+    // add hemisphere light
 	let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
-	hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
-	hemiLight.groundColor.setHSL( 0.1, 1, 0.4 );
-	hemiLight.position.set( 0, 50, 0 );
+	    hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
+	    hemiLight.groundColor.setHSL( 0.1, 1, 0.4 );
+        hemiLight.position.set( 0, 50, 0 );
+        
 	scene.add( hemiLight );
 
-	//Add directional light
-	let dirLight = new THREE.DirectionalLight( 0xffffff , 1);
-	dirLight.color.setHSL( 0.1, 1, 0.95 );
-	dirLight.position.set( -1, 1.75, 1 );
-	dirLight.position.multiplyScalar( 100 );
-	scene.add( dirLight );
+	// add directional light
+	let dirLight = new THREE.DirectionalLight( 0xffffff , 0.75);
+	    dirLight.color.setHSL( 0.1, 1, 0.95 );
+	    dirLight.position.set( -1, 1.75, 1 );
+        dirLight.position.multiplyScalar( 100 );
 
-	dirLight.castShadow = true;
+	    dirLight.castShadow = true;
 
-	dirLight.shadow.mapSize.width = 4096;
-	dirLight.shadow.mapSize.height = 4096;
+	    dirLight.shadow.mapSize.width = 4096;
+	    dirLight.shadow.mapSize.height = 4096;
 
-	dirLight.shadow.camera.left = -500;
-	dirLight.shadow.camera.right = 500;
-	dirLight.shadow.camera.top = 500;
-	dirLight.shadow.camera.bottom = -500;
+	    dirLight.shadow.camera.left = -500;
+	    dirLight.shadow.camera.right = 500;
+	    dirLight.shadow.camera.top = 500;
+	    dirLight.shadow.camera.bottom = -500;
 
-    dirLight.shadow.camera.far = 13500;
-    
+        dirLight.shadow.camera.far = 13500;
+
+    // helper for directional light
     let helper = new THREE.CameraHelper( dirLight.shadow.camera );
+
+    scene.add( dirLight );
     scene.add( helper );
 
     function createSkyBox() {
-    scene.background = new THREE.CubeTextureLoader().setPath( './texture/skybox/' ).load(
-        [
-		    'bluecloud_right.jpg',
-		    'bluecloud_left.jpg',
-		    'bluecloud_up.jpg',
-		    'bluecloud_down.jpg',
-		    'bluecloud_back.jpg',
-		    'bluecloud_front.jpg'
-	    ]);
+        let base_Texture = [
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/skybox/bluecloud_right.jpg'), side: THREE.BackSide }),  //Right
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/skybox/bluecloud_left.jpg'), side: THREE.BackSide }),  //Left
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/skybox/bluecloud_up.jpg'), side: THREE.BackSide }),  //Top
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/skybox/bluecloud_down.jpg'), side: THREE.BackSide }),  //Bottom
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/skybox/bluecloud_back.jpg'), side: THREE.BackSide }),  //Back
+            new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/skybox/bluecloud_front.jpg'), side: THREE.BackSide }),  //Front
+        ];
+
+        let box = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
+            box.scale.set(10000, 10000, 10000);
+            box.position.set(0, 0, 0);
+
+        scene.add(box);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //  NOTE, THE PLAYER CAN JUMP 45 UNITS LONG AND 5 UNITS HIGH
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     function createGround() {
-
-
-
         let groundMaterial = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/city_Ground_1.jpg')});
             groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
-            groundMaterial.map.repeat.set(10, 10);
+            groundMaterial.map.repeat.set(20, 20);
         let ground = new THREE.Mesh(new THREE.BoxBufferGeometry(), groundMaterial);
             ground.position.set(0, 0, 0);
             ground.scale.set(10000, 0.5, 10000);
@@ -61,172 +94,327 @@ function createLevel1() {
             scene.add(ground);
     }
 
-    function createStartPlatform() {
-        let pos = {x: 0, y: 50, z: 0};
-        let scale = {x: 15, y: 100, z: 15};
+    function create_Course() {
+        let scale, pos, quat, texture, has_Boundry;
 
-        let mass = 0;
+    //PLATFORMS DENOTED BY P#
 
-        //create base of starter platform
-        //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
-        let base_Texture = [
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Right
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Left
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/base_Texture.jpg'), side: THREE.FrontSide }),  //Top
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Bottom
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Front
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Back
-        ];
-        base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
-        //base_Texture.map.repeat.set(5, 5);
-        let startPlatformBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
-        startPlatformBox.position.set(pos.x, pos.y, pos.z);
-        startPlatformBox.scale.set(scale.x, scale.y, scale.z);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // START BUILDING
 
-        startPlatformBox.castShadow = true;
-        startPlatformBox.receiveShadow = true;
+        scale = {x: 60, y: 2, z: 20};
+        pos = {x: 0, y: 99, z: 0};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
 
-        scene.add(startPlatformBox);
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        //physics for base
-        let starterBoxTransform = new Ammo.btTransform();
-        starterBoxTransform.setIdentity();
-        starterBoxTransform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
-        starterBoxTransform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
-        let starterBoxMotionState = new Ammo.btDefaultMotionState(starterBoxTransform);
-        let starterBoxColShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 1, scale.y * 0.5 + 0.5, scale.z * 0.5 + 1));
-        starterBoxColShape.setMargin(0.05);
-        let starterBoxLocalInertia = new Ammo.btVector3(0, 0, 0);
-        starterBoxColShape.calculateLocalInertia(mass, starterBoxLocalInertia);
-        let starterBoxRbInfo = new Ammo.btRigidBodyConstructionInfo(mass, starterBoxMotionState, starterBoxColShape, starterBoxLocalInertia);
-        let starterBoxBody = new Ammo.btRigidBody(starterBoxRbInfo);
-        starterBoxBody.setFriction(4);
-        starterBoxBody.setRollingFriction(10);
-        physicsWorld.addRigidBody(starterBoxBody);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P1
+        
+        scale = {x: 60, y: 2, z: 20};
+        pos = {x: 0, y: 94, z: -60};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P2
+        
+        scale = {x: 60, y: 2, z: 60};
+        pos = {x: -40, y: 99, z: -120};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P3
+
+        scale = {x: 20, y: 2, z: 10};
+        pos = {x: -30, y: 119, z: -95};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P4
+
+        scale = {x: 10, y: 2, z: 60};
+        pos = {x: -65, y: 114, z: -120};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P5
+
+        scale = {x: 20, y: 2, z: 20};
+        pos = {x: -20, y: 104, z: -180};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P6
+
+        scale = {x: 20, y: 2, z: 20};
+        pos = {x: -60, y: 109, z: -180};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P7
+
+        scale = {x: 2, y: 40, z: 100};
+        pos = {x: 5, y: 105, z: -140};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P8
+
+        scale = {x: 10, y: 2, z: 80};
+        pos = {x: 25, y: 99, z: -140};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P9
+
+        scale = {x: 20, y: 2, z: 40};
+        pos = {x: 50, y: 94, z: -220};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P10
+
+        scale = {x: 20, y: 2, z: 60};
+        pos = {x: 130, y: 99, z: -230};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P11
+
+        scale = {x: 2, y: 10, z: 60};
+        pos = {x: 75, y: 100, z: -290};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P12
+
+        scale = {x: 40, y: 2, z: 2};
+        pos = {x: 0, y: 134, z: -280};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P13
+
+        scale = {x: 20, y: 2, z: 100};
+        pos = {x: -90, y: 119, z: -280};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P14
+
+        scale = {x: 20, y: 2, z: 40};
+        pos = {x: 50, y: 99, z: -360};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P15
+
+        scale = {x: 20, y: 2, z: 20};
+        pos = {x: 50, y: 104, z: -410};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P16
+
+        scale = {x: 20, y: 2, z: 40};
+        pos = {x: 50, y: 109, z: -460};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P17
+
+        scale = {x: 40, y: 2, z: 120};
+        pos = {x: 10, y: 114, z: -440};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P18
+
+        scale = {x: 80, y: 2, z: 60};
+        pos = {x: -50, y: 114, z: -470};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P19
+
+        scale = {x: 60, y: 115, z: 60};
+        pos = {x: -60, y: 57.5, z: -560};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P20
+
+        scale = {x: 60, y: 110, z: 40};
+        pos = {x: -60, y: 55, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P20
+
+        scale = {x: 60, y: 110, z: 40};
+        pos = {x: 30, y: 55, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
-    function createCityScape() {
-        let pos = {x: 0, y: 45, z: -75};
-        let scale = {x: 40, y: 90, z: 60};
 
-        let mass = 0;
+    function create_Boundary() { 
+        let origin = -200;
+        let scale, pos, quat, texture, has_Boundry, width, height;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// BUILDING 1
+        for (let i = 0; i < 9; i++) {
+            width = Math.random() * 10 + 40;
+            height = Math.random() * 50 + 150;
 
-        //let building_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_8.jpg')})
-        let building_Texture = new THREE.MeshLambertMaterial({color: 0xcbd1d1});    
-            //building_Texture.map.wrapS = building_Texture.map.wrapT = THREE.RepeatWrapping;
-            //building_Texture.map.repeat.set(5, 5);
-        let building = new THREE.Mesh(new THREE.BoxBufferGeometry(), building_Texture);
-            building.position.set(pos.x, pos.y, pos.z);
-            building.scale.set(scale.x, scale.y, scale.z);
+            scale = {x: width, y: height, z: width};
+            pos = {x: origin, y: height / 2, z: 180};
+            quat = {x: 0, y: 0, z: 0, w: 1};
+            has_Boundry = false;
 
+            origin += 50;
+            texture = random_Texture();
 
-            building.castShadow = true;
-            building.receiveShadow = true;
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        }
 
-            scene.add(building);
+        origin = 120;
 
-        //physics for base
-        let building_Transform = new Ammo.btTransform();
-            building_Transform.setIdentity();
-            building_Transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
-            building_Transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
-        let building_MotionState = new Ammo.btDefaultMotionState(building_Transform);
-        let building_ColShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 1, scale.y * 0.5 + 0.5, scale.z * 0.5 + 1));
-            building_ColShape.setMargin(0.05);
-        let building_LocalInertia = new Ammo.btVector3(0, 0, 0);
-            building_ColShape.calculateLocalInertia(mass, building_LocalInertia);
-        let building_RbInfo = new Ammo.btRigidBodyConstructionInfo(mass, building_MotionState, building_ColShape, building_LocalInertia);
-        let building_Body = new Ammo.btRigidBody(building_RbInfo);
-            building_Body.setFriction(4);
-            building_Body.setRollingFriction(10);
-            physicsWorld.addRigidBody(building_Body, buildingGroup, playerGroup);
+        while (origin > -721) {
+            width = Math.random() * 10 + 40;
+            height = Math.random() * 50 + 150;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// BUILDING 2
+            scale = {x: width, y: height, z: width};
+            pos = {x: -200, y: height / 2, z: origin};
+            quat = {x: 0, y: 0, z: 0, w: 1};
+            has_Boundry = false;
 
-        //let building_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_8.jpg')})
-        let building_Texture2 = new THREE.MeshLambertMaterial({color: 0xcbd1d1});    
-            //building_Texture.map.wrapS = building_Texture.map.wrapT = THREE.RepeatWrapping;
-            //building_Texture.map.repeat.set(5, 5);
-        let building2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), building_Texture2);
-            building2.position.set(-42, 50, pos.z - 10);
-            building2.scale.set(40, 100, 80);
+            texture = random_Texture();
 
-            scene.add(building2);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-        let building_Transform2 = new Ammo.btTransform();
-            building_Transform2.setIdentity();
-            building_Transform2.setOrigin(new Ammo.btVector3(-42, 50, pos.z - 10));
-            building_Transform2.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
-        let building_MotionState2 = new Ammo.btDefaultMotionState(building_Transform2);
-        let building_ColShape2 = new Ammo.btBoxShape(new Ammo.btVector3(40 * 0.5 + 1, 100 * 0.5 + 0.5, 80 * 0.5 + 1));
-            building_ColShape2.setMargin(0.05);
-        let building_LocalInertia2 = new Ammo.btVector3(0, 0, 0);
-            building_ColShape2.calculateLocalInertia(mass, building_LocalInertia2);
-        let building_RbInfo2 = new Ammo.btRigidBodyConstructionInfo(mass, building_MotionState2, building_ColShape2, building_LocalInertia2);
-        let building_Body2 = new Ammo.btRigidBody(building_RbInfo2);
-            building_Body2.setFriction(4);
-            building_Body2.setRollingFriction(10);
-            physicsWorld.addRigidBody(building_Body2, buildingGroup, playerGroup);
+            width = Math.random() * 10 + 40;
+            height = Math.random() * 50 + 180;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// BUILDING 3
+            scale = {x: width, y: height, z: width};
+            pos = {x: 200, y: height / 2, z: origin};
+            quat = {x: 0, y: 0, z: 0, w: 1};
+            has_Boundry = false;
 
-        let building_Texture3 = new THREE.MeshLambertMaterial({color: 0xcbd1d1});    
-            //building_Texture.map.wrapS = building_Texture.map.wrapT = THREE.RepeatWrapping;
-            //building_Texture.map.repeat.set(5, 5);
-        let building3 = new THREE.Mesh(new THREE.BoxBufferGeometry(), building_Texture3);
-            building3.position.set(-5, 90, pos.z - 20);
-            building3.scale.set(30, 10, 20);
+            texture = random_Texture();
 
-            scene.add(building3);
-
-        let building_Transform3 = new Ammo.btTransform();
-            building_Transform3.setIdentity();
-            building_Transform3.setOrigin(new Ammo.btVector3(-5, 90, pos.z - 20));
-            building_Transform3.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
-        let building_MotionState3 = new Ammo.btDefaultMotionState(building_Transform3);
-        let building_ColShape3 = new Ammo.btBoxShape(new Ammo.btVector3(30 * 0.5 + 1, 10 * 0.5 + 0.5, 20 * 0.5 + 1));
-            building_ColShape3.setMargin(0.05);
-        let building_LocalInertia3 = new Ammo.btVector3(0, 0, 0);
-            building_ColShape3.calculateLocalInertia(mass, building_LocalInertia3);
-        let building_RbInfo3 = new Ammo.btRigidBodyConstructionInfo(mass, building_MotionState3, building_ColShape3, building_LocalInertia3);
-        let building_Body3 = new Ammo.btRigidBody(building_RbInfo3);
-            building_Body3.setFriction(4);
-            building_Body3.setRollingFriction(10);
-            physicsWorld.addRigidBody(building_Body3, buildingGroup, playerGroup);
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// BUILDING 4
-
-        let building_Texture4 = new THREE.MeshLambertMaterial({color: 0xcbd1d1});    
-        let building4 = new THREE.Mesh(new THREE.BoxBufferGeometry(), building_Texture4);
-        building4.position.set(50, 60, pos.z);
-        building4.scale.set(50, 120, 60);
-
-        scene.add(building4);
-
-        let building_Transform4 = new Ammo.btTransform();
-            building_Transform4.setIdentity();
-            building_Transform4.setOrigin(new Ammo.btVector3(50, 60, pos.z));
-            building_Transform4.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
-        let building_MotionState4 = new Ammo.btDefaultMotionState(building_Transform4);
-        let building_ColShape4 = new Ammo.btBoxShape(new Ammo.btVector3(50 * 0.5 + 1, 120 * 0.5 + 0.5, 60 * 0.5 + 1));
-            building_ColShape4.setMargin(0.05);
-        let building_LocalInertia4 = new Ammo.btVector3(0, 0, 0);
-            building_ColShape4.calculateLocalInertia(mass, building_LocalInertia4);
-        let building_RbInfo4 = new Ammo.btRigidBodyConstructionInfo(mass, building_MotionState4, building_ColShape4, building_LocalInertia4);
-        let building_Body4 = new Ammo.btRigidBody(building_RbInfo4);
-            building_Body4.setFriction(4);
-            building_Body4.setRollingFriction(10);
-            physicsWorld.addRigidBody(building_Body4, buildingGroup, playerGroup);
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+            
+            origin -= 50;
+        }
     }
-
 
     function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
         //enemy models
@@ -235,15 +423,15 @@ function createLevel1() {
         //enemy models
         let catLoader = new THREE.GLTFLoader();
         catLoader.load(
-            "objects/catGun.glb",
+            "objects/cat/catGun.glb",
             function(obj) {//onLoad, obj is a GLTF
 
                 obj.name = "Enemy";
 
-                obj.scene.position.y = 85;
-                obj.scene.position.x = -8;
-                obj.scene.position.z = 8;
-                //obj.scene.rotation.y = .8;
+                obj.scene.position.y = 110;
+                obj.scene.position.x = -10;
+                obj.scene.position.z = -40;
+                obj.scene.rotation.y = -1.2;
                 /*obj.asset.position.set(5, 60, -14);//moves the mesh
                 obj.asset.rotateX(.3);
                 obj.asset.rotateY(-.8);
@@ -288,7 +476,7 @@ function createLevel1() {
                 //});
 
                 obj.name = "Flag";
-                obj.position.set(0, 95, -100);//moves the mesh
+                obj.position.set(0, 140, -100);//moves the mesh
                 obj.scale.set( .3, .3, .3 );
 
                 let geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
@@ -307,7 +495,7 @@ function createLevel1() {
 
                 let transform = new Ammo.btTransform();
                 transform.setIdentity();
-                transform.setOrigin( new Ammo.btVector3( 0, 98, -100 ) );
+                transform.setOrigin( new Ammo.btVector3( 0, 140, -100 ) );
                 transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
                 let motionState = new Ammo.btDefaultMotionState( transform );
 
@@ -417,6 +605,7 @@ function createLevel1() {
         body.setFriction(4);
         body.setRollingFriction(10);
 
+        body.setActivationState(4);
 
         physicsWorld.addRigidBody( body, playerGroup, buildingGroup );
 
@@ -430,13 +619,14 @@ function createLevel1() {
 
     }
 
-
     setupPhysicsWorld();
     initDebug();
+
     object_Loader();
     createPlayer();
+
     createSkyBox();
     createGround();
-    createStartPlatform();
-    createCityScape();
+    create_Course();
+    create_Boundary();
 }

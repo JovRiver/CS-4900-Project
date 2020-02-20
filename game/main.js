@@ -1,26 +1,26 @@
 //variable declaration section
-let physicsWorld, scene, camera, clock, stats, sound, controls, renderer, rigidBodies = [], tmpTrans = null;
+let physicsWorld, scene, camera, renderer, stats, sound, controls, rigidBodies = [], tmpTrans = null;
 let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
+
+// collision group and detection variables
 let playerGroup = 1, flagGroup = 2, buildingGroup = 3, ghostGroup = 4;
 let a = false;
 let b = false;
 let flagCallBack = null;
 
-let objects = [];
+let objects = [];	// check for actual usage
 let canJump = false;
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
+let clock = new THREE.Clock();
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2(), intersected_Object;
+//const STATE = { DISABLE_DEACTIVATION : 4 };
 
-let playing = false; //set to true for level creation
-let level = 0;	//set to true for level creation
-
-
-let level_Select_Objects = [];
-let menu_Group;
+let level = 1;	//set to 0 for main menu, 1 or higher for levels
+let menu_Group;	// menu_Group to hold menu items for raycaster detection
 
 //Ammojs Initialization
 Ammo().then(start);
@@ -35,6 +35,14 @@ function start (){
 	ammoTmpQuat = new Ammo.btQuaternion();
 	flagCallBack = new Ammo.ConcreteContactResultCallback();
 
+	//Setup the renderer
+	renderer = new THREE.WebGLRenderer( { antialias: false } );
+	renderer.setClearColor( 0xbfd1e5 );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+
+	renderer.shadowMap.enabled = true;
 
 	setupEventHandlers();
 	showStats();
@@ -47,11 +55,6 @@ function start (){
 
 function load_Manager() {	
 	scene = new THREE.Scene();
-	//scene.dispose();
-
-	document.getElementById("blocker").style.display = "block";
-	document.getElementById("load").style.display = "";
-	document.getElementById("instructions").style.display = "";
 
 	switch (level){
 		case 0:
@@ -72,13 +75,13 @@ function load_Manager() {
 		case 5:
 			createLevel1();
 			break;
-
 	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //	SYSTEM
 ///////////////////////////////////////////////////////////////////////////////////////
+
 function updatePhysics( deltaTime ){
 	// Step world
 	physicsWorld.stepSimulation( deltaTime, 10 );
@@ -135,7 +138,7 @@ function updateCamera(){
 function renderFrame(){
 	let deltaTime = clock.getDelta();
 
-	if (playing === true) {
+	if (level > 0) {
 		updatePhysics( deltaTime );
 		stats.update();
 
@@ -234,7 +237,7 @@ function onKeyUp( event ) {
 }
 
 function menu_Selection(event) {
-	if (playing === false) {
+	if (level === 0) {
 		event.preventDefault();
 		raycaster.setFromCamera( mouse, camera );
 		let intersects = raycaster.intersectObject(menu_Group, true);
@@ -271,7 +274,7 @@ function menu_Selection(event) {
 }
 
 function on_Mouse_Move(event) {
-	if (playing === false) {
+	if (level === 0) {
 		mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 		mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
@@ -279,15 +282,8 @@ function on_Mouse_Move(event) {
 		let intersects = raycaster.intersectObject(menu_Group, true);
 
 		if (intersects.length > 0) {
-			if (intersects[0].object.name === "Grappling_Game") {
-				if (intersected_Object)
-					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
-
-				intersected_Object = null;
-			}
-
-			else if (intersects[0].object.name === "Level_1_Cube") {
-				level_Select_Objects[0].rotation.y += 0.01;
+			if (intersects[0].object.name === "Level_1_Cube") {
+				intersects[0].object.rotation.y += 0.01;
 			}
 
 			else if (intersected_Object != intersects[0].object) {
