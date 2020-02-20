@@ -11,7 +11,6 @@ function setupPhysicsWorld(){
 }
 
 function setupControls(){
-
     //create controls
     controls = new THREE.PointerLockControls( camera, document.body );
     let blocker = document.getElementById( 'blocker' );

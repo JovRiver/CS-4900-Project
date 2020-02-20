@@ -21,7 +21,13 @@ let mouse = new THREE.Vector2(), intersected_Object;
 let startClock = true;
 let gamePlay = true; // Set this value someone when game starts.
 let timer = document.getElementById('clock');
-//const STATE = { DISABLE_DEACTIVATION : 4 };
+const STATE = {
+	ACTIVE_TAG : 1,
+	ISLAND_SLEEPING : 2,
+	WANTS_DEACTIVATION : 3,
+	DISABLE_DEACTIVATION : 4,
+	DISABLE_SIMULATION : 5
+}
 
 let level = 1;	//set to 0 for main menu, 1 or higher for levels
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
@@ -115,7 +121,6 @@ flagCallBack.addSingleResult = function () {
 		console.log(gameTime);
 		gamePlay = false;
 	}
-
 };
 
 function movePlayer(){
@@ -158,11 +163,8 @@ function renderFrame(){
 			}else{
 				mins =  Math.floor(gameClock.getElapsedTime()%60);
 			}
-
 			if(gamePlay)
 				timer.innerHTML = "<h1>"+ hours +":" + mins + "</h1>";
-
-
 		}
 
 		if ( controls.isLocked === true ) {

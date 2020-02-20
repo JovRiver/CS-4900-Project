@@ -608,7 +608,7 @@ function createLevel1() {
         body.setFriction(4);
         body.setRollingFriction(10);
 
-        body.setActivationState(4);
+        body.setActivationState(STATE.DISABLE_DEACTIVATION);
 
         physicsWorld.addRigidBody( body, playerGroup, buildingGroup );
 
