@@ -124,7 +124,6 @@ flagCallBack.addSingleResult = function () {
 		console.log("COLLIDE");
 		console.log(gameTime);
 		gamePlay = false;
-
 	}
 };
 

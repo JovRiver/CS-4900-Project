@@ -427,26 +427,52 @@ function createLevel1() {
                 theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
                 obj.name = "Enemy";
 
+                let pos ={ x: -10, y: 103, z: 0};
 
-                obj.scene.position.y = 110;
-                obj.scene.position.x = -10;
-                obj.scene.position.z = -40;
+                obj.scene.position.x = pos.x;
+                obj.scene.position.y = pos.y;
+                obj.scene.position.z = pos.z;
                 obj.scene.rotation.y = -1.2;
-                /*obj.asset.position.set(5, 60, -14);//moves the mesh
-                obj.asset.rotateX(.3);
-                obj.asset.rotateY(-.8);
-                obj.asset.rotateZ(.4);*/
+
                 scene.add(obj.scene);
-                //console.log("Made to onload");
+
+                let vect3 = new THREE.Vector3();
+                let box = new THREE.Box3().setFromObject(obj.scene).getSize(vect3);
+
+                let transform = new Ammo.btTransform();
+                transform.setIdentity();
+                transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+                transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
+                let motionState = new Ammo.btDefaultMotionState( transform );
+
+                colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2.5, box.y/3, box.z/2.5));
+                colShape.setMargin( 0.5 );
+
+                let localInertia = new Ammo.btVector3( 0, 0, 0 );
+                colShape.calculateLocalInertia( 1, localInertia );
+
+                let rbInfo = new Ammo.btRigidBodyConstructionInfo( 1, motionState, colShape, localInertia );
+                let objBody = new Ammo.btRigidBody( rbInfo );
+
+                objBody.setFriction(4);
+                objBody.setRollingFriction(10);
+
+                physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
+
+                obj.scene.userData.physicsBody = objBody;
+
+
+                rigidBodies.push(obj.scene);
 
                 //animation for catGun
                 let anims = obj.animations;
                 //let aClip = THEE.AnimationClip.findByName(anims, "Walk");...
-
+                /*
                 anims.forEach(function(aClip){
                     theMixer.clipAction(aClip).play();//returns an Animation Action that's played with play()
                 });
-                //theMixer.clipAction(anims[1]).play();//"death" doesn't play for some reason
+                */
+                theMixer.clipAction(anims[0]).play();//"death" doesn't play for some reason
 
 
 
