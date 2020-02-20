@@ -296,11 +296,22 @@ Commit: 16
   Fixed immediate loading of level 1 by changing level variable to 1 from 0. There were a few issues preventing level 1 from loading 
 correctly. I also added more objects to level 1 and have been working with graph paper to map out the level.
 
+
 2/19/2020 (2:35 pm - 2:45 pm)
 Semira Pinder
 Commit #1 of week 4
 
 Fixed the location to load the catGun.glb from in the object_Loader function, then changed the position of it in the game scene so it's visible.
+
+
+Feb/19/2020
+Ryan Slaybaugh:
+Commit 17:
+
+  Reworked level one, moving away from more open platforming to a more linear platform design. Also reworked building creation by creating
+a create_Box_Geometry() function with scale, pos, quat, texture, has_Boundary parameters. This allows for easy creation of box geometries
+without having to rewrite the same code over and over. I also implemented a for loop and while loop to create the boundary buildings surrounding
+the level.
 
 2/20/2020 12:38 am - 2:51 am 
 Semira Pinder
@@ -313,3 +324,11 @@ Semira Pinder
 Commit #3 of week 4
 
 Imported animations to the game (level 1) for catGun. Death animation does not seem to work, though.
+Feb/20/2020
+Ryan Slaybaugh:
+Commit 18:
+
+  Added a basic running course for level 1. It is the beginning of level 1 but still requires much work to be a full level. Some platform
+heights will need to be adjusted as player movement is adjusted. Also changed the skybox to a cube mesh rather than a scene.background in
+order to cut off the obvious edge separating top from bottom in the skymap image.
+
