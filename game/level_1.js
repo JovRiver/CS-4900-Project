@@ -97,11 +97,13 @@ function createLevel1() {
     function create_Course() {
         let scale, pos, quat, texture, has_Boundry;
 
+    //PLATFORMS DENOTED BY P#
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // START BUILDING
 
-        scale = {x: 40, y: 20, z: 20};
-        pos = {x: 0, y: 90, z: 0};
+        scale = {x: 60, y: 2, z: 20};
+        pos = {x: 0, y: 99, z: 0};
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundry = true;
 
@@ -112,8 +114,8 @@ function createLevel1() {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // P1
         
-        scale = {x: 40, y: 5, z: 40};
-        pos = {x: 0, y: 97.5, z: -65};
+        scale = {x: 60, y: 2, z: 20};
+        pos = {x: 0, y: 94, z: -60};
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundry = true;
 
@@ -124,8 +126,8 @@ function createLevel1() {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // P2
         
-        scale = {x: 1, y: 1, z: 1};
-        pos = {x: 0, y: 120, z: 110};
+        scale = {x: 60, y: 2, z: 60};
+        pos = {x: -40, y: 99, z: -120};
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundry = true;
 
@@ -136,8 +138,8 @@ function createLevel1() {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // P3
 
-        scale = {x: 1, y: 1, z: 1};
-        pos = {x: 0, y: 120, z: 110};
+        scale = {x: 20, y: 2, z: 10};
+        pos = {x: -30, y: 119, z: -95};
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundry = true;
 
@@ -146,7 +148,221 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  FINISHED
+    // P4
+
+        scale = {x: 10, y: 2, z: 60};
+        pos = {x: -65, y: 114, z: -120};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P5
+
+        scale = {x: 20, y: 2, z: 20};
+        pos = {x: -20, y: 104, z: -180};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P6
+
+        scale = {x: 20, y: 2, z: 20};
+        pos = {x: -60, y: 109, z: -180};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P7
+
+        scale = {x: 2, y: 40, z: 100};
+        pos = {x: 5, y: 105, z: -140};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P8
+
+        scale = {x: 10, y: 2, z: 80};
+        pos = {x: 25, y: 99, z: -140};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P9
+
+        scale = {x: 20, y: 2, z: 40};
+        pos = {x: 50, y: 94, z: -220};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P10
+
+        scale = {x: 20, y: 2, z: 60};
+        pos = {x: 130, y: 99, z: -230};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P11
+
+        scale = {x: 2, y: 10, z: 60};
+        pos = {x: 75, y: 100, z: -290};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P12
+
+        scale = {x: 40, y: 2, z: 2};
+        pos = {x: 0, y: 134, z: -280};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P13
+
+        scale = {x: 20, y: 2, z: 100};
+        pos = {x: -90, y: 119, z: -280};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P14
+
+        scale = {x: 20, y: 2, z: 40};
+        pos = {x: 50, y: 99, z: -360};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P15
+
+        scale = {x: 20, y: 2, z: 20};
+        pos = {x: 50, y: 104, z: -410};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P16
+
+        scale = {x: 20, y: 2, z: 40};
+        pos = {x: 50, y: 109, z: -460};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P17
+
+        scale = {x: 40, y: 2, z: 120};
+        pos = {x: 10, y: 114, z: -440};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P18
+
+        scale = {x: 80, y: 2, z: 60};
+        pos = {x: -50, y: 114, z: -470};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P19
+
+        scale = {x: 60, y: 115, z: 60};
+        pos = {x: -60, y: 57.5, z: -560};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P20
+
+        scale = {x: 60, y: 110, z: 40};
+        pos = {x: -60, y: 55, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // P20
+
+        scale = {x: 60, y: 110, z: 40};
+        pos = {x: 30, y: 55, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundry = true;
+
+        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -260,7 +476,7 @@ function createLevel1() {
                 //});
 
                 obj.name = "Flag";
-                obj.position.set(0, 95, -100);//moves the mesh
+                obj.position.set(0, 140, -100);//moves the mesh
                 obj.scale.set( .3, .3, .3 );
 
                 let geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
@@ -279,7 +495,7 @@ function createLevel1() {
 
                 let transform = new Ammo.btTransform();
                 transform.setIdentity();
-                transform.setOrigin( new Ammo.btVector3( 0, 98, -100 ) );
+                transform.setOrigin( new Ammo.btVector3( 0, 140, -100 ) );
                 transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
                 let motionState = new Ammo.btDefaultMotionState( transform );
 
