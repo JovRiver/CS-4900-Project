@@ -15,11 +15,24 @@ let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
 let clock = new THREE.Clock();
+let gameClock =  new THREE.Clock();
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2(), intersected_Object;
-//const STATE = { DISABLE_DEACTIVATION : 4 };
+let startClock = true;
+let gamePlay = true; // Set this value someone when game starts.
+let timer = document.getElementById('clock');
 
-let level = 1;	//set to 0 for main menu, 1 or higher for levels
+let onBox = false;
+
+const STATE = {
+	ACTIVE_TAG : 1,
+	ISLAND_SLEEPING : 2,
+	WANTS_DEACTIVATION : 3,
+	DISABLE_DEACTIVATION : 4,
+	DISABLE_SIMULATION : 5
+}
+
+let level = 0;	//set to 0 for main menu, 1 or higher for levels
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 
 //Ammojs Initialization
@@ -105,9 +118,13 @@ function updatePhysics( deltaTime ){
 }
 
 flagCallBack.addSingleResult = function () {
-	console.log("COLLIDE");
-	//level = 0;
-	//load_Manager();
+	if(gamePlay){
+		let gameTime = gameClock.getDelta();
+		console.log("COLLIDE");
+		console.log(gameTime);
+		gamePlay = false;
+
+	}
 };
 
 function movePlayer(){
@@ -142,6 +159,18 @@ function renderFrame(){
 		updatePhysics( deltaTime );
 		stats.update();
 
+		if(!startClock){
+			let mins =  Math.floor(gameClock.getElapsedTime()/60);
+			let secs;
+			if( Math.floor(gameClock.getElapsedTime()%60) < 10){
+				secs =  "0" + Math.floor(gameClock.getElapsedTime()%60);
+			}else{
+				secs =  Math.floor(gameClock.getElapsedTime()%60);
+			}
+			if(gamePlay)
+				timer.innerHTML = "<h1>"+ mins +":" + secs + "</h1>";
+		}
+
 		if ( controls.isLocked === true ) {
 			raycaster.ray.origin.copy( controls.getObject().position );
 			raycaster.ray.origin.y -= 10;
@@ -149,7 +178,12 @@ function renderFrame(){
 	
 		movePlayer();
 		updateCamera();
+	}else{
+		if(onBox) {
+			menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+		}
 	}
+
   
 	if (this.debugDrawer) 
 		this.debugDrawer.update();
@@ -249,6 +283,7 @@ function menu_Selection(event) {
 
 			if (intersects[0].object.name === "Level_1" || intersects[0].object.name === "Level_1_Cube") {
 				level = 1;
+				onBox = false;
 				load_Manager();
 			}
 
@@ -274,6 +309,7 @@ function menu_Selection(event) {
 }
 
 function on_Mouse_Move(event) {
+
 	if (level === 0) {
 		mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 		mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -283,23 +319,27 @@ function on_Mouse_Move(event) {
 
 		if (intersects.length > 0) {
 			if (intersects[0].object.name === "Level_1_Cube") {
-				intersects[0].object.rotation.y += 0.01;
+				onBox = true;
+				//intersects[0].object.rotation.y += 0.01;
 			}
 
 			else if (intersected_Object != intersects[0].object) {
-				if (intersected_Object)
+				if (intersected_Object){
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
+				}
 
 				intersected_Object = intersects[0].object;
 				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
 				intersected_Object.material.emissive.setHex(0xdde014);
+
 			}
 		} 
 		else {
-			if (intersected_Object) 
+			if (intersected_Object) {
 				intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
-
+			}
 			intersected_Object = null;
+			onBox = false;
 		}
 	}
 }

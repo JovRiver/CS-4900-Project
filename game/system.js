@@ -16,7 +16,11 @@ function setupControls(){
     let blocker = document.getElementById( 'blocker' );
     let instructions = document.getElementById( 'instructions' );
     instructions.addEventListener( 'click', function () {controls.lock();}, false );
-    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();} );
+    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();
+        if(startClock){
+            gameClock.start();
+            startClock = false;
+        }} );
     controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = ''; sound.pause();} );
     scene.add( controls.getObject() );
 }
@@ -50,8 +54,10 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         box.scale.set(scale.x, scale.y, scale.z);
         box.position.set(pos.x, pos.y, pos.z);
 
-        box.castShadow = true;
-        box.receiveShadow = true;
+   if(has_Boundary === true){
+       box.castShadow = true;
+       box.receiveShadow = true;
+    }
 
     scene.add(box);
 

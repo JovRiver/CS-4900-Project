@@ -474,13 +474,16 @@ function createLevel1() {
                 //	if (child instanceof THREE.Mesh)
                 //		child.material.map = tex;
                 //});
-
+                let pos ={ x: 5, y: 125, z: -100};
                 obj.name = "Flag";
-                obj.position.set(0, 140, -100);//moves the mesh
+                obj.position.set(pos.x, pos.y, pos.z);//moves the mesh
                 obj.scale.set( .3, .3, .3 );
 
                 let geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
                 let material = new THREE.MeshBasicMaterial( { color: 0xffff00} );
+                let vect3 = new THREE.Vector3();
+                let box = new THREE.Box3().setFromObject(obj).getSize(vect3);
+
                 flag = new THREE.Mesh( geometry, material );
                 flag.visible = false;
 
@@ -495,12 +498,12 @@ function createLevel1() {
 
                 let transform = new Ammo.btTransform();
                 transform.setIdentity();
-                transform.setOrigin( new Ammo.btVector3( 0, 140, -100 ) );
+                transform.setOrigin( new Ammo.btVector3( pos.x, pos.y+4, pos.z ) );
                 transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
                 let motionState = new Ammo.btDefaultMotionState( transform );
 
-                colShape = new Ammo.btBoxShape(new Ammo.btVector3(3, 3, 3));
-                colShape.setMargin( 0.05 );
+                colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2, box.y/2, box.z/2));
+                colShape.setMargin( 0.5 );
 
                 let localInertia = new Ammo.btVector3( 0, 0, 0 );
                 colShape.calculateLocalInertia( 1, localInertia );
@@ -605,7 +608,7 @@ function createLevel1() {
         body.setFriction(4);
         body.setRollingFriction(10);
 
-        body.setActivationState(4);
+        body.setActivationState(STATE.DISABLE_DEACTIVATION);
 
         physicsWorld.addRigidBody( body, playerGroup, buildingGroup );
 
@@ -621,7 +624,7 @@ function createLevel1() {
 
     setupPhysicsWorld();
     initDebug();
-
+    gamePlay = true;
     object_Loader();
     createPlayer();
 
