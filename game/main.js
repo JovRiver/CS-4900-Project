@@ -17,6 +17,7 @@ let vertex = new THREE.Vector3();
 let clock = new THREE.Clock();
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2(), intersected_Object;
+//const STATE = { DISABLE_DEACTIVATION : 4 };
 
 let level = 1;	//set to 0 for main menu, 1 or higher for levels
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
