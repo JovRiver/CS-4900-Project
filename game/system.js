@@ -54,8 +54,10 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         box.scale.set(scale.x, scale.y, scale.z);
         box.position.set(pos.x, pos.y, pos.z);
 
-        box.castShadow = true;
-        box.receiveShadow = true;
+   if(has_Boundary === true){
+       box.castShadow = true;
+       box.receiveShadow = true;
+    }
 
     scene.add(box);
 
