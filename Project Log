@@ -295,3 +295,13 @@ Commit: 16
 
   Fixed immediate loading of level 1 by changing level variable to 1 from 0. There were a few issues preventing level 1 from loading 
 correctly. I also added more objects to level 1 and have been working with graph paper to map out the level.
+
+
+Feb/19/2020
+Ryan Slaybaugh:
+Commit 17:
+
+  Reworked level one, moving away from more open platforming to a more linear platform design. Also reworked building creation by creating
+a create_Box_Geometry() function with scale, pos, quat, texture, has_Boundary parameters. This allows for easy creation of box geometries
+without having to rewrite the same code over and over. I also implemented a for loop and while loop to create the boundary buildings surrounding
+the level.
