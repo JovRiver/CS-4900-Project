@@ -6,6 +6,7 @@ let playerGroup = 1, flagGroup = 2, buildingGroup = 3, ghostGroup = 4;
 let a = false;
 let b = false;
 let flagCallBack = null;
+let theMixer;// = new THREE.AnimationMixer();
 
 let objects = [];
 let canJump = false;
@@ -150,7 +151,10 @@ function renderFrame(){
   
 	if (this.debugDrawer) 
 		this.debugDrawer.update();
-	
+
+	if(theMixer)//null would be false
+		theMixer.update(1.0/60);
+
 	requestAnimationFrame( renderFrame );
 	renderer.render(scene, camera);
 }
