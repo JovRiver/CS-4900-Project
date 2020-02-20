@@ -305,3 +305,12 @@ Commit 17:
 a create_Box_Geometry() function with scale, pos, quat, texture, has_Boundary parameters. This allows for easy creation of box geometries
 without having to rewrite the same code over and over. I also implemented a for loop and while loop to create the boundary buildings surrounding
 the level.
+
+
+Feb/20/2020
+Ryan Slaybaugh:
+Commit 18:
+
+  Added a basic running course for level 1. It is the beginning of level 1 but still requires much work to be a full level. Some platform
+heights will need to be adjusted as player movement is adjusted. Also changed the skybox to a cube mesh rather than a scene.background in
+order to cut off the obvious edge separating top from bottom in the skymap image.
