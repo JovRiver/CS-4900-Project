@@ -33,7 +33,7 @@ const STATE = {
 	DISABLE_SIMULATION : 5
 }
 
-let level = 1;	//set to 0 for main menu, 1 or higher for levels
+let level = 0;	//set to 0 for main menu, 1 or higher for levels
 let menu_Group = new THREE.Group();	// menu_Group to hold menu items for raycaster detection
 
 //Ammojs Initialization
@@ -123,8 +123,10 @@ flagCallBack.addSingleResult = function () {
 		let gameTime = gameClock.getDelta();
 		console.log("COLLIDE");
 		console.log(gameTime);
-		level = 0;
-		load_Manager();
+		//level = 0;
+		gamePlay = false;
+		controls.unlock();
+
 	}
 };
 
@@ -177,7 +179,9 @@ function renderFrame(){
 			raycaster.ray.origin.y -= 10;
 		}
 	
-		movePlayer();
+		if(gamePlay){
+			movePlayer();
+		}
 		updateCamera();
 	}
 	else {

@@ -21,7 +21,12 @@ function setupControls(){
             gameClock.start();
             startClock = false;
         }} );
-    controls.addEventListener( 'unlock', function () {blocker.style.display = 'block'; instructions.style.display = ''; sound.pause();} );
+    controls.addEventListener( 'unlock', function () {
+        if(gamePlay){
+            blocker.style.display = 'block';
+            console.log("TEST");
+        }
+        instructions.style.display = ''; sound.pause();} );
     scene.add( controls.getObject() );
 }
 
