@@ -6,13 +6,11 @@ function create_Start_Menu() {
 	let loader = new THREE.FontLoader();
 	let loadBar = document.getElementById('load_Menu');
 
-	menu_Group = new THREE.Group();
-
 	scene.background = new THREE.Color(0x0f0f0f);
 
 	//create camera
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
-	camera.position.set(0,-10,50)
+	camera.position.set(0,-10, 50);
 	camera.lookAt(0,0,0);
 
 	//setup point light for the scene
@@ -291,10 +289,149 @@ function create_Start_Menu() {
 				menu_Group.add(mesh);
 		});
 		scene.add(menu_Group);
-    }
+	}
 
+	function after_Game_Menu() {
+		let loader = new THREE.FontLoader();
+
+		if (gamePlay) {
+			setInterval(function cameraPos() {camera.position.set(490,-10, 50); camera.rotation.y = THREE.Math.degToRad(-90);}, 500);
+			
+			loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+	
+				let textGeo = new THREE.TextBufferGeometry( "Time ", {
+		
+					font: font,
+		
+					size: 5,
+					height: 1,
+					curveSegments: 12,
+		
+					bevelThickness: .5,
+					bevelSize: .3,
+					bevelEnabled: true
+		
+				} );
+		
+					textGeo.computeBoundingBox();
+				let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		
+				let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		
+				let mesh = new THREE.Mesh( textGeo, textMaterial );
+					mesh.position.x = centerOffset + 560;
+					mesh.position.y = 2;
+					mesh.position.z = 25;
+	
+					mesh.rotation.y = THREE.Math.degToRad(-90);
+		
+					mesh.name = "Time";
+				scene.add(mesh);	
+			});
+		}
+	
+		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+	
+			let textGeo = new THREE.TextBufferGeometry( "Congratulations", {
+	
+				font: font,
+	
+				size: 5,
+				height: 1,
+				curveSegments: 12,
+	
+				bevelThickness: .5,
+				bevelSize: .3,
+				bevelEnabled: true
+	
+			} );
+	
+				textGeo.computeBoundingBox();
+			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+	
+			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+	
+			let mesh = new THREE.Mesh( textGeo, textMaterial );
+				mesh.position.x = centerOffset + 560;
+				mesh.position.y = 7;
+				mesh.position.z = 25;
+
+				mesh.rotation.y = THREE.Math.degToRad(-90);
+	
+				mesh.name = "Congratulations";
+			scene.add(mesh);
+		});
+
+		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+	
+			let textGeo = new THREE.TextBufferGeometry( "Continue", {
+	
+				font: font,
+	
+				size: 5,
+				height: 1,
+				curveSegments: 12,
+	
+				bevelThickness: .5,
+				bevelSize: .3,
+				bevelEnabled: true
+	
+			} );
+	
+				textGeo.computeBoundingBox();
+			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+	
+			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+	
+			let mesh = new THREE.Mesh( textGeo, textMaterial );
+				mesh.position.x = centerOffset + 560;
+				mesh.position.y = -25;
+				mesh.position.z = 36.5;
+
+				mesh.rotation.y = THREE.Math.degToRad(-90);
+	
+				mesh.name = "Continue";
+			menu_Group.add(mesh);	
+		});
+
+		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+	
+			let textGeo = new THREE.TextBufferGeometry( "Main Menu", {
+	
+				font: font,
+	
+				size: 5,
+				height: 1,
+				curveSegments: 12,
+	
+				bevelThickness: .5,
+				bevelSize: .3,
+				bevelEnabled: true
+	
+			} );
+	
+				textGeo.computeBoundingBox();
+			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+	
+			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+	
+			let mesh = new THREE.Mesh( textGeo, textMaterial );
+				mesh.position.x = centerOffset + 560;
+				mesh.position.y = -15;
+				mesh.position.z = 34.5;
+
+				mesh.rotation.y = THREE.Math.degToRad(-90);
+	
+				mesh.name = "Main_Menu";
+			menu_Group.add(mesh);	
+		});
+		scene.add(menu_Group);
+		gamePlay = false;
+	}
+	
     main_Menu();
     level_Select_Menu();
-    options_Menu();
+	options_Menu();
+	after_Game_Menu();
 	renderFrame();
 }

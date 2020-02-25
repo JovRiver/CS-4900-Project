@@ -417,7 +417,6 @@ function createLevel1() {
     }
 
     function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
-        //enemy models
         let loadBar = document.getElementById('load');
 
         //enemy models
@@ -425,19 +424,60 @@ function createLevel1() {
         catLoader.load(
             "objects/cat/catGun.glb",
             function(obj) {//onLoad, obj is a GLTF
-
+                theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
                 obj.name = "Enemy";
 
-                obj.scene.position.y = 110;
-                obj.scene.position.x = -10;
-                obj.scene.position.z = -40;
+                let pos ={ x: -10, y: 103, z: 0};
+
+                obj.scene.position.x = pos.x;
+                obj.scene.position.y = pos.y;
+                obj.scene.position.z = pos.z;
                 obj.scene.rotation.y = -1.2;
-                /*obj.asset.position.set(5, 60, -14);//moves the mesh
-                obj.asset.rotateX(.3);
-                obj.asset.rotateY(-.8);
-                obj.asset.rotateZ(.4);*/
+
                 scene.add(obj.scene);
-                //console.log("Made to onload");
+
+                let vect3 = new THREE.Vector3();
+                let box = new THREE.Box3().setFromObject(obj.scene).getSize(vect3);
+
+                let transform = new Ammo.btTransform();
+                transform.setIdentity();
+                transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+                transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
+                let motionState = new Ammo.btDefaultMotionState( transform );
+
+                colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2.5, box.y/3, box.z/2.5));
+                colShape.setMargin( 0.5 );
+
+                let localInertia = new Ammo.btVector3( 0, 0, 0 );
+                colShape.calculateLocalInertia( 1, localInertia );
+
+                let rbInfo = new Ammo.btRigidBodyConstructionInfo( 1, motionState, colShape, localInertia );
+                let objBody = new Ammo.btRigidBody( rbInfo );
+
+                objBody.setFriction(4);
+                objBody.setRollingFriction(10);
+
+                physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
+
+                obj.scene.userData.physicsBody = objBody;
+
+
+                rigidBodies.push(obj.scene);
+
+                //animation for catGun
+                let anims = obj.animations;
+                //let aClip = THEE.AnimationClip.findByName(anims, "Walk");...
+                /*
+                anims.forEach(function(aClip){
+                    theMixer.clipAction(aClip).play();//returns an Animation Action that's played with play()
+                });
+                */
+                theMixer.clipAction(anims[0]).play();//"death" doesn't play for some reason
+
+
+
+
+
                 loadBar.innerHTML = "";
             },
             function(xhr){//onProgress
@@ -451,6 +491,7 @@ function createLevel1() {
             function(err){//onError
                 loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 console.log("error in loading enemy model");
+                console.log(err);
             }
         );
     }
@@ -474,13 +515,16 @@ function createLevel1() {
                 //	if (child instanceof THREE.Mesh)
                 //		child.material.map = tex;
                 //});
-
+                let pos ={ x: 5, y: 125, z: -100};
                 obj.name = "Flag";
-                obj.position.set(0, 140, -100);//moves the mesh
+                obj.position.set(pos.x, pos.y, pos.z);//moves the mesh
                 obj.scale.set( .3, .3, .3 );
 
                 let geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
                 let material = new THREE.MeshBasicMaterial( { color: 0xffff00} );
+                let vect3 = new THREE.Vector3();
+                let box = new THREE.Box3().setFromObject(obj).getSize(vect3);
+
                 flag = new THREE.Mesh( geometry, material );
                 flag.visible = false;
 
@@ -495,12 +539,12 @@ function createLevel1() {
 
                 let transform = new Ammo.btTransform();
                 transform.setIdentity();
-                transform.setOrigin( new Ammo.btVector3( 0, 140, -100 ) );
+                transform.setOrigin( new Ammo.btVector3( pos.x, pos.y+4, pos.z ) );
                 transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
                 let motionState = new Ammo.btDefaultMotionState( transform );
 
-                colShape = new Ammo.btBoxShape(new Ammo.btVector3(3, 3, 3));
-                colShape.setMargin( 0.05 );
+                colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2, box.y/2, box.z/2));
+                colShape.setMargin( 0.5 );
 
                 let localInertia = new Ammo.btVector3( 0, 0, 0 );
                 colShape.calculateLocalInertia( 1, localInertia );
@@ -605,23 +649,20 @@ function createLevel1() {
         body.setFriction(4);
         body.setRollingFriction(10);
 
-        body.setActivationState(4);
+        body.setActivationState(STATE.DISABLE_DEACTIVATION);
 
         physicsWorld.addRigidBody( body, playerGroup, buildingGroup );
 
         player.userData.physicsBody = body;
         player.userData.physicsBody.set
 
-
-
         rigidBodies.push(player);
         a = true;
-
     }
 
     setupPhysicsWorld();
     initDebug();
-
+    gamePlay = true;
     object_Loader();
     createPlayer();
 
