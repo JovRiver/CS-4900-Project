@@ -332,3 +332,7 @@ Commit 18:
 heights will need to be adjusted as player movement is adjusted. Also changed the skybox to a cube mesh rather than a scene.background in
 order to cut off the obvious edge separating top from bottom in the skymap image.
 
+2/25/20 10:19pm-12:28am and 2/26/20 11:35 am-4:32pm
+Semira Pinder
+Commit #1 of week 5
+Made and exported a tree obj in the "objects/treePalm"
