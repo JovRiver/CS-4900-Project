@@ -342,3 +342,9 @@ Semira Pinder
 Commit #2 of week 5
 
 Added a tail bone armature to the catGun.blend file that can be weighted then animated later.
+
+2/26/20 5:03pm-5:15pm
+Semira Pinder
+Commit #3 of week 5
+
+Re-weighted the armature with catGun in a way that allows the armature's tail to move the mesh's tail.
