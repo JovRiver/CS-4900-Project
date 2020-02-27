@@ -101,7 +101,7 @@ function load_Manager() {
 			createLevel1();
 			break;
 		case 2:
-			createLevel1();
+			createLevel2();
 			break;
 		case 3:
 			createLevel1();
