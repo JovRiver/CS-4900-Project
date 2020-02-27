@@ -20,8 +20,9 @@
 function createLevel1() {
     // sets load_Menu to be invisible, and all other css styles to be visible
     document.getElementById("load_Menu").style.display = "none";
-	document.getElementById("load").style.display = "";
+	  document.getElementById("load").style.display = "";
     document.getElementById("instructions").style.display = "none";
+
 
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
     //scene.fog = new THREE.Fog(0x6c7578, 150, 750);
@@ -57,6 +58,7 @@ function createLevel1() {
 
     scene.add( dirLight );
     //scene.add( helper );
+
 
     function createSkyBox() {
         let base_Texture = [
@@ -605,7 +607,6 @@ function createLevel1() {
 
                     setupControls();//game can start with a click after external files are loaded in
                     renderFrame();//starts the loop once the models are loaded
-                    playing = true;
                 }
             },
             function(err){//onError
@@ -658,6 +659,7 @@ function createLevel1() {
 
         rigidBodies.push(player);
         a = true;
+
     }
 
     setupPhysicsWorld();
@@ -671,4 +673,5 @@ function createLevel1() {
     create_Course();
     create_Boundary();
     after_Game_Menu();
+
 }
