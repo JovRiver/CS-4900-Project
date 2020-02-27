@@ -25,7 +25,7 @@ function create_Start_Menu() {
 		//	Grappling_Game
 		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
 
-			let textGeo = new THREE.TextBufferGeometry( "Grapple Game", {
+			let textGeo = new THREE.TextBufferGeometry( "Kitty Crush", {
 
 				font: font,
 
@@ -290,148 +290,143 @@ function create_Start_Menu() {
 		});
 		scene.add(menu_Group);
 	}
-
-	function after_Game_Menu() {
-		let loader = new THREE.FontLoader();
-
-		if (gamePlay) {
-			setInterval(function cameraPos() {camera.position.set(490,-10, 50); camera.rotation.y = THREE.Math.degToRad(-90);}, 500);
-			
-			loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
-	
-				let textGeo = new THREE.TextBufferGeometry( "Time ", {
-		
-					font: font,
-		
-					size: 5,
-					height: 1,
-					curveSegments: 12,
-		
-					bevelThickness: .5,
-					bevelSize: .3,
-					bevelEnabled: true
-		
-				} );
-		
-					textGeo.computeBoundingBox();
-				let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-		
-				let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-		
-				let mesh = new THREE.Mesh( textGeo, textMaterial );
-					mesh.position.x = centerOffset + 560;
-					mesh.position.y = 2;
-					mesh.position.z = 25;
-	
-					mesh.rotation.y = THREE.Math.degToRad(-90);
-		
-					mesh.name = "Time";
-				scene.add(mesh);	
-			});
-		}
-	
-		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
-	
-			let textGeo = new THREE.TextBufferGeometry( "Congratulations", {
-	
-				font: font,
-	
-				size: 5,
-				height: 1,
-				curveSegments: 12,
-	
-				bevelThickness: .5,
-				bevelSize: .3,
-				bevelEnabled: true
-	
-			} );
-	
-				textGeo.computeBoundingBox();
-			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-	
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-	
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset + 560;
-				mesh.position.y = 7;
-				mesh.position.z = 25;
-
-				mesh.rotation.y = THREE.Math.degToRad(-90);
-	
-				mesh.name = "Congratulations";
-			scene.add(mesh);
-		});
-
-		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
-	
-			let textGeo = new THREE.TextBufferGeometry( "Continue", {
-	
-				font: font,
-	
-				size: 5,
-				height: 1,
-				curveSegments: 12,
-	
-				bevelThickness: .5,
-				bevelSize: .3,
-				bevelEnabled: true
-	
-			} );
-	
-				textGeo.computeBoundingBox();
-			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-	
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-	
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset + 560;
-				mesh.position.y = -25;
-				mesh.position.z = 36.5;
-
-				mesh.rotation.y = THREE.Math.degToRad(-90);
-	
-				mesh.name = "Continue";
-			menu_Group.add(mesh);	
-		});
-
-		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
-	
-			let textGeo = new THREE.TextBufferGeometry( "Main Menu", {
-	
-				font: font,
-	
-				size: 5,
-				height: 1,
-				curveSegments: 12,
-	
-				bevelThickness: .5,
-				bevelSize: .3,
-				bevelEnabled: true
-	
-			} );
-	
-				textGeo.computeBoundingBox();
-			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-	
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-	
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset + 560;
-				mesh.position.y = -15;
-				mesh.position.z = 34.5;
-
-				mesh.rotation.y = THREE.Math.degToRad(-90);
-	
-				mesh.name = "Main_Menu";
-			menu_Group.add(mesh);	
-		});
-		scene.add(menu_Group);
-		gamePlay = false;
-	}
 	
     main_Menu();
     level_Select_Menu();
 	options_Menu();
-	after_Game_Menu();
 	renderFrame();
+}
+
+function after_Game_Menu() {
+	let loader = new THREE.FontLoader();
+
+	loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+
+		let textGeo = new THREE.TextBufferGeometry( "Congratulations", {
+
+			font: font,
+
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+
+			bevelThickness: .5,
+			bevelSize: .3,
+			bevelEnabled: true
+
+		} );
+
+		textGeo.computeBoundingBox();
+		let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+
+		let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+
+		let mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.y = 220;
+		mesh.position.z = -50;
+
+		mesh.name = "Congratulations";
+		in_Game_Menu_Group.add(mesh);
+	});
+
+	loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+
+		let textGeo = new THREE.TextBufferGeometry( "Time ", {
+
+			font: font,
+
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+
+			bevelThickness: .5,
+			bevelSize: .3,
+			bevelEnabled: true
+
+		} );
+
+		textGeo.computeBoundingBox();
+		let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+
+		let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+
+		let mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset - 10;
+		mesh.position.y = 210;
+		mesh.position.z = -50;
+
+		mesh.name = "Time";
+		in_Game_Menu_Group.add(mesh);
+	});
+
+	loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+
+		let textGeo = new THREE.TextBufferGeometry( "Main Menu", {
+
+			font: font,
+
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+
+			bevelThickness: .5,
+			bevelSize: .3,
+			bevelEnabled: true
+
+		} );
+
+		textGeo.computeBoundingBox();
+		let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+
+		let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+
+		let mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.y = 200;
+		mesh.position.z = -50;
+
+		mesh.name = "Main_Menu";
+		in_Game_Menu_Group.add(mesh);	
+	});
+
+	loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+
+		let textGeo = new THREE.TextBufferGeometry( "Continue", {
+
+			font: font,
+
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+
+			bevelThickness: .5,
+			bevelSize: .3,
+			bevelEnabled: true
+
+		} );
+
+		textGeo.computeBoundingBox();
+		let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+
+		let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+
+		let mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.y = 190;
+		mesh.position.z = -50;
+
+		mesh.name = "Continue";
+		in_Game_Menu_Group.add(mesh);	
+	});
+
+	let background = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshBasicMaterial({color: 0x000000}));
+	background.scale.set(180, 120, 1);
+	background.position.set(0, 205, -52);
+	background.name = "background";
+
+	scene.add(background);
+	scene.add(in_Game_Menu_Group);
+	background.visible = false;
+	in_Game_Menu_Group.visible = false;
 }

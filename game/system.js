@@ -64,26 +64,27 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
        box.receiveShadow = true;
     }
 
+    level_1_Objects.push(box);
     scene.add(box);
 
     if (has_Boundary === true) {
         // ammo physics bounding box for each building
         let transform = new Ammo.btTransform();
-            transform.setIdentity();
+        transform.setIdentity();
         // set origin using each objects x,y,z coordinates
-            transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
-            transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w));
+        transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+        transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w));
         let motionState = new Ammo.btDefaultMotionState(transform);
         // set bounding box using each objects x,y,z scale
         let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 0.8, scale.y * 0.5 + 0.5, scale.z * 0.5 + 0.8));
-            colShape.setMargin(0.05);
+        colShape.setMargin(0.05);
         let localInertia = new Ammo.btVector3(0, 0, 0);
-            colShape.calculateLocalInertia(0, localInertia);
+        colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
         let body = new Ammo.btRigidBody(rbInfo);
-            body.setFriction(4);
-            body.setRollingFriction(10);
-            physicsWorld.addRigidBody(body, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
+        body.setFriction(4);
+        body.setRollingFriction(10);
+        physicsWorld.addRigidBody(body, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
     }
 }
 

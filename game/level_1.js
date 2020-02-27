@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  RELIC CODE / MAY REUSE
+//  RELIC CODE / MAY REUSE  /   REFERENCE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
@@ -20,9 +20,8 @@
 function createLevel1() {
     // sets load_Menu to be invisible, and all other css styles to be visible
     document.getElementById("load_Menu").style.display = "none";
-	document.getElementById("blocker").style.display = "block";
 	document.getElementById("load").style.display = "";
-    document.getElementById("instructions").style.display = "";
+    document.getElementById("instructions").style.display = "none";
 
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
     //scene.fog = new THREE.Fog(0x6c7578, 150, 750);
@@ -54,10 +53,10 @@ function createLevel1() {
         dirLight.shadow.camera.far = 13500;
 
     // helper for directional light
-    let helper = new THREE.CameraHelper( dirLight.shadow.camera );
+    //let helper = new THREE.CameraHelper( dirLight.shadow.camera );
 
     scene.add( dirLight );
-    scene.add( helper );
+    //scene.add( helper );
 
     function createSkyBox() {
         let base_Texture = [
@@ -601,6 +600,7 @@ function createLevel1() {
                 loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     document.getElementById("blocker").style.display = "block";
+                    document.getElementById("instructions").style.display = "";
                     document.getElementById("load").style.display = "none";
 
                     setupControls();//game can start with a click after external files are loaded in
@@ -670,4 +670,5 @@ function createLevel1() {
     createGround();
     create_Course();
     create_Boundary();
+    after_Game_Menu();
 }
