@@ -1,6 +1,7 @@
 //variable declaration section
-let physicsWorld, scene, camera, renderer, stats, sound, controls, rigidBodies = [], tmpTrans = null;
-let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
+let physicsWorld, scene, camera, renderer, stats, sound, controls, rigidBodies = [], platforms = [], tmpTrans = null;
+let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 },
+								tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
 
 // collision group and detection variables
@@ -8,10 +9,14 @@ let playerGroup = 1, flagGroup = 2, buildingGroup = 3, ghostGroup = 4;
 let a = false;
 let b = false;
 let flagCallBack = null;
-let theMixer;// = new THREE.AnimationMixer();
+let movementCallBack = null;
+let canJump = true;
+let canMove = true;
 
+
+
+let theMixer;// = new THREE.AnimationMixer();
 let objects = [];	// check for actual usage
-let canJump = false;
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
@@ -34,7 +39,7 @@ const STATE = {
 	DISABLE_SIMULATION : 5
 }
 
-let level = 0;	//set to 0 for main menu, 1 or higher for levels
+let level = 1;	//set to 0 for main menu, 1 or higher for levels
 let level_1_Objects = [];
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
@@ -52,6 +57,7 @@ function start (){
 	ammoTmpPos = new Ammo.btVector3();
 	ammoTmpQuat = new Ammo.btQuaternion();
 	flagCallBack = new Ammo.ConcreteContactResultCallback();
+	movementCallBack = new Ammo.ConcreteContactResultCallback();
 
 	//Setup the renderer
 	renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -73,11 +79,10 @@ function start (){
 
 function load_Manager() {
 	scene = new THREE.Scene();
-	renderer.dispose();
 	in_Game_Menu_Group = new THREE.Group();
 	menu_Group = new THREE.Group();
 	rigidBodies = [];
-
+	/*
 	for (let i = scene.children.length; i > 0; i--) {
 		let sceneObject = scene.children[i];
 		scene.remove(sceneObject);
@@ -85,8 +90,8 @@ function load_Manager() {
 		sceneObject.material.dispose();
 		sceneObject = null;
 	}
-
-	scene.dispose()
+	*/
+	//scene.dispose()
 
 	switch (level){
 		case 0:
@@ -114,11 +119,17 @@ function load_Manager() {
 //	SYSTEM
 ///////////////////////////////////////////////////////////////////////////////////////
 
+
+
 function updatePhysics( deltaTime ){
 	// Step world
 	physicsWorld.stepSimulation( deltaTime, 10 );
 	if(a && b){
 		physicsWorld.contactPairTest(player.userData.physicsBody, flag.userData.physicsBody, flagCallBack );
+		if(!canJump || !canMove){
+			physicsWorld.contactTest(player.userData.physicsBody, movementCallBack);
+		}
+
 	}
 
 	// Update rigid bodies
@@ -136,6 +147,15 @@ function updatePhysics( deltaTime ){
 	}
 }
 
+movementCallBack.addSingleResult = function () {
+	if(gamePlay){
+		canMove = true;
+		canJump = true;
+		playerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
+	}
+}
+
+
 flagCallBack.addSingleResult = function () {
 	if(gamePlay){
 		let gameTime = gameClock.getDelta();
@@ -150,7 +170,7 @@ flagCallBack.addSingleResult = function () {
 		scene.getObjectByName("background").visible = true;
 		in_Game_Menu_Group.visible = true;
 
-	//	ATTEMPT AT USING SPRITES
+		//	ATTEMPT AT USING SPRITES
 
 	/*
 		let spriteMap = new THREE.TextureLoader().load( "texture/sprites/sprite.png" );
@@ -183,6 +203,7 @@ flagCallBack.addSingleResult = function () {
 };
 
 function movePlayer(){
+
 	let scalingFactor = 20; //move speed
 
 	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
@@ -214,6 +235,20 @@ function renderFrame(){
 		updatePhysics( deltaTime );
 		stats.update();
 
+		/*
+		for(int i = 0; i < physicsWorld.getDispatcher().getNumManifolds(); i++){
+			if(physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody0() == player.userData.physicsBody || physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody1() == player.userData.physicsBody){
+				if(physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody0() == player.userData.physicsBody){
+
+				}
+			}
+		}
+		 */
+		console.log(physicsWorld.getDispatcher().getNumManifolds())
+		if(physicsWorld.getDispatcher().getNumManifolds() < 2 ){
+			canMove = false;
+		}
+
 		if(!startClock){
 			let mins =  Math.floor(gameClock.getElapsedTime()/60);
 			let secs;
@@ -230,7 +265,7 @@ function renderFrame(){
 			raycaster.ray.origin.copy( controls.getObject().position );
 			raycaster.ray.origin.y -= 10;
 		}
-	
+
 		if(gamePlay){
 			movePlayer();
 			updateCamera();
@@ -243,7 +278,7 @@ function renderFrame(){
 		}
 	}
 
-	if (this.debugDrawer) 
+	if (this.debugDrawer)
 		this.debugDrawer.update();
 
 	if(theMixer)//null would be false
@@ -273,30 +308,44 @@ function onWindowResize() {
 function onKeyDown (event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
-			playerMoveDirection.forward = 1;
+			if(canMove){
+				playerMoveDirection.forward = 1;
+			}
+
 			break;
 
 		case 65: // a
-			playerMoveDirection.left = 1;
+			if(canMove) {
+				playerMoveDirection.left = 1;
+			}
 			break;
 
 		case 83: // s
-			playerMoveDirection.back = 1;
+			if(canMove) {
+				playerMoveDirection.back = 1;
+			}
 			break;
 
 		case 68: // d
-			playerMoveDirection.right = 1;
+			if(canMove) {
+				playerMoveDirection.right = 1;
+			}
 			break;
 
 		case 32: // space
-			playerMoveDirection.forward = 0;
-			playerMoveDirection.left = 0;
-			playerMoveDirection.back = 0;
-			playerMoveDirection.right = 0;
-			let resultantImpulse = new Ammo.btVector3( 0, 5, 0 );
-			resultantImpulse.op_mul(2);
-			let physicsBody = player.userData.physicsBody;
-			physicsBody.applyImpulse( resultantImpulse );
+			if(canJump){
+				tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
+				playerMoveDirection.forward = 0;
+				playerMoveDirection.left = 0;
+				playerMoveDirection.back = 0;
+				playerMoveDirection.right = 0;
+				canMove = false;
+				canJump = false;
+				let resultantImpulse = new Ammo.btVector3( 0, 5, 0 );
+				resultantImpulse.op_mul(2);
+				let physicsBody = player.userData.physicsBody;
+				physicsBody.applyImpulse( resultantImpulse );
+			}
 			break;
 
 		case 16: // shift
@@ -419,7 +468,7 @@ function on_Mouse_Move(event) {
 				intersected_Object.material.emissive.setHex(0xdde014);
 
 			}
-		} 
+		}
 		else {
 			if (intersected_Object) {
 				intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
@@ -454,7 +503,7 @@ function on_Mouse_Move(event) {
 				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
 				intersected_Object.material.emissive.setHex(0xdde014);
 			}
-		} 
+		}
 		else {
 			if (intersected_Object) {
 				intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
