@@ -354,3 +354,11 @@ Semira Pinder
 Commit #4 of week 5
 
 Changed catGun's origin so that it's aligned better.
+
+
+2/26/2020
+Ryan Slaybaugh:
+Commit 19:
+
+  Fixed a few document elements improperly showing with a scroll bar. Worked on getting in game menu and added ability to get back to the
+main menu from level 1. We have a massive performance problem, most likely a memory leak that will need to be addressed.
