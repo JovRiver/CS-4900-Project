@@ -231,10 +231,21 @@ function renderFrame(){
 	if (level > 0) {
 		updatePhysics( deltaTime );
 		stats.update();
+
+		/*
+		for(int i = 0; i < physicsWorld.getDispatcher().getNumManifolds(); i++){
+			if(physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody0() == player.userData.physicsBody || physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody1() == player.userData.physicsBody){
+				if(physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody0() == player.userData.physicsBody){
+
+				}
+			}
+		}
+		 */
 		console.log(physicsWorld.getDispatcher().getNumManifolds())
 		if(physicsWorld.getDispatcher().getNumManifolds() < 2 ){
 			canMove = false;
 		}
+
 		if(!startClock){
 			let mins =  Math.floor(gameClock.getElapsedTime()/60);
 			let secs;
