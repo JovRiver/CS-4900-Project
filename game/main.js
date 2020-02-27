@@ -39,7 +39,7 @@ const STATE = {
 	DISABLE_SIMULATION : 5
 }
 
-let level = 1;	//set to 0 for main menu, 1 or higher for levels
+let level = 0;	//set to 0 for main menu, 1 or higher for levels
 let level_1_Objects = [];
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
