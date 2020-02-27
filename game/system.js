@@ -7,7 +7,6 @@ function setupPhysicsWorld(){
     physicsWorld  = new Ammo.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
     physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
     physicsWorld.debugDrawWorld();
-
 }
 
 function setupControls(){
@@ -77,14 +76,16 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         let motionState = new Ammo.btDefaultMotionState(transform);
         // set bounding box using each objects x,y,z scale
         let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 0.8, scale.y * 0.5 + 0.5, scale.z * 0.5 + 0.8));
-        colShape.setMargin(0.05);
+       // colShape.setMargin(0.05);
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
         let body = new Ammo.btRigidBody(rbInfo);
         body.setFriction(4);
         body.setRollingFriction(10);
+        box.userData.physicsBody = body;
         physicsWorld.addRigidBody(body, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
+        platforms.push(box);
     }
 }
 
