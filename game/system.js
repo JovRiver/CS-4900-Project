@@ -27,6 +27,7 @@ function setupControls(){
             console.log("TEST");
         }
         instructions.style.display = ''; sound.pause();} );
+
     scene.add( controls.getObject() );
 }
 

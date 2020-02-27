@@ -21,6 +21,7 @@ let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2(), intersected_Object;
 let startClock = true;
 let gamePlay = false; // Set this value someone when game starts.
+
 let timer = document.getElementById('clock');
 
 let onBox = false;
@@ -35,6 +36,7 @@ const STATE = {
 
 let level = 0;	//set to 0 for main menu, 1 or higher for levels
 let level_1_Objects = [];
+
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let in_Game_Menu_Group;
 
@@ -176,6 +178,7 @@ flagCallBack.addSingleResult = function () {
 		scene.add(in_Game_Menu_Group);
 		scene.add(spriteB);
 	*/
+
 	}
 };
 
@@ -234,6 +237,7 @@ function renderFrame(){
 		}
 	}
 	else {
+
 		if(onBox) {
 			menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
 		}
@@ -244,8 +248,6 @@ function renderFrame(){
 
 	if(theMixer)//null would be false
 		theMixer.update(1.0/60);
-	
-
 	requestAnimationFrame( renderFrame );
 	renderer.render(scene, camera);
 }
@@ -415,12 +417,14 @@ function on_Mouse_Move(event) {
 				intersected_Object = intersects[0].object;
 				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
 				intersected_Object.material.emissive.setHex(0xdde014);
+
 			}
 		} 
 		else {
 			if (intersected_Object) {
 				intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 			}
+
 			intersected_Object = null;
 			onBox = false;
 		}
@@ -455,7 +459,9 @@ function on_Mouse_Move(event) {
 			if (intersected_Object) {
 				intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 			}
+
 			intersected_Object = null;
+			onBox = false;
 		}
 	}
 }
