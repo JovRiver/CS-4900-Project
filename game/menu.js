@@ -417,13 +417,31 @@ function after_Game_Menu() {
 		in_Game_Menu_Group.add(mesh);	
 	});
 
-	let background = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshBasicMaterial({color: 0x000000}));
+	let bMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
+	bMaterial.transparent = true;
+	bMaterial.opacity = 0.25;
+	let background = new THREE.Mesh(new THREE.BoxBufferGeometry(), bMaterial);
 	background.scale.set(180, 120, 1);
 	background.position.set(0, 205, -52);
 	background.name = "background";
+	background.receiveShadow = true;
 
 	scene.add(background);
 	scene.add(in_Game_Menu_Group);
+
+	let spotLight = new THREE.SpotLight( 0xffffff, 1.5, 110);
+	spotLight.position.set(0, 210, 0);
+	spotLight.target.position.x = 0;
+	spotLight.target.position.y = 200;
+	spotLight.target.position.z = -50
+	spotLight.name = "spotlight";
+	
+	spotLight.color.setHSL(.2, 1, 0.5);
+
+	scene.add(spotLight.target);
+	scene.add(spotLight);
+
 	background.visible = false;
 	in_Game_Menu_Group.visible = false;
+	spotLight.visible = false;
 }

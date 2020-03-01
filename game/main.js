@@ -1,5 +1,5 @@
 //variable declaration section
-let physicsWorld, camera, renderer, stats, sound, controls, rigidBodies = [], platforms = [], tmpTrans = null;
+let physicsWorld, renderer, stats, sound, controls, rigidBodies = [], platforms = [], tmpTrans = null;
 let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
 
@@ -12,7 +12,8 @@ let movementCallBack = null;
 let canJump = true;
 let canMove = true;
 
-let scene;
+let scene, orthoScene;
+let camera, orthoCamera;
 
 let theMixer;// = new THREE.AnimationMixer();
 let objects = [];	// check for actual usage
@@ -40,7 +41,7 @@ const STATE = {
 }
 
 let level = 0;	//set to 0 for main menu, 1 or higher for levels
-let level_1_Objects = [];
+let level_1_Objects;
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let in_Game_Menu_Group;
@@ -87,6 +88,7 @@ function load_Manager() {
 	in_Game_Menu_Group = new THREE.Group();
 	menu_Group = new THREE.Group();
 	rigidBodies = [];
+	level_1_Objects = [];
 
 	switch (level){
 		case 0:
@@ -162,14 +164,10 @@ flagCallBack.addSingleResult = function () {
 		gamePlay = false;
 		controls.unlock();
 
-		let pointLight2 = new THREE.PointLight(0xffffff, 1.5);
-		pointLight2.position.set(0, 220, 0);
-		pointLight2.color.setHSL(.2, 1, 0.5);
-
-		scene.add(pointLight2);
-
 		scene.getObjectByName("background").visible = true;
+		scene.getObjectByName("spotlight").visible = true;
 		in_Game_Menu_Group.visible = true;
+
 
 		//	ATTEMPT AT USING SPRITES
 
@@ -288,9 +286,8 @@ function renderFrame(){
 		theMixer.update(1.0/60);
 
 	renderFrameId = requestAnimationFrame( renderFrame );
-	renderer.clear();
 	renderer.render(scene, camera);
-	renderer.clearDepth();
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
