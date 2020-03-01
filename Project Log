@@ -371,3 +371,9 @@ Commit 20:
   Fixed the issue with calling and stacking multiple renders by invoking cancelAnimationFrame(renderFrameId) before invoking new renderFrames.
 Also corrected cases of the camera being off center when looking at the in game menu. I moved the camera.position and camera.lookAt into the
 renderFrame so that it would constantly ensure that it was located at and looking in the correct locations.
+
+3/1/2020
+Ryan Slaybaug:
+Commit 21:
+
+  Further improved the look of the ingame menu adding in lighting to get the same color text as in the main menu.
