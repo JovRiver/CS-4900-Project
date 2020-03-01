@@ -1,7 +1,6 @@
 //variable declaration section
-let physicsWorld, scene, camera, renderer, stats, sound, controls, rigidBodies = [], platforms = [], tmpTrans = null;
-let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 },
-								tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
+let physicsWorld, camera, renderer, stats, sound, controls, rigidBodies = [], platforms = [], tmpTrans = null;
+let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
 
 // collision group and detection variables
@@ -13,7 +12,7 @@ let movementCallBack = null;
 let canJump = true;
 let canMove = true;
 
-
+let scene;
 
 let theMixer;// = new THREE.AnimationMixer();
 let objects = [];	// check for actual usage
@@ -29,6 +28,7 @@ let gamePlay = false; // Set this value someone when game starts.
 
 let timer = document.getElementById('clock');
 
+let renderFrameId;
 let onBox = false;
 
 const STATE = {
@@ -78,29 +78,27 @@ function start (){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 function load_Manager() {
+	document.getElementById("blocker").style.display = "block";
+	document.getElementById("load").style.display = "none";
+	document.getElementById("load_Menu").style.display = "none";
+	document.getElementById("instructions").style.display = "none";
+
 	scene = new THREE.Scene();
 	in_Game_Menu_Group = new THREE.Group();
 	menu_Group = new THREE.Group();
 	rigidBodies = [];
-	/*
-	for (let i = scene.children.length; i > 0; i--) {
-		let sceneObject = scene.children[i];
-		scene.remove(sceneObject);
-		sceneObject.geometry.dispose();
-		sceneObject.material.dispose();
-		sceneObject = null;
-	}
-	*/
-	//scene.dispose()
 
 	switch (level){
 		case 0:
+			document.getElementById("load_Menu").style.display = "";
 			create_Start_Menu();
 			break;
 		case 1:
+			document.getElementById("load").style.display = "";
 			createLevel1();
 			break;
 		case 2:
+    		document.getElementById("instructions").style.display = "";
 			createLevel2();
 			break;
 		case 3:
@@ -164,8 +162,11 @@ flagCallBack.addSingleResult = function () {
 		gamePlay = false;
 		controls.unlock();
 
-		setTimeout(camera.position.set(0, 200, 0), 500);
-		setTimeout(camera.lookAt(0, 200, -80), 600);
+		let pointLight2 = new THREE.PointLight(0xffffff, 1.5);
+		pointLight2.position.set(0, 220, 0);
+		pointLight2.color.setHSL(.2, 1, 0.5);
+
+		scene.add(pointLight2);
 
 		scene.getObjectByName("background").visible = true;
 		in_Game_Menu_Group.visible = true;
@@ -234,7 +235,6 @@ function renderFrame(){
 	if (level > 0) {
 		updatePhysics( deltaTime );
 		stats.update();
-
 		/*
 		for(int i = 0; i < physicsWorld.getDispatcher().getNumManifolds(); i++){
 			if(physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody0() == player.userData.physicsBody || physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody1() == player.userData.physicsBody){
@@ -270,9 +270,12 @@ function renderFrame(){
 			movePlayer();
 			updateCamera();
 		}
+		else {
+			camera.position.set(0, 200, 0);
+			camera.lookAt(0, 200, -80);
+		}
 	}
 	else {
-
 		if(onBox) {
 			menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
 		}
@@ -283,8 +286,11 @@ function renderFrame(){
 
 	if(theMixer)//null would be false
 		theMixer.update(1.0/60);
-	requestAnimationFrame( renderFrame );
+
+	renderFrameId = requestAnimationFrame( renderFrame );
+	renderer.clear();
 	renderer.render(scene, camera);
+	renderer.clearDepth();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

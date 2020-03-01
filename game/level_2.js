@@ -1,9 +1,4 @@
-function createLevel2() {
-    // sets load_Menu to be invisible, and all other css styles to be visible
-    document.getElementById("blocker").style.display = "block";
-    document.getElementById("instructions").style.display = "";
-    document.getElementById("load").style.display = "none";
- 
+function createLevel2() { 
      camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
      scene.fog = new THREE.Fog(0x6c7578, 150, 750);
  

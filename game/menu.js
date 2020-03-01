@@ -1,8 +1,4 @@
-function create_Start_Menu() {
-	document.getElementById("load_Menu").style.display = "blocker";
-	document.getElementById("instructions").style.display = "none";
-	document.getElementById("load").style.display = "none";
-	
+function create_Start_Menu() {	
 	let loader = new THREE.FontLoader();
 	let loadBar = document.getElementById('load_Menu');
 
@@ -294,6 +290,7 @@ function create_Start_Menu() {
     main_Menu();
     level_Select_Menu();
 	options_Menu();
+	cancelAnimationFrame(renderFrameId);
 	renderFrame();
 }
 
