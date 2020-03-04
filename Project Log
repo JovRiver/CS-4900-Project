@@ -377,3 +377,11 @@ Ryan Slaybaug:
 Commit 21:
 
   Further improved the look of the ingame menu adding in lighting to get the same color text as in the main menu.
+
+
+3/3/2020
+Ryan Slaybaugh:
+Commit 22:
+
+  Pushed the renderframe fix to level_2.js and reinitialized the physics world to flush old bounding boxes from the scene. There is currently
+an issue of being unable to move due to no other physics collisions taking place. We will need to fix this.
