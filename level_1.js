@@ -17,6 +17,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+let animationNum = 0,secondLoopBool = false, anims;
 function createLevel1() {
     // sets load_Menu to be invisible, and all other css styles to be visible
     document.getElementById("load_Menu").style.display = "none";
@@ -466,19 +467,17 @@ function createLevel1() {
 
                 //animation for catGun
                 anims = obj.animations;
-                //let aClip = THEE.AnimationClip.findByName(anims, "Walk");...
 
-                anims.forEach(function(aClip){
-                    //theMixer.clipAction(aClip).play();//returns an Animation Action that's played with play()
-                    theMixer.clipAction(aClip).repetitions = 1;
-                    theMixer.clipAction(aClip).clampWhenFinished = true;//stops the animation instead of looping it.
-                    theMixer.clipAction(aClip).paused = true;
-                    //animations won't loop again after they're re-enabled, you would have to start the loop again
-                    //theMixer.clipAction(aClip).play();//play the animations, all at once = merge animations
-                });
-                theMixer.clipAction(anims[0]).paused = false;//stops the animation instead of looping it.
-                theMixer.clipAction(anims[0]).play();//play the animations
-                theMixer.addEventListener('finished', animationLoop);
+                /*anims.forEach(function(e){
+                    //e.repetitions = 2;//each animation only plays 2 times before stopping
+                    e.setLoop(THREE.LoopRepeat, 2);
+                });*/
+
+                theMixer.clipAction(anims[0]).play();//"death" doesn't play for some reason
+
+                theMixer.addEventListener('loop', catAnimations);//'finished' does not count a loop ending as finished,
+                //setting amount of repetitions doesn't work either, fix soon
+
 
                 loadBar.innerHTML = "";
             },
@@ -677,13 +676,18 @@ function createLevel1() {
     create_Boundary();
 }
 
-function animationLoop(e){
-    aniNum++;
-    if (aniNum == anims.length)
-        aniNum = 0;
+function catAnimations(e){//e contains the type action and loopDelta
+    //stop the current animation
+    if (secondLoopBool){//if it's on the 2nd loop, adjust the animationMixer so that we don't have to do this later
+        e.action.stop(); //not needed since each animation runs only twice before stopping
+        animationNum++;
+        if (animationNum == anims.length)
+            animationNum = 0;
 
-    e.paused = true;
-    anims[aniNum].paused = false;
-    //anims[aniNum].loop = THREE.LoopOnce;
-    theMixer.clipAction(anims[aniNum]).play();
+        //start the next animation in the queue
+        theMixer.clipAction(anims[animationNum]).play();
+    }
+    secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
+    //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
+
 }
