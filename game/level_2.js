@@ -90,10 +90,12 @@ function createLevel2() {
         a = true;
     }
 
+    //setupPhysicsWorld();
     gamePlay = true;
-    setupControls();//game can start with a click after external files are loaded in
+    setupControls();
 
     createPlatform();
     createPlayer();
+    cancelAnimationFrame(renderFrameId);
     renderFrame();//starts the loop once the models are loaded
 }
