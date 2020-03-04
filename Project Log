@@ -332,3 +332,62 @@ Commit 18:
 heights will need to be adjusted as player movement is adjusted. Also changed the skybox to a cube mesh rather than a scene.background in
 order to cut off the obvious edge separating top from bottom in the skymap image.
 
+2/25/20 10:19pm-12:28am and 2/26/20 11:35 am-4:32pm
+Semira Pinder
+Commit #1 of week 5
+Made and exported a tree obj in the "objects/treePalm"
+
+2/26/20 4:40pm-4:55pm
+Semira Pinder
+Commit #2 of week 5
+
+Added a tail bone armature to the catGun.blend file that can be weighted then animated later.
+
+2/26/20 5:03pm-5:15pm
+Semira Pinder
+Commit #3 of week 5
+
+Re-weighted the armature with catGun in a way that allows the armature's tail to move the mesh's tail.
+
+2/26/20 5:16pm - 5:21pm
+Semira Pinder
+Commit #4 of week 5
+
+Changed catGun's origin so that it's aligned better.
+
+
+2/26/2020
+Ryan Slaybaugh:
+Commit 19:
+
+  Fixed a few document elements improperly showing with a scroll bar. Worked on getting in game menu and added ability to get back to the
+main menu from level 1. We have a massive performance problem, most likely a memory leak that will need to be addressed.
+
+
+3/1/2020
+Ryan Slaybaugh:
+Commit 20:
+
+  Fixed the issue with calling and stacking multiple renders by invoking cancelAnimationFrame(renderFrameId) before invoking new renderFrames.
+Also corrected cases of the camera being off center when looking at the in game menu. I moved the camera.position and camera.lookAt into the
+renderFrame so that it would constantly ensure that it was located at and looking in the correct locations.
+
+3/1/2020
+Ryan Slaybaug:
+Commit 21:
+
+  Further improved the look of the ingame menu adding in lighting to get the same color text as in the main menu.
+
+
+3/3/2020
+Ryan Slaybaugh:
+Commit 22:
+
+  Pushed the renderframe fix to level_2.js and reinitialized the physics world to flush old bounding boxes from the scene. There is currently
+an issue of being unable to move due to no other physics collisions taking place. We will need to fix this.
+
+3/4/2020 10:54 - 11:57 am
+Semira Pinder
+Commit #1 of week 6
+
+Fixed the animation loop for the cat model, but I will need to fix the death animation not playing.
