@@ -385,3 +385,9 @@ Commit 22:
 
   Pushed the renderframe fix to level_2.js and reinitialized the physics world to flush old bounding boxes from the scene. There is currently
 an issue of being unable to move due to no other physics collisions taking place. We will need to fix this.
+
+3/4/2020 10:54 - 11:57 am
+Semira Pinder
+Commit #1 of week 6
+
+Fixed the animation loop for the cat model, but I will need to fix the death animation not playing.
