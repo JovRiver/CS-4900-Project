@@ -298,6 +298,8 @@ function setupEventHandlers(){
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'keydown', onKeyDown, false );
 	document.addEventListener( 'keyup', onKeyUp, false );
+	document.addEventListener( 'mousedown', onMouseDown, false );
+	document.addEventListener( 'mouseup', onMouseUp, false );
 	window.addEventListener( 'mousemove', on_Mouse_Move, false );
 	document.addEventListener('mousedown', menu_Selection, false);
 }
@@ -306,6 +308,18 @@ function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
+function onMouseDown(event){
+	if(event.which === 3){
+		console.log("Right mouse button clicked");
+	}
+}
+
+function onMouseUp(event){
+	if(event.which === 3){
+		console.log("Right mouse button unclicked");
+	}
 }
 
 function onKeyDown (event ) {
