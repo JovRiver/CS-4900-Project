@@ -421,3 +421,10 @@ of the model
 Semira Pinder
 Commit #6 of week 6
 Changed the "theMixer" object to update using a THREE.Clock object
+
+
+3/5/2020
+Ryan Slaybaugh:
+Commit 23:
+
+  Created a level 2 select and level 2 cube for the select level menu, and linked level two to the buttons in the raycasting event handlers.
