@@ -1,7 +1,6 @@
 //variable declaration section
-let physicsWorld, scene, camera, renderer, stats, sound, controls, rigidBodies = [], platforms = [], tmpTrans = null;
-let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 },
-								tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
+let physicsWorld, renderer, stats, sound, controls, rigidBodies = [], platforms = [], tmpTrans = null;
+let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
 
 // collision group and detection variables
@@ -13,7 +12,8 @@ let movementCallBack = null;
 let canJump = true;
 let canMove = true;
 
-
+let scene, orthoScene;
+let camera, orthoCamera;
 
 let theMixer;// = new THREE.AnimationMixer();
 let objects = [];	// check for actual usage
@@ -29,7 +29,8 @@ let gamePlay = false; // Set this value someone when game starts.
 
 let timer = document.getElementById('clock');
 
-let onBox = false;
+let renderFrameId;
+let onBox = 0;
 
 const STATE = {
 	ACTIVE_TAG : 1,
@@ -40,7 +41,6 @@ const STATE = {
 }
 
 let level = 0;	//set to 0 for main menu, 1 or higher for levels
-let level_1_Objects = [];
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let in_Game_Menu_Group;
@@ -78,29 +78,27 @@ function start (){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 function load_Manager() {
+	document.getElementById("blocker").style.display = "block";
+	document.getElementById("load").style.display = "none";
+	document.getElementById("load_Menu").style.display = "none";
+	document.getElementById("instructions").style.display = "none";
+
 	scene = new THREE.Scene();
 	in_Game_Menu_Group = new THREE.Group();
 	menu_Group = new THREE.Group();
 	rigidBodies = [];
-	/*
-	for (let i = scene.children.length; i > 0; i--) {
-		let sceneObject = scene.children[i];
-		scene.remove(sceneObject);
-		sceneObject.geometry.dispose();
-		sceneObject.material.dispose();
-		sceneObject = null;
-	}
-	*/
-	//scene.dispose()
 
 	switch (level){
 		case 0:
+			document.getElementById("load_Menu").style.display = "";
 			create_Start_Menu();
 			break;
 		case 1:
+			document.getElementById("load").style.display = "";
 			createLevel1();
 			break;
 		case 2:
+    		document.getElementById("instructions").style.display = "";
 			createLevel2();
 			break;
 		case 3:
@@ -118,8 +116,6 @@ function load_Manager() {
 ///////////////////////////////////////////////////////////////////////////////////////
 //	SYSTEM
 ///////////////////////////////////////////////////////////////////////////////////////
-
-
 
 function updatePhysics( deltaTime ){
 	// Step world
@@ -164,11 +160,10 @@ flagCallBack.addSingleResult = function () {
 		gamePlay = false;
 		controls.unlock();
 
-		setTimeout(camera.position.set(0, 200, 0), 500);
-		setTimeout(camera.lookAt(0, 200, -80), 600);
-
 		scene.getObjectByName("background").visible = true;
+		scene.getObjectByName("spotlight").visible = true;
 		in_Game_Menu_Group.visible = true;
+
 
 		//	ATTEMPT AT USING SPRITES
 
@@ -234,7 +229,6 @@ function renderFrame(){
 	if (level > 0) {
 		updatePhysics( deltaTime );
 		stats.update();
-
 		/*
 		for(int i = 0; i < physicsWorld.getDispatcher().getNumManifolds(); i++){
 			if(physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody0() == player.userData.physicsBody || physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody1() == player.userData.physicsBody){
@@ -245,7 +239,7 @@ function renderFrame(){
 		}
 		 */
 		console.log(physicsWorld.getDispatcher().getNumManifolds())
-		if(physicsWorld.getDispatcher().getNumManifolds() < 2 ){
+		if(physicsWorld.getDispatcher().getNumManifolds() < 2){
 			canMove = false;
 		}
 
@@ -270,11 +264,22 @@ function renderFrame(){
 			movePlayer();
 			updateCamera();
 		}
+		else {
+			camera.position.set(0, 200, 0);
+			camera.lookAt(0, 200, -80);
+		}
 	}
 	else {
-
-		if(onBox) {
-			menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+		switch(onBox) {
+			case 1: 
+				menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+				break;
+			case 2: 
+				menu_Group.getObjectByName("Level_2_Cube").rotation.y += 0.01;
+				break;
+			//case 3: 
+				//menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+				//break;
 		}
 	}
 
@@ -283,8 +288,10 @@ function renderFrame(){
 
 	if(theMixer)//null would be false
 		theMixer.update(1.0/60);
-	requestAnimationFrame( renderFrame );
+
+	renderFrameId = requestAnimationFrame( renderFrame );
 	renderer.render(scene, camera);
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -396,10 +403,10 @@ function menu_Selection(event) {
 				load_Manager();
 			}
 
-			//if (intersects[0].object.name === "Level_2" || intersects[0].object.name === "Level_2_Cube") {
-			//	level = 2;
-			//	load_Manager();
-			//}
+			if (intersects[0].object.name === "Level_2" || intersects[0].object.name === "Level_2_Cube") {
+				level = 2;
+				load_Manager();
+			}
 
 			if (intersects[0].object.name === "Options") {
 				camera.position.y -= 80;
@@ -452,7 +459,11 @@ function on_Mouse_Move(event) {
 
 		if (intersects.length > 0) {
 			if (intersects[0].object.name === "Level_1_Cube") {
-				onBox = true;
+				onBox = 1;
+			}
+
+			else if (intersects[0].object.name === "Level_2_Cube") {
+				onBox = 2;
 			}
 
 			else if (intersected_Object != intersects[0].object) {
@@ -460,9 +471,12 @@ function on_Mouse_Move(event) {
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 				}
 
-				if (intersects[0].object.name === "Level_1")
-					onBox = true;
-
+				if (intersects[0].object.name === "Level_1"){
+					onBox = 1;
+				}
+				else if (intersects[0].object.name === "Level_2"){
+					onBox = 2;
+				}
 				intersected_Object = intersects[0].object;
 				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
 				intersected_Object.material.emissive.setHex(0xdde014);
