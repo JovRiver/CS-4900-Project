@@ -11,7 +11,7 @@ let flagCallBack = null;
 let movementCallBack = null;
 let canJump = true;
 let canMove = true;
-
+let rope = null;
 let scene, orthoScene;
 let camera, orthoCamera;
 
@@ -128,6 +128,24 @@ function updatePhysics( deltaTime ){
 
 	}
 
+	// Update rope
+	if(rope != null){
+		var softBody = rope.userData.physicsBody;
+		var ropePositions = rope.geometry.attributes.position.array;
+		var numVerts = ropePositions.length / 3;
+		var nodes = softBody.get_m_nodes();
+		var indexFloat = 0;
+		for ( var i = 0; i < numVerts; i ++ ) {
+
+			var node = nodes.at( i );
+			var nodePos = node.get_m_x();
+			ropePositions[ indexFloat++ ] = nodePos.x();
+			ropePositions[ indexFloat++ ] = nodePos.y();
+			ropePositions[ indexFloat++ ] = nodePos.z();
+
+		}
+		rope.geometry.attributes.position.needsUpdate = true;
+	}
 	// Update rigid bodies
 	for ( let i = 0; i < rigidBodies.length; i++ ) {
 		let objThree = rigidBodies[i];
@@ -219,8 +237,8 @@ function movePlayer(){
 
 function updateCamera(){
 	camera.position.x = player.position.x;
-	camera.position.y = player.position.y;
-	camera.position.z = player.position.z;
+	camera.position.y = player.position.y+2;
+	camera.position.z = player.position.z+3;
 }
 
 function renderFrame(){
@@ -238,8 +256,8 @@ function renderFrame(){
 			}
 		}
 		 */
-		console.log(physicsWorld.getDispatcher().getNumManifolds())
-		if(physicsWorld.getDispatcher().getNumManifolds() < 2){
+		if(physicsWorld.getDispatcher().getNumManifolds() < 2 ){
+
 			canMove = false;
 		}
 
@@ -302,6 +320,8 @@ function setupEventHandlers(){
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'keydown', onKeyDown, false );
 	document.addEventListener( 'keyup', onKeyUp, false );
+	document.addEventListener( 'mousedown', onMouseDown, false );
+	document.addEventListener( 'mouseup', onMouseUp, false );
 	window.addEventListener( 'mousemove', on_Mouse_Move, false );
 	document.addEventListener('mousedown', menu_Selection, false);
 }
@@ -310,6 +330,39 @@ function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
+function onMouseDown(event){
+	if(event.which === 3){
+
+		var direction = new THREE.Vector3(0,0,0);
+		var raycasterRope = new THREE.Raycaster(); // create once and reuse
+		controls.getDirection( direction );
+		raycasterRope.set( controls.getObject().position, direction );
+		raycasterRope.near = 1;
+		raycasterRope.far = 50;
+		var intersects = raycasterRope.intersectObjects( platforms );
+		for ( var i = 0; i < intersects.length; i++ ) {
+			if(intersects.length === 1){
+				createGrapplingHook(intersects[i].object);
+			}
+
+
+		}
+	}
+}
+
+function onMouseUp(event){
+	if(event.which === 3){
+		console.log("Right mouse button unclicked");
+		if(rope != null){
+			physicsWorld.removeCollisionObject(rope.userData.physicsBody);
+			scene.remove(rope);
+		}
+
+
+
+	}
 }
 
 function onKeyDown (event ) {
@@ -365,18 +418,22 @@ function onKeyUp( event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
 			playerMoveDirection.forward = 0;
+			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: 0, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 65: // a
 			playerMoveDirection.left = 0;
+			tempPlayerMoveDirection = {left: 0, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 83: // s
 			playerMoveDirection.back = 0;
+			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: 0}
 			break;
 
 		case 68: // d
 			playerMoveDirection.right = 0;
+			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: 0, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 16: // shift
