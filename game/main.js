@@ -361,18 +361,22 @@ function onKeyUp( event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
 			playerMoveDirection.forward = 0;
+			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: 0, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 65: // a
 			playerMoveDirection.left = 0;
+			tempPlayerMoveDirection = {left: 0, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 83: // s
 			playerMoveDirection.back = 0;
+			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: 0}
 			break;
 
 		case 68: // d
 			playerMoveDirection.right = 0;
+			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: 0, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 16: // shift
