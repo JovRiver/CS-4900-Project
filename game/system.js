@@ -56,12 +56,12 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         base_Texture.map.repeat.set(2, 10);
     }
     let box = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
-        box.scale.set(scale.x, scale.y, scale.z);
-        box.position.set(pos.x, pos.y, pos.z);
+    box.scale.set(scale.x, scale.y, scale.z);
+    box.position.set(pos.x, pos.y, pos.z);
 
-   if(has_Boundary === true){
-       box.castShadow = true;
-       box.receiveShadow = true;
+    if(has_Boundary === true){
+        box.castShadow = true;
+        box.receiveShadow = true;
     }
     scene.add(box);
 
@@ -75,7 +75,7 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         let motionState = new Ammo.btDefaultMotionState(transform);
         // set bounding box using each objects x,y,z scale
         let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 0.8, scale.y * 0.5 + 0.5, scale.z * 0.5 + 0.8));
-       // colShape.setMargin(0.05);
+        // colShape.setMargin(0.05);
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
@@ -91,23 +91,23 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
 function createGrapplingHook(platform){
     // The rope
     // Rope graphic object
-    var ropeNumSegments = 10;
-    var ropeLength = 10;
-    var ropeMass = 3;
-    var ropePos = player.position.clone();
+    let ropeNumSegments = 10;
+    let ropeLength = 10;
+    let ropeMass = 3;
+    let ropePos = player.position.clone();
     ropePos.y += 1;
 
-    var segmentLength = ropeLength / ropeNumSegments;
-    var ropeGeometry = new THREE.BufferGeometry();
-    var ropeMaterial = new THREE.LineBasicMaterial( { color: 0x000000 } );
-    var ropePositions = [];
-    var ropeIndices = [];
+    let segmentLength = ropeLength / ropeNumSegments;
+    let ropeGeometry = new THREE.BufferGeometry();
+    let ropeMaterial = new THREE.LineBasicMaterial( { color: 0x000000 } );
+    let ropePositions = [];
+    let ropeIndices = [];
 
-    for ( var i = 0; i < ropeNumSegments + 1; i++ ) {
+    for ( let i = 0; i < ropeNumSegments + 1; i++ ) {
         ropePositions.push( ropePos.x, ropePos.y + i * segmentLength, ropePos.z );
     }
 
-    for ( var i = 0; i < ropeNumSegments; i++ ) {
+    for ( let i = 0; i < ropeNumSegments; i++ ) {
         ropeIndices.push( i, i + 1 );
     }
 
@@ -120,11 +120,11 @@ function createGrapplingHook(platform){
     scene.add( rope );
 
     // Rope physic object
-    var softBodyHelpers = new Ammo.btSoftBodyHelpers();
-    var ropeStart = new Ammo.btVector3( ropePos.x, ropePos.y, ropePos.z );
-    var ropeEnd = new Ammo.btVector3( ropePos.x, ropePos.y + ropeLength, ropePos.z );
-    var ropeSoftBody = softBodyHelpers.CreateRope( physicsWorld.getWorldInfo(), ropeStart, ropeEnd, ropeNumSegments - 1, 0 );
-    var sbConfig = ropeSoftBody.get_m_cfg();
+    let softBodyHelpers = new Ammo.btSoftBodyHelpers();
+    let ropeStart = new Ammo.btVector3( ropePos.x, ropePos.y, ropePos.z );
+    let ropeEnd = new Ammo.btVector3( ropePos.x, ropePos.y + ropeLength, ropePos.z );
+    let ropeSoftBody = softBodyHelpers.CreateRope( physicsWorld.getWorldInfo(), ropeStart, ropeEnd, ropeNumSegments - 1, 0 );
+    let sbConfig = ropeSoftBody.get_m_cfg();
     sbConfig.set_viterations( 10 );
     sbConfig.set_piterations( 10 );
     ropeSoftBody.setTotalMass( ropeMass, false )
@@ -137,7 +137,7 @@ function createGrapplingHook(platform){
 
 
     // Glue the rope extremes to the ball and the arm
-    var influence = 1;
+    let influence = 1;
     ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
     ropeSoftBody.appendAnchor( ropeNumSegments, platform.userData.physicsBody, true, influence );
 
@@ -146,7 +146,7 @@ function createGrapplingHook(platform){
 //function for later use
 function lockGrapplingHook(arm){
     // Glue the rope extremes to the ball and the arm
-    //var influence = 1;
+    //let influence = 1;
     //ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
     //ropeSoftBody.appendAnchor( ropeNumSegments, arm.userData.physicsBody, true, influence );
 }

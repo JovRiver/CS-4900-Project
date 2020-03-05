@@ -98,7 +98,7 @@ function load_Manager() {
 			createLevel1();
 			break;
 		case 2:
-    		document.getElementById("instructions").style.display = "";
+			document.getElementById("instructions").style.display = "";
 			createLevel2();
 			break;
 		case 3:
@@ -130,15 +130,15 @@ function updatePhysics( deltaTime ){
 
 	// Update rope
 	if(rope != null){
-		var softBody = rope.userData.physicsBody;
-		var ropePositions = rope.geometry.attributes.position.array;
-		var numVerts = ropePositions.length / 3;
-		var nodes = softBody.get_m_nodes();
-		var indexFloat = 0;
-		for ( var i = 0; i < numVerts; i ++ ) {
+		let softBody = rope.userData.physicsBody;
+		let ropePositions = rope.geometry.attributes.position.array;
+		let numVerts = ropePositions.length / 3;
+		let nodes = softBody.get_m_nodes();
+		let indexFloat = 0;
+		for ( let i = 0; i < numVerts; i ++ ) {
 
-			var node = nodes.at( i );
-			var nodePos = node.get_m_x();
+			let node = nodes.at( i );
+			let nodePos = node.get_m_x();
 			ropePositions[ indexFloat++ ] = nodePos.x();
 			ropePositions[ indexFloat++ ] = nodePos.y();
 			ropePositions[ indexFloat++ ] = nodePos.z();
@@ -185,32 +185,32 @@ flagCallBack.addSingleResult = function () {
 
 		//	ATTEMPT AT USING SPRITES
 
-	/*
-		let spriteMap = new THREE.TextureLoader().load( "texture/sprites/sprite.png" );
-		let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
-		sprite = new THREE.Sprite( spriteMaterial );
-	
-		sprite.position.set(camera.position.x, camera.position.y + 40, camera.position.z);
-		sprite.center.set(0.5, 0.25);
-		sprite.scale.set(50, 50, 1);
-		sprite.name = "Continue";
+		/*
+            let spriteMap = new THREE.TextureLoader().load( "texture/sprites/sprite.png" );
+            let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+            sprite = new THREE.Sprite( spriteMaterial );
 
-		in_Game_Menu_Group.add(sprite);
+            sprite.position.set(camera.position.x, camera.position.y + 40, camera.position.z);
+            sprite.center.set(0.5, 0.25);
+            sprite.scale.set(50, 50, 1);
+            sprite.name = "Continue";
 
-		let spriteBackground = new THREE.TextureLoader().load("texture/sprites/background.png");
-		let backgroundMaterial = new THREE.SpriteMaterial({map: spriteBackground, color: 0x000000});
-		spriteB = new THREE.Sprite(backgroundMaterial);
+            in_Game_Menu_Group.add(sprite);
 
-		spriteB.position.set(camera.position.x, camera.position.y + 50, camera.position.z);
-		spriteB.center.set(0.5, 0.5);
-		spriteB.scale.set(150, 150, 1);
+            let spriteBackground = new THREE.TextureLoader().load("texture/sprites/background.png");
+            let backgroundMaterial = new THREE.SpriteMaterial({map: spriteBackground, color: 0x000000});
+            spriteB = new THREE.Sprite(backgroundMaterial);
 
-		camera.rotation.x = THREE.Math.degToRad(90);
-		camera.position.y += 10;
+            spriteB.position.set(camera.position.x, camera.position.y + 50, camera.position.z);
+            spriteB.center.set(0.5, 0.5);
+            spriteB.scale.set(150, 150, 1);
 
-		scene.add(in_Game_Menu_Group);
-		scene.add(spriteB);
-	*/
+            camera.rotation.x = THREE.Math.degToRad(90);
+            camera.position.y += 10;
+
+            scene.add(in_Game_Menu_Group);
+            scene.add(spriteB);
+        */
 
 	}
 };
@@ -289,15 +289,15 @@ function renderFrame(){
 	}
 	else {
 		switch(onBox) {
-			case 1: 
+			case 1:
 				menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
 				break;
-			case 2: 
+			case 2:
 				menu_Group.getObjectByName("Level_2_Cube").rotation.y += 0.01;
 				break;
-			//case 3: 
-				//menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
-				//break;
+			//case 3:
+			//menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+			//break;
 		}
 	}
 
@@ -335,14 +335,14 @@ function onWindowResize() {
 function onMouseDown(event){
 	if(event.which === 3){
 
-		var direction = new THREE.Vector3(0,0,0);
-		var raycasterRope = new THREE.Raycaster(); // create once and reuse
+		let direction = new THREE.Vector3(0,0,0);
+		let raycasterRope = new THREE.Raycaster(); // create once and reuse
 		controls.getDirection( direction );
 		raycasterRope.set( controls.getObject().position, direction );
 		raycasterRope.near = 1;
 		raycasterRope.far = 50;
-		var intersects = raycasterRope.intersectObjects( platforms );
-		for ( var i = 0; i < intersects.length; i++ ) {
+		let intersects = raycasterRope.intersectObjects( platforms );
+		for ( let i = 0; i < intersects.length; i++ ) {
 			if(intersects.length === 1){
 				createGrapplingHook(intersects[i].object);
 			}
