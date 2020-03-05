@@ -278,7 +278,7 @@ function create_Start_Menu() {
 					menu_Group.add(mesh);
 		});
 
-		let Level_2_Cube_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_5.jpg')});
+		let Level_2_Cube_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')});
 		Level_2_Cube_Texture.map.wrapS = Level_1_Cube_Texture.map.wrapT = THREE.RepeatWrapping;
 		Level_2_Cube_Texture.map.repeat.set(1, 1);
         let	Level_2_Cube = new THREE.Mesh(new THREE.BoxBufferGeometry(), Level_2_Cube_Texture);

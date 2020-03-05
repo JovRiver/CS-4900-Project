@@ -12,15 +12,16 @@ let movementCallBack = null;
 let canJump = true;
 let canMove = true;
 let rope = null;
+
 let scene, orthoScene;
 let camera, orthoCamera;
 
 let theMixer;// = new THREE.AnimationMixer();
-let theThreeClock = new THREE.Clock();
 let objects = [];	// check for actual usage
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
+let clock = new THREE.Clock();
 let gameClock =  new THREE.Clock();
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2(), intersected_Object;
@@ -130,15 +131,15 @@ function updatePhysics( deltaTime ){
 
 	// Update rope
 	if(rope != null){
-		let softBody = rope.userData.physicsBody;
-		let ropePositions = rope.geometry.attributes.position.array;
-		let numVerts = ropePositions.length / 3;
-		let nodes = softBody.get_m_nodes();
-		let indexFloat = 0;
-		for ( let i = 0; i < numVerts; i ++ ) {
+		var softBody = rope.userData.physicsBody;
+		var ropePositions = rope.geometry.attributes.position.array;
+		var numVerts = ropePositions.length / 3;
+		var nodes = softBody.get_m_nodes();
+		var indexFloat = 0;
+		for ( var i = 0; i < numVerts; i ++ ) {
 
-			let node = nodes.at( i );
-			let nodePos = node.get_m_x();
+			var node = nodes.at( i );
+			var nodePos = node.get_m_x();
 			ropePositions[ indexFloat++ ] = nodePos.x();
 			ropePositions[ indexFloat++ ] = nodePos.y();
 			ropePositions[ indexFloat++ ] = nodePos.z();
@@ -146,6 +147,8 @@ function updatePhysics( deltaTime ){
 		}
 		rope.geometry.attributes.position.needsUpdate = true;
 	}
+
+
 	// Update rigid bodies
 	for ( let i = 0; i < rigidBodies.length; i++ ) {
 		let objThree = rigidBodies[i];
@@ -256,8 +259,8 @@ function renderFrame(){
 			}
 		}
 		 */
-		if(physicsWorld.getDispatcher().getNumManifolds() < 2 ){
-
+		console.log(physicsWorld.getDispatcher().getNumManifolds())
+		if(physicsWorld.getDispatcher().getNumManifolds() < 2){
 			canMove = false;
 		}
 
@@ -304,11 +307,11 @@ function renderFrame(){
 	if (this.debugDrawer)
 		this.debugDrawer.update();
 
+	if(theMixer){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
+		//multiple cats
+		theMixer.update(deltaTime);//updates the time for the animations with the THREE.Clock object
+	}
 
-  if(theMixer){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
-    //multiple cats
-    theMixer.update(gameClock.getDelta());//updates the time for the animations with the THREE.Clock object
-  }
 	renderFrameId = requestAnimationFrame( renderFrame );
 	renderer.render(scene, camera);
 
@@ -337,14 +340,14 @@ function onWindowResize() {
 function onMouseDown(event){
 	if(event.which === 3){
 
-		let direction = new THREE.Vector3(0,0,0);
-		let raycasterRope = new THREE.Raycaster(); // create once and reuse
+		var direction = new THREE.Vector3(0,0,0);
+		var raycasterRope = new THREE.Raycaster(); // create once and reuse
 		controls.getDirection( direction );
 		raycasterRope.set( controls.getObject().position, direction );
 		raycasterRope.near = 1;
 		raycasterRope.far = 50;
-		let intersects = raycasterRope.intersectObjects( platforms );
-		for ( let i = 0; i < intersects.length; i++ ) {
+		var intersects = raycasterRope.intersectObjects( platforms );
+		for ( var i = 0; i < intersects.length; i++ ) {
 			if(intersects.length === 1){
 				createGrapplingHook(intersects[i].object);
 			}
@@ -420,22 +423,18 @@ function onKeyUp( event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
 			playerMoveDirection.forward = 0;
-			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: 0, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 65: // a
 			playerMoveDirection.left = 0;
-			tempPlayerMoveDirection = {left: 0, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 83: // s
 			playerMoveDirection.back = 0;
-			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: 0}
 			break;
 
 		case 68: // d
 			playerMoveDirection.right = 0;
-			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: 0, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 16: // shift

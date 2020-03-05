@@ -1,58 +1,59 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  RELIC CODE / MAY REUSE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
-    /*    let base_Texture = [
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Right
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Left
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/base_Texture.jpg'), side: THREE.FrontSide }),  //Top
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Bottom
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Front
-            new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Back
-        ];
-            base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
-            base_Texture.map.repeat.set(5, 5);
-    */
-
+//  RELIC CODE / MAY REUSE  /   REFERENCE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
+/*    let base_Texture = [
+        new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Right
+        new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Left
+        new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/base_Texture.jpg'), side: THREE.FrontSide }),  //Top
+        new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Bottom
+        new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Front
+        new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg'), side: THREE.FrontSide }),  //Back
+    ];
+        base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
+        base_Texture.map.repeat.set(5, 5);
+*/
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 let animationNum = 0,secondLoopBool = false, anims;
+
 function createLevel1() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
     //scene.fog = new THREE.Fog(0x6c7578, 150, 750);
 
     // add hemisphere light
-	let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
-	    hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
-	    hemiLight.groundColor.setHSL( 0.1, 1, 0.4 );
-        hemiLight.position.set( 0, 50, 0 );
-        
-	scene.add( hemiLight );
+    let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
+    hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
+    hemiLight.groundColor.setHSL( 0.1, 1, 0.4 );
+    hemiLight.position.set( 0, 50, 0 );
 
-	// add directional light
-	let dirLight = new THREE.DirectionalLight( 0xffffff , 0.75);
-	    dirLight.color.setHSL( 0.1, 1, 0.95 );
-	    dirLight.position.set( -1, 1.75, 1 );
-        dirLight.position.multiplyScalar( 100 );
+    scene.add( hemiLight );
 
-	    dirLight.castShadow = true;
+    // add directional light
+    let dirLight = new THREE.DirectionalLight( 0xffffff , 0.75);
+    dirLight.color.setHSL( 0.1, 1, 0.95 );
+    dirLight.position.set( -1, 1.75, 1 );
+    dirLight.position.multiplyScalar( 100 );
 
-	    dirLight.shadow.mapSize.width = 4096;
-	    dirLight.shadow.mapSize.height = 4096;
+    dirLight.castShadow = true;
 
-	    dirLight.shadow.camera.left = -500;
-	    dirLight.shadow.camera.right = 500;
-	    dirLight.shadow.camera.top = 500;
-	    dirLight.shadow.camera.bottom = -500;
+    dirLight.shadow.mapSize.width = 4096;
+    dirLight.shadow.mapSize.height = 4096;
 
-        dirLight.shadow.camera.far = 13500;
+    dirLight.shadow.camera.left = -500;
+    dirLight.shadow.camera.right = 500;
+    dirLight.shadow.camera.top = 500;
+    dirLight.shadow.camera.bottom = -500;
+
+    dirLight.shadow.camera.far = 13500;
 
     // helper for directional light
-    let helper = new THREE.CameraHelper( dirLight.shadow.camera );
+    //let helper = new THREE.CameraHelper( dirLight.shadow.camera );
 
     scene.add( dirLight );
-    scene.add( helper );
+    //scene.add( helper );
+
 
     function createSkyBox() {
         let base_Texture = [
@@ -65,8 +66,8 @@ function createLevel1() {
         ];
 
         let box = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
-            box.scale.set(10000, 10000, 10000);
-            box.position.set(0, 0, 0);
+        box.scale.set(10000, 10000, 10000);
+        box.position.set(0, 0, 0);
 
         scene.add(box);
     }
@@ -79,23 +80,23 @@ function createLevel1() {
 
     function createGround() {
         let groundMaterial = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/city_Ground_1.jpg')});
-            groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
-            groundMaterial.map.repeat.set(20, 20);
+        groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
+        groundMaterial.map.repeat.set(20, 20);
         let ground = new THREE.Mesh(new THREE.BoxBufferGeometry(), groundMaterial);
-            ground.position.set(0, 0, 0);
-            ground.scale.set(10000, 0.5, 10000);
-            ground.receiveShadow = true;
+        ground.position.set(0, 0, 0);
+        ground.scale.set(10000, 0.5, 10000);
+        ground.receiveShadow = true;
 
-            scene.add(ground);
+        scene.add(ground);
     }
 
     function create_Course() {
         let scale, pos, quat, texture, has_Boundry;
 
-    //PLATFORMS DENOTED BY P#
+        //PLATFORMS DENOTED BY P#
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // START BUILDING
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // START BUILDING
 
         scale = {x: 60, y: 2, z: 20};
         pos = {x: 0, y: 99, z: 0};
@@ -106,9 +107,9 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P1
-        
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P1
+
         scale = {x: 60, y: 2, z: 20};
         pos = {x: 0, y: 94, z: -60};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -118,9 +119,9 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P2
-        
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P2
+
         scale = {x: 60, y: 2, z: 60};
         pos = {x: -40, y: 99, z: -120};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -130,8 +131,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P3
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P3
 
         scale = {x: 20, y: 2, z: 10};
         pos = {x: -30, y: 119, z: -95};
@@ -142,8 +143,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P4
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P4
 
         scale = {x: 10, y: 2, z: 60};
         pos = {x: -65, y: 114, z: -120};
@@ -154,8 +155,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P5
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P5
 
         scale = {x: 20, y: 2, z: 20};
         pos = {x: -20, y: 104, z: -180};
@@ -166,8 +167,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P6
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P6
 
         scale = {x: 20, y: 2, z: 20};
         pos = {x: -60, y: 109, z: -180};
@@ -178,8 +179,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P7
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P7
 
         scale = {x: 2, y: 40, z: 100};
         pos = {x: 5, y: 105, z: -140};
@@ -190,8 +191,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P8
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P8
 
         scale = {x: 10, y: 2, z: 80};
         pos = {x: 25, y: 99, z: -140};
@@ -202,8 +203,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P9
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P9
 
         scale = {x: 20, y: 2, z: 40};
         pos = {x: 50, y: 94, z: -220};
@@ -214,8 +215,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P10
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P10
 
         scale = {x: 20, y: 2, z: 60};
         pos = {x: 130, y: 99, z: -230};
@@ -226,8 +227,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P11
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P11
 
         scale = {x: 2, y: 10, z: 60};
         pos = {x: 75, y: 100, z: -290};
@@ -238,8 +239,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P12
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P12
 
         scale = {x: 40, y: 2, z: 2};
         pos = {x: 0, y: 134, z: -280};
@@ -250,8 +251,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P13
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P13
 
         scale = {x: 20, y: 2, z: 100};
         pos = {x: -90, y: 119, z: -280};
@@ -262,8 +263,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P14
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P14
 
         scale = {x: 20, y: 2, z: 40};
         pos = {x: 50, y: 99, z: -360};
@@ -274,8 +275,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P15
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P15
 
         scale = {x: 20, y: 2, z: 20};
         pos = {x: 50, y: 104, z: -410};
@@ -286,8 +287,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P16
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P16
 
         scale = {x: 20, y: 2, z: 40};
         pos = {x: 50, y: 109, z: -460};
@@ -298,8 +299,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P17
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P17
 
         scale = {x: 40, y: 2, z: 120};
         pos = {x: 10, y: 114, z: -440};
@@ -310,8 +311,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P18
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P18
 
         scale = {x: 80, y: 2, z: 60};
         pos = {x: -50, y: 114, z: -470};
@@ -322,8 +323,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P19
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P19
 
         scale = {x: 60, y: 115, z: 60};
         pos = {x: -60, y: 57.5, z: -560};
@@ -334,8 +335,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P20
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P20
 
         scale = {x: 60, y: 110, z: 40};
         pos = {x: -60, y: 55, z: -640};
@@ -346,8 +347,8 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // P20
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P20
 
         scale = {x: 60, y: 110, z: 40};
         pos = {x: 30, y: 55, z: -640};
@@ -358,10 +359,10 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
-    function create_Boundary() { 
+    function create_Boundary() {
         let origin = -200;
         let scale, pos, quat, texture, has_Boundry, width, height;
 
@@ -406,7 +407,7 @@ function createLevel1() {
             texture = random_Texture();
 
             create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
-            
+
             origin -= 50;
         }
     }
@@ -471,6 +472,9 @@ function createLevel1() {
 
                 theMixer.addEventListener('loop', catAnimations);//'finished' does not count a loop ending as finished,
                 //setting amount of repetitions doesn't work either, fix soon
+
+
+
 
 
                 loadBar.innerHTML = "";
@@ -596,12 +600,12 @@ function createLevel1() {
                 loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     document.getElementById("blocker").style.display = "block";
+                    document.getElementById("instructions").style.display = "";
                     document.getElementById("load").style.display = "none";
 
                     setupControls();//game can start with a click after external files are loaded in
                     cancelAnimationFrame(renderFrameId);
                     renderFrame();//starts the loop once the models are loaded
-                    playing = true;
                 }
             },
             function(err){//onError
@@ -652,10 +656,24 @@ function createLevel1() {
         player.userData.physicsBody = body;
         player.userData.physicsBody.set
 
-
-
         rigidBodies.push(player);
         a = true;
+
+    }
+
+    function catAnimations(e){//e contains the type action and loopDelta
+        //stop the current animation
+        if (secondLoopBool){//if it's on the 2nd loop, adjust the animationMixer so that we don't have to do this later
+            e.action.stop(); //not needed since each animation runs only twice before stopping
+            animationNum++;
+            if (animationNum == anims.length)
+                animationNum = 0;
+
+            //start the next animation in the queue
+            theMixer.clipAction(anims[animationNum]).play();
+        }
+        secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
+        //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
 
     }
 
@@ -670,21 +688,4 @@ function createLevel1() {
     create_Boundary();
     after_Game_Menu();
     object_Loader();
-
-}
-
-function catAnimations(e){//e contains the type action and loopDelta
-    //stop the current animation
-    if (secondLoopBool){//if it's on the 2nd loop, adjust the animationMixer so that we don't have to do this later
-        e.action.stop(); //not needed since each animation runs only twice before stopping
-        animationNum++;
-        if (animationNum == anims.length)
-            animationNum = 0;
-
-        //start the next animation in the queue
-        theMixer.clipAction(anims[animationNum]).play();
-    }
-    secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
-    //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
-
 }
