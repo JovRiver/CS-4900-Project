@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  RELIC CODE / MAY REUSE  /   REFERENCE
+//  RELIC CODE / MAY REUSE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         //let base_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/building_Type_3.jpg')})
@@ -17,6 +17,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+let animationNum = 0,secondLoopBool = false, anims;
 function createLevel1() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
     //scene.fog = new THREE.Fog(0x6c7578, 150, 750);
@@ -48,11 +49,10 @@ function createLevel1() {
         dirLight.shadow.camera.far = 13500;
 
     // helper for directional light
-    //let helper = new THREE.CameraHelper( dirLight.shadow.camera );
+    let helper = new THREE.CameraHelper( dirLight.shadow.camera );
 
     scene.add( dirLight );
-    //scene.add( helper );
-
+    scene.add( helper );
 
     function createSkyBox() {
         let base_Texture = [
@@ -460,17 +460,17 @@ function createLevel1() {
                 rigidBodies.push(obj.scene);
 
                 //animation for catGun
-                let anims = obj.animations;
-                //let aClip = THEE.AnimationClip.findByName(anims, "Walk");...
-                /*
-                anims.forEach(function(aClip){
-                    theMixer.clipAction(aClip).play();//returns an Animation Action that's played with play()
-                });
-                */
+                anims = obj.animations;
+
+                /*anims.forEach(function(e){
+                    //e.repetitions = 2;//each animation only plays 2 times before stopping
+                    e.setLoop(THREE.LoopRepeat, 2);
+                });*/
+
                 theMixer.clipAction(anims[0]).play();//"death" doesn't play for some reason
 
-
-
+                theMixer.addEventListener('loop', catAnimations);//'finished' does not count a loop ending as finished,
+                //setting amount of repetitions doesn't work either, fix soon
 
 
                 loadBar.innerHTML = "";
@@ -596,12 +596,12 @@ function createLevel1() {
                 loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     document.getElementById("blocker").style.display = "block";
-                    document.getElementById("instructions").style.display = "";
                     document.getElementById("load").style.display = "none";
 
                     setupControls();//game can start with a click after external files are loaded in
                     cancelAnimationFrame(renderFrameId);
                     renderFrame();//starts the loop once the models are loaded
+                    playing = true;
                 }
             },
             function(err){//onError
@@ -652,6 +652,8 @@ function createLevel1() {
         player.userData.physicsBody = body;
         player.userData.physicsBody.set
 
+
+
         rigidBodies.push(player);
         a = true;
 
@@ -668,4 +670,21 @@ function createLevel1() {
     create_Boundary();
     after_Game_Menu();
     object_Loader();
+
+}
+
+function catAnimations(e){//e contains the type action and loopDelta
+    //stop the current animation
+    if (secondLoopBool){//if it's on the 2nd loop, adjust the animationMixer so that we don't have to do this later
+        e.action.stop(); //not needed since each animation runs only twice before stopping
+        animationNum++;
+        if (animationNum == anims.length)
+            animationNum = 0;
+
+        //start the next animation in the queue
+        theMixer.clipAction(anims[animationNum]).play();
+    }
+    secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
+    //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
+
 }

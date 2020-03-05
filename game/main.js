@@ -16,11 +16,11 @@ let scene, orthoScene;
 let camera, orthoCamera;
 
 let theMixer;// = new THREE.AnimationMixer();
+let theThreeClock = new THREE.Clock();
 let objects = [];	// check for actual usage
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
-let clock = new THREE.Clock();
 let gameClock =  new THREE.Clock();
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2(), intersected_Object;
@@ -304,9 +304,11 @@ function renderFrame(){
 	if (this.debugDrawer)
 		this.debugDrawer.update();
 
-	if(theMixer)//null would be false
-		theMixer.update(1.0/60);
 
+  if(theMixer){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
+    //multiple cats
+    theMixer.update(gameClock.getDelta());//updates the time for the animations with the THREE.Clock object
+  }
 	renderFrameId = requestAnimationFrame( renderFrame );
 	renderer.render(scene, camera);
 
