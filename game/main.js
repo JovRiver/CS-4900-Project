@@ -16,6 +16,7 @@ let canMove = true;
 
 
 let theMixer;// = new THREE.AnimationMixer();
+let theThreeClock = new THREE.Clock();
 let objects = [];	// check for actual usage
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
@@ -281,8 +282,10 @@ function renderFrame(){
 	if (this.debugDrawer)
 		this.debugDrawer.update();
 
-	if(theMixer)//null would be false
-		theMixer.update(1.0/60);
+	if(theMixer)//null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
+		//multiple cats
+		theMixer.update(theThreeClock.getDelta());//updates the time for the animations with the THREE.Clock object
+
 	requestAnimationFrame( renderFrame );
 	renderer.render(scene, camera);
 }
