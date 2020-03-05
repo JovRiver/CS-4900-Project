@@ -63,9 +63,6 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
        box.castShadow = true;
        box.receiveShadow = true;
     }
-
-    level_1_Objects.push(box);
-   box.name = "platform";
     scene.add(box);
 
     if (has_Boundary === true) {

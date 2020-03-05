@@ -21,7 +21,7 @@ function create_Start_Menu() {
 		//	Grappling_Game
 		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
 
-			let textGeo = new THREE.TextBufferGeometry( "Kitty Crush", {
+			let textGeo = new THREE.TextBufferGeometry( "Kitty Kill", {
 
 				font: font,
 
@@ -45,8 +45,6 @@ function create_Start_Menu() {
 				mesh.position.y = 10;
 
 				mesh.rotation.x = THREE.Math.degToRad(10);
-
-				mesh.name = "Grappling_Game";
 
 				scene.add(mesh);
         	}, 
@@ -237,15 +235,61 @@ function create_Start_Menu() {
 		});
 
 		let Level_1_Cube_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')});
-			Level_1_Cube_Texture.map.wrapS = Level_1_Cube_Texture.map.wrapT = THREE.RepeatWrapping;
-			Level_1_Cube_Texture.map.repeat.set(1, 1);
+		Level_1_Cube_Texture.map.wrapS = Level_1_Cube_Texture.map.wrapT = THREE.RepeatWrapping;
+		Level_1_Cube_Texture.map.repeat.set(1, 1);
         let	Level_1_Cube = new THREE.Mesh(new THREE.BoxBufferGeometry(), Level_1_Cube_Texture);
-			Level_1_Cube.position.set(-38, 95, 0);
-			Level_1_Cube.scale.set(10, 10, 10);
+		Level_1_Cube.position.set(-38, 95, 0);
+		Level_1_Cube.scale.set(10, 10, 10);
+		Level_1_Cube.rotation.y = THREE.Math.degToRad(65);
 
-			Level_1_Cube.name = "Level_1_Cube";
+		Level_1_Cube.name = "Level_1_Cube";
 
-			menu_Group.add(Level_1_Cube);
+		menu_Group.add(Level_1_Cube);
+
+		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+
+			let textGeo = new THREE.TextBufferGeometry( "Level 2", {
+	
+				font: font,
+	
+				size: 5,
+				height: 1,
+				curveSegments: 12,
+	
+				bevelThickness: 1,
+				bevelSize: .5,
+				bevelEnabled: true
+	
+			} );
+	
+			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+	
+			let mesh = new THREE.Mesh( textGeo, textMaterial );
+					mesh.position.x = -12;
+					mesh.position.z = -5;
+					mesh.position.y += 80.3;
+	
+					mesh.rotation.x = THREE.Math.degToRad(20);
+					//mesh.rotation.y = THREE.Math.degToRad(0);
+					//mesh.rotation.z = THREE.Math.degToRad(0);
+	
+					mesh.name = "Level_2";
+	
+					menu_Group.add(mesh);
+		});
+
+		let Level_2_Cube_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')});
+		Level_2_Cube_Texture.map.wrapS = Level_1_Cube_Texture.map.wrapT = THREE.RepeatWrapping;
+		Level_2_Cube_Texture.map.repeat.set(1, 1);
+        let	Level_2_Cube = new THREE.Mesh(new THREE.BoxBufferGeometry(), Level_2_Cube_Texture);
+		Level_2_Cube.position.set(-1, 95, 0);
+		Level_2_Cube.scale.set(10, 10, 10);
+		Level_2_Cube.rotation.y = THREE.Math.degToRad(45);
+		Level_2_Cube.rotation.x = THREE.Math.degToRad(5);
+
+		Level_2_Cube.name = "Level_2_Cube";
+
+		menu_Group.add(Level_2_Cube);
 			
 		scene.add(menu_Group);
 	}

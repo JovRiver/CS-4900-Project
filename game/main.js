@@ -30,7 +30,7 @@ let gamePlay = false; // Set this value someone when game starts.
 let timer = document.getElementById('clock');
 
 let renderFrameId;
-let onBox = false;
+let onBox = 0;
 
 const STATE = {
 	ACTIVE_TAG : 1,
@@ -40,8 +40,7 @@ const STATE = {
 	DISABLE_SIMULATION : 5
 }
 
-let level = 1;	//set to 0 for main menu, 1 or higher for levels
-let level_1_Objects;
+let level = 0;	//set to 0 for main menu, 1 or higher for levels
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let in_Game_Menu_Group;
@@ -88,7 +87,6 @@ function load_Manager() {
 	in_Game_Menu_Group = new THREE.Group();
 	menu_Group = new THREE.Group();
 	rigidBodies = [];
-	level_1_Objects = [];
 
 	switch (level){
 		case 0:
@@ -118,8 +116,6 @@ function load_Manager() {
 ///////////////////////////////////////////////////////////////////////////////////////
 //	SYSTEM
 ///////////////////////////////////////////////////////////////////////////////////////
-
-
 
 function updatePhysics( deltaTime ){
 	// Step world
@@ -261,6 +257,7 @@ function renderFrame(){
 		}
 		 */
 		if(physicsWorld.getDispatcher().getNumManifolds() < 2 ){
+
 			canMove = false;
 		}
 
@@ -291,8 +288,16 @@ function renderFrame(){
 		}
 	}
 	else {
-		if(onBox) {
-			menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+		switch(onBox) {
+			case 1: 
+				menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+				break;
+			case 2: 
+				menu_Group.getObjectByName("Level_2_Cube").rotation.y += 0.01;
+				break;
+			//case 3: 
+				//menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+				//break;
 		}
 	}
 
@@ -455,10 +460,10 @@ function menu_Selection(event) {
 				load_Manager();
 			}
 
-			//if (intersects[0].object.name === "Level_2" || intersects[0].object.name === "Level_2_Cube") {
-			//	level = 2;
-			//	load_Manager();
-			//}
+			if (intersects[0].object.name === "Level_2" || intersects[0].object.name === "Level_2_Cube") {
+				level = 2;
+				load_Manager();
+			}
 
 			if (intersects[0].object.name === "Options") {
 				camera.position.y -= 80;
@@ -511,7 +516,11 @@ function on_Mouse_Move(event) {
 
 		if (intersects.length > 0) {
 			if (intersects[0].object.name === "Level_1_Cube") {
-				onBox = true;
+				onBox = 1;
+			}
+
+			else if (intersects[0].object.name === "Level_2_Cube") {
+				onBox = 2;
 			}
 
 			else if (intersected_Object != intersects[0].object) {
@@ -519,9 +528,12 @@ function on_Mouse_Move(event) {
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 				}
 
-				if (intersects[0].object.name === "Level_1")
-					onBox = true;
-
+				if (intersects[0].object.name === "Level_1"){
+					onBox = 1;
+				}
+				else if (intersects[0].object.name === "Level_2"){
+					onBox = 2;
+				}
 				intersected_Object = intersects[0].object;
 				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
 				intersected_Object.material.emissive.setHex(0xdde014);

@@ -362,3 +362,69 @@ Commit 19:
 
   Fixed a few document elements improperly showing with a scroll bar. Worked on getting in game menu and added ability to get back to the
 main menu from level 1. We have a massive performance problem, most likely a memory leak that will need to be addressed.
+
+
+3/1/2020
+Ryan Slaybaugh:
+Commit 20:
+
+  Fixed the issue with calling and stacking multiple renders by invoking cancelAnimationFrame(renderFrameId) before invoking new renderFrames.
+Also corrected cases of the camera being off center when looking at the in game menu. I moved the camera.position and camera.lookAt into the
+renderFrame so that it would constantly ensure that it was located at and looking in the correct locations.
+
+3/1/2020
+Ryan Slaybaug:
+Commit 21:
+
+  Further improved the look of the ingame menu adding in lighting to get the same color text as in the main menu.
+
+
+3/3/2020
+Ryan Slaybaugh:
+Commit 22:
+
+  Pushed the renderframe fix to level_2.js and reinitialized the physics world to flush old bounding boxes from the scene. There is currently
+an issue of being unable to move due to no other physics collisions taking place. We will need to fix this.
+
+3/4/2020 10:54 - 11:57 am
+Semira Pinder
+Commit #1 of week 6
+
+Fixed the animation loop for the cat model, but I will need to fix the death animation not playing.
+
+
+3/4/2020 8:08-9-21pm
+Semira Pinder
+Commit #2 of week 6
+
+Added a possible level design to the git
+
+3/4/2020 10:48 pm - 11:42 pm
+Semira Pinder
+Commit #3 of week 6
+
+Added a texture to the treePalm object in blender, but I need to remove internal faces and re-map the vertices to the texture later on so that it looks
+cleaner than it does now.
+
+3/5/2020 10:32am-11:28am
+Semira Pinder
+Commit #4 of week 6
+Removed face intersections for the treePalm model
+
+3/5/2020 11:28am-11:42am
+Semira Pinder
+Commit #5 of week 6
+Added a texture color image to the model using the "Face selection mask for painting" option in texture paint with the edit mode, and exported the new version 
+of the model
+
+3/5/2020 1:35-1:46pm
+Semira Pinder
+Commit #6 of week 6
+Changed the "theMixer" object to update using a THREE.Clock object
+
+
+3/5/2020
+Ryan Slaybaugh:
+Commit 23:
+
+  Created a level 2 select and level 2 cube for the select level menu, and linked level two to the buttons in the raycasting event handlers.
