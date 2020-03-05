@@ -406,13 +406,18 @@ Commit #3 of week 6
 Added a texture to the treePalm object in blender, but I need to remove internal faces and re-map the vertices to the texture later on so that it looks
 cleaner than it does now.
 
-3/4/2020 10:32am-11:28am
+3/5/2020 10:32am-11:28am
 Semira Pinder
 Commit #4 of week 6
 Removed face intersections for the treePalm model
 
-3/4/2020 11:28am-11:42am
+3/5/2020 11:28am-11:42am
 Semira Pinder
 Commit #5 of week 6
 Added a texture color image to the model using the "Face selection mask for painting" option in texture paint with the edit mode, and exported the new version 
 of the model
+
+3/5/2020 1:35-1:46pm
+Semira Pinder
+Commit #6 of week 6
+Changed the "theMixer" object to update using a THREE.Clock object
