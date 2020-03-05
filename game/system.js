@@ -2,9 +2,10 @@ function setupPhysicsWorld(){
     let collisionConfiguration  = new Ammo.btDefaultCollisionConfiguration(),
         dispatcher              = new Ammo.btCollisionDispatcher(collisionConfiguration),
         overlappingPairCache    = new Ammo.btDbvtBroadphase(),
-        solver                  = new Ammo.btSequentialImpulseConstraintSolver();
+        solver                  = new Ammo.btSequentialImpulseConstraintSolver(),
+        softBodySolver = new Ammo.btDefaultSoftBodySolver();
 
-    physicsWorld  = new Ammo.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+    physicsWorld  = new Ammo.btSoftRigidDynamicsWorld (dispatcher, overlappingPairCache, solver, collisionConfiguration, softBodySolver);
     physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
     physicsWorld.debugDrawWorld();
 }
@@ -23,7 +24,6 @@ function setupControls(){
     controls.addEventListener( 'unlock', function () {
         if(gamePlay){
             blocker.style.display = 'block';
-            console.log("TEST");
         }
         instructions.style.display = ''; sound.pause();} );
 
@@ -65,6 +65,7 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
     }
 
     level_1_Objects.push(box);
+   box.name = "platform";
     scene.add(box);
 
     if (has_Boundary === true) {
@@ -88,6 +89,69 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         physicsWorld.addRigidBody(body, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
         platforms.push(box);
     }
+}
+
+function createGrapplingHook(platform){
+    // The rope
+    // Rope graphic object
+    var ropeNumSegments = 10;
+    var ropeLength = 10;
+    var ropeMass = 3;
+    var ropePos = player.position.clone();
+    ropePos.y += 1;
+
+    var segmentLength = ropeLength / ropeNumSegments;
+    var ropeGeometry = new THREE.BufferGeometry();
+    var ropeMaterial = new THREE.LineBasicMaterial( { color: 0x000000 } );
+    var ropePositions = [];
+    var ropeIndices = [];
+
+    for ( var i = 0; i < ropeNumSegments + 1; i++ ) {
+        ropePositions.push( ropePos.x, ropePos.y + i * segmentLength, ropePos.z );
+    }
+
+    for ( var i = 0; i < ropeNumSegments; i++ ) {
+        ropeIndices.push( i, i + 1 );
+    }
+
+    ropeGeometry.setIndex( new THREE.BufferAttribute( new Uint16Array( ropeIndices ), 1 ) );
+    ropeGeometry.setAttribute( 'position', new THREE.BufferAttribute( new Float32Array( ropePositions ), 3 ) );
+    ropeGeometry.computeBoundingSphere();
+    rope = new THREE.LineSegments( ropeGeometry, ropeMaterial );
+    rope.castShadow = true;
+    rope.receiveShadow = true;
+    scene.add( rope );
+
+    // Rope physic object
+    var softBodyHelpers = new Ammo.btSoftBodyHelpers();
+    var ropeStart = new Ammo.btVector3( ropePos.x, ropePos.y, ropePos.z );
+    var ropeEnd = new Ammo.btVector3( ropePos.x, ropePos.y + ropeLength, ropePos.z );
+    var ropeSoftBody = softBodyHelpers.CreateRope( physicsWorld.getWorldInfo(), ropeStart, ropeEnd, ropeNumSegments - 1, 0 );
+    var sbConfig = ropeSoftBody.get_m_cfg();
+    sbConfig.set_viterations( 10 );
+    sbConfig.set_piterations( 10 );
+    ropeSoftBody.setTotalMass( ropeMass, false )
+    Ammo.castObject( ropeSoftBody, Ammo.btCollisionObject ).getCollisionShape().setMargin( 0 * 3 );
+    physicsWorld.addSoftBody( ropeSoftBody, 1, -1 );
+    rope.userData.physicsBody = ropeSoftBody;
+    // Disable deactivation
+    ropeSoftBody.setActivationState( STATE.DISABLE_DEACTIVATION );
+
+
+
+    // Glue the rope extremes to the ball and the arm
+    var influence = 1;
+    ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
+    ropeSoftBody.appendAnchor( ropeNumSegments, platform.userData.physicsBody, true, influence );
+
+}
+
+//function for later use
+function lockGrapplingHook(arm){
+    // Glue the rope extremes to the ball and the arm
+    //var influence = 1;
+    //ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
+    //ropeSoftBody.appendAnchor( ropeNumSegments, arm.userData.physicsBody, true, influence );
 }
 
 function random_Texture() {
