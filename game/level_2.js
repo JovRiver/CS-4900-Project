@@ -1,9 +1,4 @@
-function createLevel2() {
-    // sets load_Menu to be invisible, and all other css styles to be visible
-    document.getElementById("blocker").style.display = "block";
-    document.getElementById("instructions").style.display = "";
-    document.getElementById("load").style.display = "none";
- 
+function createLevel2() { 
      camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
      scene.fog = new THREE.Fog(0x6c7578, 150, 750);
  
@@ -50,6 +45,42 @@ function createLevel2() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
      }
 
+     function sound_Loader(){
+        let loadBar = document.getElementById('load');
+        let listener = new THREE.AudioListener();
+        camera.add( listener );
+
+        // create a global audio source
+        sound = new THREE.Audio( listener );
+
+
+        // load a sound and set it as the Audio object's buffer
+        let audioLoader = new THREE.AudioLoader();
+        audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
+            function( buffer ) {
+                sound.setBuffer( buffer );
+                sound.setLoop( true );
+                sound.setVolume( 0.25 );
+            },
+            function(xhr){//onProgress
+                loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                    document.getElementById("blocker").style.display = "block";
+                    document.getElementById("instructions").style.display = "";
+                    document.getElementById("load").style.display = "none";
+
+                    setupControls();//game can start with a click after external files are loaded in
+                    cancelAnimationFrame(renderFrameId);
+                    renderFrame();//starts the loop once the models are loaded
+                }
+            },
+            function(err){//onError
+                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                console.log("error in loading sound");
+            }
+        );
+    }
+
      function createPlayer(){
         //var pos = {x: 0, y: 2, z: 3};
         let pos = {x: 0, y: 105, z: 0};
@@ -94,11 +125,13 @@ function createLevel2() {
         rigidBodies.push(player);
         a = true;
     }
-
+    setupPhysicsWorld();
+    initDebug();
     gamePlay = true;
-    setupControls();//game can start with a click after external files are loaded in
-
-    createPlatform();
     createPlayer();
-    renderFrame();//starts the loop once the models are loaded
+
+    //createLevel1.createSkyBox();
+    createPlatform();
+    
+    sound_Loader();
 }

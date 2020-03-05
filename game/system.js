@@ -2,9 +2,10 @@ function setupPhysicsWorld(){
     let collisionConfiguration  = new Ammo.btDefaultCollisionConfiguration(),
         dispatcher              = new Ammo.btCollisionDispatcher(collisionConfiguration),
         overlappingPairCache    = new Ammo.btDbvtBroadphase(),
-        solver                  = new Ammo.btSequentialImpulseConstraintSolver();
+        solver                  = new Ammo.btSequentialImpulseConstraintSolver(),
+        softBodySolver = new Ammo.btDefaultSoftBodySolver();
 
-    physicsWorld  = new Ammo.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+    physicsWorld  = new Ammo.btSoftRigidDynamicsWorld (dispatcher, overlappingPairCache, solver, collisionConfiguration, softBodySolver);
     physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
     physicsWorld.debugDrawWorld();
 }
@@ -23,7 +24,6 @@ function setupControls(){
     controls.addEventListener( 'unlock', function () {
         if(gamePlay){
             blocker.style.display = 'block';
-            console.log("TEST");
         }
         instructions.style.display = ''; sound.pause();} );
 
@@ -56,15 +56,13 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         base_Texture.map.repeat.set(2, 10);
     }
     let box = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
-        box.scale.set(scale.x, scale.y, scale.z);
-        box.position.set(pos.x, pos.y, pos.z);
+    box.scale.set(scale.x, scale.y, scale.z);
+    box.position.set(pos.x, pos.y, pos.z);
 
-   if(has_Boundary === true){
-       box.castShadow = true;
-       box.receiveShadow = true;
+    if(has_Boundary === true){
+        box.castShadow = true;
+        box.receiveShadow = true;
     }
-
-    level_1_Objects.push(box);
     scene.add(box);
 
     if (has_Boundary === true) {
@@ -77,7 +75,7 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         let motionState = new Ammo.btDefaultMotionState(transform);
         // set bounding box using each objects x,y,z scale
         let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 0.8, scale.y * 0.5 + 0.5, scale.z * 0.5 + 0.8));
-       // colShape.setMargin(0.05);
+        // colShape.setMargin(0.05);
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
@@ -88,6 +86,69 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         physicsWorld.addRigidBody(body, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
         platforms.push(box);
     }
+}
+
+function createGrapplingHook(platform){
+    // The rope
+    // Rope graphic object
+    let ropeNumSegments = 10;
+    let ropeLength = 10;
+    let ropeMass = 3;
+    let ropePos = player.position.clone();
+    ropePos.y += 1;
+
+    let segmentLength = ropeLength / ropeNumSegments;
+    let ropeGeometry = new THREE.BufferGeometry();
+    let ropeMaterial = new THREE.LineBasicMaterial( { color: 0x000000 } );
+    let ropePositions = [];
+    let ropeIndices = [];
+
+    for ( let i = 0; i < ropeNumSegments + 1; i++ ) {
+        ropePositions.push( ropePos.x, ropePos.y + i * segmentLength, ropePos.z );
+    }
+
+    for ( let i = 0; i < ropeNumSegments; i++ ) {
+        ropeIndices.push( i, i + 1 );
+    }
+
+    ropeGeometry.setIndex( new THREE.BufferAttribute( new Uint16Array( ropeIndices ), 1 ) );
+    ropeGeometry.setAttribute( 'position', new THREE.BufferAttribute( new Float32Array( ropePositions ), 3 ) );
+    ropeGeometry.computeBoundingSphere();
+    rope = new THREE.LineSegments( ropeGeometry, ropeMaterial );
+    rope.castShadow = true;
+    rope.receiveShadow = true;
+    scene.add( rope );
+
+    // Rope physic object
+    let softBodyHelpers = new Ammo.btSoftBodyHelpers();
+    let ropeStart = new Ammo.btVector3( ropePos.x, ropePos.y, ropePos.z );
+    let ropeEnd = new Ammo.btVector3( ropePos.x, ropePos.y + ropeLength, ropePos.z );
+    let ropeSoftBody = softBodyHelpers.CreateRope( physicsWorld.getWorldInfo(), ropeStart, ropeEnd, ropeNumSegments - 1, 0 );
+    let sbConfig = ropeSoftBody.get_m_cfg();
+    sbConfig.set_viterations( 10 );
+    sbConfig.set_piterations( 10 );
+    ropeSoftBody.setTotalMass( ropeMass, false )
+    Ammo.castObject( ropeSoftBody, Ammo.btCollisionObject ).getCollisionShape().setMargin( 0 * 3 );
+    physicsWorld.addSoftBody( ropeSoftBody, 1, -1 );
+    rope.userData.physicsBody = ropeSoftBody;
+    // Disable deactivation
+    ropeSoftBody.setActivationState( STATE.DISABLE_DEACTIVATION );
+
+
+
+    // Glue the rope extremes to the ball and the arm
+    let influence = 1;
+    ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
+    ropeSoftBody.appendAnchor( ropeNumSegments, platform.userData.physicsBody, true, influence );
+
+}
+
+//function for later use
+function lockGrapplingHook(arm){
+    // Glue the rope extremes to the ball and the arm
+    //let influence = 1;
+    //ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
+    //ropeSoftBody.appendAnchor( ropeNumSegments, arm.userData.physicsBody, true, influence );
 }
 
 function random_Texture() {

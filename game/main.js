@@ -1,7 +1,6 @@
 //variable declaration section
-let physicsWorld, scene, camera, renderer, stats, sound, controls, rigidBodies = [], platforms = [], tmpTrans = null;
-let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 },
-								tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
+let physicsWorld, renderer, stats, sound, controls, rigidBodies = [], platforms = [], tmpTrans = null;
+let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
 
 // collision group and detection variables
@@ -12,8 +11,9 @@ let flagCallBack = null;
 let movementCallBack = null;
 let canJump = true;
 let canMove = true;
-
-
+let rope = null;
+let scene, orthoScene;
+let camera, orthoCamera;
 
 let theMixer;// = new THREE.AnimationMixer();
 let theThreeClock = new THREE.Clock();
@@ -29,7 +29,8 @@ let gamePlay = false; // Set this value someone when game starts.
 
 let timer = document.getElementById('clock');
 
-let onBox = false;
+let renderFrameId;
+let onBox = 0;
 
 const STATE = {
 	ACTIVE_TAG : 1,
@@ -40,7 +41,6 @@ const STATE = {
 }
 
 let level = 0;	//set to 0 for main menu, 1 or higher for levels
-let level_1_Objects = [];
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let in_Game_Menu_Group;
@@ -78,29 +78,27 @@ function start (){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 function load_Manager() {
+	document.getElementById("blocker").style.display = "block";
+	document.getElementById("load").style.display = "none";
+	document.getElementById("load_Menu").style.display = "none";
+	document.getElementById("instructions").style.display = "none";
+
 	scene = new THREE.Scene();
 	in_Game_Menu_Group = new THREE.Group();
 	menu_Group = new THREE.Group();
 	rigidBodies = [];
-	/*
-	for (let i = scene.children.length; i > 0; i--) {
-		let sceneObject = scene.children[i];
-		scene.remove(sceneObject);
-		sceneObject.geometry.dispose();
-		sceneObject.material.dispose();
-		sceneObject = null;
-	}
-	*/
-	//scene.dispose()
 
 	switch (level){
 		case 0:
+			document.getElementById("load_Menu").style.display = "";
 			create_Start_Menu();
 			break;
 		case 1:
+			document.getElementById("load").style.display = "";
 			createLevel1();
 			break;
 		case 2:
+			document.getElementById("instructions").style.display = "";
 			createLevel2();
 			break;
 		case 3:
@@ -119,8 +117,6 @@ function load_Manager() {
 //	SYSTEM
 ///////////////////////////////////////////////////////////////////////////////////////
 
-
-
 function updatePhysics( deltaTime ){
 	// Step world
 	physicsWorld.stepSimulation( deltaTime, 10 );
@@ -132,6 +128,24 @@ function updatePhysics( deltaTime ){
 
 	}
 
+	// Update rope
+	if(rope != null){
+		let softBody = rope.userData.physicsBody;
+		let ropePositions = rope.geometry.attributes.position.array;
+		let numVerts = ropePositions.length / 3;
+		let nodes = softBody.get_m_nodes();
+		let indexFloat = 0;
+		for ( let i = 0; i < numVerts; i ++ ) {
+
+			let node = nodes.at( i );
+			let nodePos = node.get_m_x();
+			ropePositions[ indexFloat++ ] = nodePos.x();
+			ropePositions[ indexFloat++ ] = nodePos.y();
+			ropePositions[ indexFloat++ ] = nodePos.z();
+
+		}
+		rope.geometry.attributes.position.needsUpdate = true;
+	}
 	// Update rigid bodies
 	for ( let i = 0; i < rigidBodies.length; i++ ) {
 		let objThree = rigidBodies[i];
@@ -164,40 +178,39 @@ flagCallBack.addSingleResult = function () {
 		gamePlay = false;
 		controls.unlock();
 
-		setTimeout(camera.position.set(0, 200, 0), 500);
-		setTimeout(camera.lookAt(0, 200, -80), 600);
-
 		scene.getObjectByName("background").visible = true;
+		scene.getObjectByName("spotlight").visible = true;
 		in_Game_Menu_Group.visible = true;
+
 
 		//	ATTEMPT AT USING SPRITES
 
-	/*
-		let spriteMap = new THREE.TextureLoader().load( "texture/sprites/sprite.png" );
-		let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
-		sprite = new THREE.Sprite( spriteMaterial );
-	
-		sprite.position.set(camera.position.x, camera.position.y + 40, camera.position.z);
-		sprite.center.set(0.5, 0.25);
-		sprite.scale.set(50, 50, 1);
-		sprite.name = "Continue";
+		/*
+            let spriteMap = new THREE.TextureLoader().load( "texture/sprites/sprite.png" );
+            let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+            sprite = new THREE.Sprite( spriteMaterial );
 
-		in_Game_Menu_Group.add(sprite);
+            sprite.position.set(camera.position.x, camera.position.y + 40, camera.position.z);
+            sprite.center.set(0.5, 0.25);
+            sprite.scale.set(50, 50, 1);
+            sprite.name = "Continue";
 
-		let spriteBackground = new THREE.TextureLoader().load("texture/sprites/background.png");
-		let backgroundMaterial = new THREE.SpriteMaterial({map: spriteBackground, color: 0x000000});
-		spriteB = new THREE.Sprite(backgroundMaterial);
+            in_Game_Menu_Group.add(sprite);
 
-		spriteB.position.set(camera.position.x, camera.position.y + 50, camera.position.z);
-		spriteB.center.set(0.5, 0.5);
-		spriteB.scale.set(150, 150, 1);
+            let spriteBackground = new THREE.TextureLoader().load("texture/sprites/background.png");
+            let backgroundMaterial = new THREE.SpriteMaterial({map: spriteBackground, color: 0x000000});
+            spriteB = new THREE.Sprite(backgroundMaterial);
 
-		camera.rotation.x = THREE.Math.degToRad(90);
-		camera.position.y += 10;
+            spriteB.position.set(camera.position.x, camera.position.y + 50, camera.position.z);
+            spriteB.center.set(0.5, 0.5);
+            spriteB.scale.set(150, 150, 1);
 
-		scene.add(in_Game_Menu_Group);
-		scene.add(spriteB);
-	*/
+            camera.rotation.x = THREE.Math.degToRad(90);
+            camera.position.y += 10;
+
+            scene.add(in_Game_Menu_Group);
+            scene.add(spriteB);
+        */
 
 	}
 };
@@ -224,8 +237,8 @@ function movePlayer(){
 
 function updateCamera(){
 	camera.position.x = player.position.x;
-	camera.position.y = player.position.y;
-	camera.position.z = player.position.z;
+	camera.position.y = player.position.y+2;
+	camera.position.z = player.position.z+3;
 }
 
 function renderFrame(){
@@ -234,7 +247,6 @@ function renderFrame(){
 	if (level > 0) {
 		updatePhysics( deltaTime );
 		stats.update();
-
 		/*
 		for(int i = 0; i < physicsWorld.getDispatcher().getNumManifolds(); i++){
 			if(physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody0() == player.userData.physicsBody || physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody1() == player.userData.physicsBody){
@@ -244,8 +256,8 @@ function renderFrame(){
 			}
 		}
 		 */
-		console.log(physicsWorld.getDispatcher().getNumManifolds())
 		if(physicsWorld.getDispatcher().getNumManifolds() < 2 ){
+
 			canMove = false;
 		}
 
@@ -270,23 +282,36 @@ function renderFrame(){
 			movePlayer();
 			updateCamera();
 		}
+		else {
+			camera.position.set(0, 200, 0);
+			camera.lookAt(0, 200, -80);
+		}
 	}
 	else {
-
-		if(onBox) {
-			menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+		switch(onBox) {
+			case 1:
+				menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+				break;
+			case 2:
+				menu_Group.getObjectByName("Level_2_Cube").rotation.y += 0.01;
+				break;
+			//case 3:
+			//menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
+			//break;
 		}
 	}
 
 	if (this.debugDrawer)
 		this.debugDrawer.update();
 
-	if(theMixer)//null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
-		//multiple cats
-		theMixer.update(gameClock.getDelta());//updates the time for the animations with the THREE.Clock object
 
-	requestAnimationFrame( renderFrame );
+  if(theMixer){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
+    //multiple cats
+    theMixer.update(gameClock.getDelta());//updates the time for the animations with the THREE.Clock object
+  }
+	renderFrameId = requestAnimationFrame( renderFrame );
 	renderer.render(scene, camera);
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -297,6 +322,8 @@ function setupEventHandlers(){
 	window.addEventListener( 'resize', onWindowResize, false );
 	document.addEventListener( 'keydown', onKeyDown, false );
 	document.addEventListener( 'keyup', onKeyUp, false );
+	document.addEventListener( 'mousedown', onMouseDown, false );
+	document.addEventListener( 'mouseup', onMouseUp, false );
 	window.addEventListener( 'mousemove', on_Mouse_Move, false );
 	document.addEventListener('mousedown', menu_Selection, false);
 }
@@ -305,6 +332,39 @@ function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
+function onMouseDown(event){
+	if(event.which === 3){
+
+		let direction = new THREE.Vector3(0,0,0);
+		let raycasterRope = new THREE.Raycaster(); // create once and reuse
+		controls.getDirection( direction );
+		raycasterRope.set( controls.getObject().position, direction );
+		raycasterRope.near = 1;
+		raycasterRope.far = 50;
+		let intersects = raycasterRope.intersectObjects( platforms );
+		for ( let i = 0; i < intersects.length; i++ ) {
+			if(intersects.length === 1){
+				createGrapplingHook(intersects[i].object);
+			}
+
+
+		}
+	}
+}
+
+function onMouseUp(event){
+	if(event.which === 3){
+		console.log("Right mouse button unclicked");
+		if(rope != null){
+			physicsWorld.removeCollisionObject(rope.userData.physicsBody);
+			scene.remove(rope);
+		}
+
+
+
+	}
 }
 
 function onKeyDown (event ) {
@@ -360,18 +420,22 @@ function onKeyUp( event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
 			playerMoveDirection.forward = 0;
+			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: 0, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 65: // a
 			playerMoveDirection.left = 0;
+			tempPlayerMoveDirection = {left: 0, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 83: // s
 			playerMoveDirection.back = 0;
+			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: 0}
 			break;
 
 		case 68: // d
 			playerMoveDirection.right = 0;
+			tempPlayerMoveDirection = {left: tempPlayerMoveDirection.left, right: 0, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 			break;
 
 		case 16: // shift
@@ -398,10 +462,10 @@ function menu_Selection(event) {
 				load_Manager();
 			}
 
-			//if (intersects[0].object.name === "Level_2" || intersects[0].object.name === "Level_2_Cube") {
-			//	level = 2;
-			//	load_Manager();
-			//}
+			if (intersects[0].object.name === "Level_2" || intersects[0].object.name === "Level_2_Cube") {
+				level = 2;
+				load_Manager();
+			}
 
 			if (intersects[0].object.name === "Options") {
 				camera.position.y -= 80;
@@ -454,7 +518,11 @@ function on_Mouse_Move(event) {
 
 		if (intersects.length > 0) {
 			if (intersects[0].object.name === "Level_1_Cube") {
-				onBox = true;
+				onBox = 1;
+			}
+
+			else if (intersects[0].object.name === "Level_2_Cube") {
+				onBox = 2;
 			}
 
 			else if (intersected_Object != intersects[0].object) {
@@ -462,9 +530,12 @@ function on_Mouse_Move(event) {
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 				}
 
-				if (intersects[0].object.name === "Level_1")
-					onBox = true;
-
+				if (intersects[0].object.name === "Level_1"){
+					onBox = 1;
+				}
+				else if (intersects[0].object.name === "Level_2"){
+					onBox = 2;
+				}
 				intersected_Object = intersects[0].object;
 				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
 				intersected_Object.material.emissive.setHex(0xdde014);

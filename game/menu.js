@@ -1,8 +1,4 @@
-function create_Start_Menu() {
-	document.getElementById("load_Menu").style.display = "blocker";
-	document.getElementById("instructions").style.display = "none";
-	document.getElementById("load").style.display = "none";
-	
+function create_Start_Menu() {	
 	let loader = new THREE.FontLoader();
 	let loadBar = document.getElementById('load_Menu');
 
@@ -25,7 +21,7 @@ function create_Start_Menu() {
 		//	Grappling_Game
 		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
 
-			let textGeo = new THREE.TextBufferGeometry( "Kitty Crush", {
+			let textGeo = new THREE.TextBufferGeometry( "Kitty Kill", {
 
 				font: font,
 
@@ -49,8 +45,6 @@ function create_Start_Menu() {
 				mesh.position.y = 10;
 
 				mesh.rotation.x = THREE.Math.degToRad(10);
-
-				mesh.name = "Grappling_Game";
 
 				scene.add(mesh);
         	}, 
@@ -241,15 +235,61 @@ function create_Start_Menu() {
 		});
 
 		let Level_1_Cube_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')});
-			Level_1_Cube_Texture.map.wrapS = Level_1_Cube_Texture.map.wrapT = THREE.RepeatWrapping;
-			Level_1_Cube_Texture.map.repeat.set(1, 1);
+		Level_1_Cube_Texture.map.wrapS = Level_1_Cube_Texture.map.wrapT = THREE.RepeatWrapping;
+		Level_1_Cube_Texture.map.repeat.set(1, 1);
         let	Level_1_Cube = new THREE.Mesh(new THREE.BoxBufferGeometry(), Level_1_Cube_Texture);
-			Level_1_Cube.position.set(-38, 95, 0);
-			Level_1_Cube.scale.set(10, 10, 10);
+		Level_1_Cube.position.set(-38, 95, 0);
+		Level_1_Cube.scale.set(10, 10, 10);
+		Level_1_Cube.rotation.y = THREE.Math.degToRad(65);
 
-			Level_1_Cube.name = "Level_1_Cube";
+		Level_1_Cube.name = "Level_1_Cube";
 
-			menu_Group.add(Level_1_Cube);
+		menu_Group.add(Level_1_Cube);
+
+		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+
+			let textGeo = new THREE.TextBufferGeometry( "Level 2", {
+	
+				font: font,
+	
+				size: 5,
+				height: 1,
+				curveSegments: 12,
+	
+				bevelThickness: 1,
+				bevelSize: .5,
+				bevelEnabled: true
+	
+			} );
+	
+			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+	
+			let mesh = new THREE.Mesh( textGeo, textMaterial );
+					mesh.position.x = -12;
+					mesh.position.z = -5;
+					mesh.position.y += 80.3;
+	
+					mesh.rotation.x = THREE.Math.degToRad(20);
+					//mesh.rotation.y = THREE.Math.degToRad(0);
+					//mesh.rotation.z = THREE.Math.degToRad(0);
+	
+					mesh.name = "Level_2";
+	
+					menu_Group.add(mesh);
+		});
+
+		let Level_2_Cube_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_5.jpg')});
+		Level_2_Cube_Texture.map.wrapS = Level_1_Cube_Texture.map.wrapT = THREE.RepeatWrapping;
+		Level_2_Cube_Texture.map.repeat.set(1, 1);
+        let	Level_2_Cube = new THREE.Mesh(new THREE.BoxBufferGeometry(), Level_2_Cube_Texture);
+		Level_2_Cube.position.set(-1, 95, 0);
+		Level_2_Cube.scale.set(10, 10, 10);
+		Level_2_Cube.rotation.y = THREE.Math.degToRad(45);
+		Level_2_Cube.rotation.x = THREE.Math.degToRad(5);
+
+		Level_2_Cube.name = "Level_2_Cube";
+
+		menu_Group.add(Level_2_Cube);
 			
 		scene.add(menu_Group);
 	}
@@ -294,6 +334,7 @@ function create_Start_Menu() {
     main_Menu();
     level_Select_Menu();
 	options_Menu();
+	cancelAnimationFrame(renderFrameId);
 	renderFrame();
 }
 
@@ -420,13 +461,31 @@ function after_Game_Menu() {
 		in_Game_Menu_Group.add(mesh);	
 	});
 
-	let background = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshBasicMaterial({color: 0x000000}));
+	let bMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
+	bMaterial.transparent = true;
+	bMaterial.opacity = 0.25;
+	let background = new THREE.Mesh(new THREE.BoxBufferGeometry(), bMaterial);
 	background.scale.set(180, 120, 1);
 	background.position.set(0, 205, -52);
 	background.name = "background";
+	background.receiveShadow = true;
 
 	scene.add(background);
 	scene.add(in_Game_Menu_Group);
+
+	let spotLight = new THREE.SpotLight( 0xffffff, 1.5, 110);
+	spotLight.position.set(0, 210, 0);
+	spotLight.target.position.x = 0;
+	spotLight.target.position.y = 200;
+	spotLight.target.position.z = -50
+	spotLight.name = "spotlight";
+	
+	spotLight.color.setHSL(.2, 1, 0.5);
+
+	scene.add(spotLight.target);
+	scene.add(spotLight);
+
 	background.visible = false;
 	in_Game_Menu_Group.visible = false;
+	spotLight.visible = false;
 }
