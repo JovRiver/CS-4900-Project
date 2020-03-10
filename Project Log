@@ -428,3 +428,12 @@ Ryan Slaybaugh:
 Commit 23:
 
   Created a level 2 select and level 2 cube for the select level menu, and linked level two to the buttons in the raycasting event handlers.
+
+
+3/9/2020
+Ryan Slaybaugh:
+Commit 24:
+
+  Removed unnecessary load_Menu style from css and index, and switched code to use load css style. Also began work on level designing and
+will implement level objects when partly finished with paper design. (Level design is being done with graph paper)
+
