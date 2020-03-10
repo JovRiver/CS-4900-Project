@@ -13,11 +13,10 @@ let canJump = true;
 let canMove = true;
 let rope = null;
 
-let scene, orthoScene;
-let camera, orthoCamera;
+let scene;
+let camera;
 
 let theMixer;// = new THREE.AnimationMixer();
-let objects = [];	// check for actual usage
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
@@ -44,7 +43,7 @@ const STATE = {
 let level = 0;	//set to 0 for main menu, 1 or higher for levels
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
-let in_Game_Menu_Group;
+let in_Game_Menu_Group; // in_Game_Menu_Group to hold menu items for raycaster detection
 
 //Ammojs Initialization
 Ammo().then(start);
@@ -71,7 +70,7 @@ function start (){
 
 	setupEventHandlers();
 	showStats();
-	load_Manager();	//comment out for level creation
+	load_Manager();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -81,17 +80,17 @@ function start (){
 function load_Manager() {
 	document.getElementById("blocker").style.display = "block";
 	document.getElementById("load").style.display = "none";
-	document.getElementById("load_Menu").style.display = "none";
 	document.getElementById("instructions").style.display = "none";
 
 	scene = new THREE.Scene();
 	in_Game_Menu_Group = new THREE.Group();
 	menu_Group = new THREE.Group();
 	rigidBodies = [];
+	platforms = [];
 
 	switch (level){
 		case 0:
-			document.getElementById("load_Menu").style.display = "";
+			document.getElementById("load").style.display = "";
 			create_Start_Menu();
 			break;
 		case 1:
@@ -240,8 +239,8 @@ function movePlayer(){
 
 function updateCamera(){
 	camera.position.x = player.position.x;
-	camera.position.y = player.position.y+2;
-	camera.position.z = player.position.z+3;
+	camera.position.y = player.position.y;
+	camera.position.z = player.position.z;
 }
 
 function renderFrame(){

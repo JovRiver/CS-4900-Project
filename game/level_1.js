@@ -91,33 +91,33 @@ function createLevel1() {
     }
 
     function create_Course() {
-        let scale, pos, quat, texture, has_Boundry;
+        let scale, pos, quat, texture, has_Boundary;
 
         //PLATFORMS DENOTED BY P#
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // START BUILDING
+        // START PLATFORM
 
-        scale = {x: 60, y: 2, z: 20};
-        pos = {x: 0, y: 99, z: 0};
+        scale = {x: 20, y: 1, z: 20};
+        pos = {x: 0, y: 99.5, z: 0};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P1
 
-        scale = {x: 60, y: 2, z: 20};
-        pos = {x: 0, y: 94, z: -60};
+        scale = {x: 10, y: 1, z: 40};
+        pos = {x: 0, y: 99.5, z: -30};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P2
@@ -125,11 +125,11 @@ function createLevel1() {
         scale = {x: 60, y: 2, z: 60};
         pos = {x: -40, y: 99, z: -120};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P3
@@ -137,11 +137,11 @@ function createLevel1() {
         scale = {x: 20, y: 2, z: 10};
         pos = {x: -30, y: 119, z: -95};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P4
@@ -149,11 +149,11 @@ function createLevel1() {
         scale = {x: 10, y: 2, z: 60};
         pos = {x: -65, y: 114, z: -120};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P5
@@ -161,11 +161,11 @@ function createLevel1() {
         scale = {x: 20, y: 2, z: 20};
         pos = {x: -20, y: 104, z: -180};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P6
@@ -173,11 +173,11 @@ function createLevel1() {
         scale = {x: 20, y: 2, z: 20};
         pos = {x: -60, y: 109, z: -180};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P7
@@ -185,11 +185,11 @@ function createLevel1() {
         scale = {x: 2, y: 40, z: 100};
         pos = {x: 5, y: 105, z: -140};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P8
@@ -197,11 +197,11 @@ function createLevel1() {
         scale = {x: 10, y: 2, z: 80};
         pos = {x: 25, y: 99, z: -140};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P9
@@ -209,11 +209,11 @@ function createLevel1() {
         scale = {x: 20, y: 2, z: 40};
         pos = {x: 50, y: 94, z: -220};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P10
@@ -221,11 +221,11 @@ function createLevel1() {
         scale = {x: 20, y: 2, z: 60};
         pos = {x: 130, y: 99, z: -230};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P11
@@ -233,11 +233,11 @@ function createLevel1() {
         scale = {x: 2, y: 10, z: 60};
         pos = {x: 75, y: 100, z: -290};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P12
@@ -245,11 +245,11 @@ function createLevel1() {
         scale = {x: 40, y: 2, z: 2};
         pos = {x: 0, y: 134, z: -280};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P13
@@ -257,11 +257,11 @@ function createLevel1() {
         scale = {x: 20, y: 2, z: 100};
         pos = {x: -90, y: 119, z: -280};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P14
@@ -269,11 +269,11 @@ function createLevel1() {
         scale = {x: 20, y: 2, z: 40};
         pos = {x: 50, y: 99, z: -360};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P15
@@ -281,11 +281,11 @@ function createLevel1() {
         scale = {x: 20, y: 2, z: 20};
         pos = {x: 50, y: 104, z: -410};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P16
@@ -293,11 +293,11 @@ function createLevel1() {
         scale = {x: 20, y: 2, z: 40};
         pos = {x: 50, y: 109, z: -460};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P17
@@ -305,11 +305,11 @@ function createLevel1() {
         scale = {x: 40, y: 2, z: 120};
         pos = {x: 10, y: 114, z: -440};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P18
@@ -317,11 +317,11 @@ function createLevel1() {
         scale = {x: 80, y: 2, z: 60};
         pos = {x: -50, y: 114, z: -470};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P19
@@ -329,11 +329,11 @@ function createLevel1() {
         scale = {x: 60, y: 115, z: 60};
         pos = {x: -60, y: 57.5, z: -560};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P20
@@ -341,11 +341,11 @@ function createLevel1() {
         scale = {x: 60, y: 110, z: 40};
         pos = {x: -60, y: 55, z: -640};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P20
@@ -353,18 +353,18 @@ function createLevel1() {
         scale = {x: 60, y: 110, z: 40};
         pos = {x: 30, y: 55, z: -640};
         quat = {x: 0, y: 0, z: 0, w: 1};
-        has_Boundry = true;
+        has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     function create_Boundary() {
         let origin = -200;
-        let scale, pos, quat, texture, has_Boundry, width, height;
+        let scale, pos, quat, texture, has_Boundary, width, height;
 
         for (let i = 0; i < 9; i++) {
             width = Math.random() * 10 + 40;
@@ -373,12 +373,12 @@ function createLevel1() {
             scale = {x: width, y: height, z: width};
             pos = {x: origin, y: height / 2, z: 180};
             quat = {x: 0, y: 0, z: 0, w: 1};
-            has_Boundry = false;
+            has_Boundary = false;
 
             origin += 50;
             texture = random_Texture();
 
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
         }
 
         origin = 120;
@@ -390,11 +390,11 @@ function createLevel1() {
             scale = {x: width, y: height, z: width};
             pos = {x: -200, y: height / 2, z: origin};
             quat = {x: 0, y: 0, z: 0, w: 1};
-            has_Boundry = false;
+            has_Boundary = false;
 
             texture = random_Texture();
 
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
             width = Math.random() * 10 + 40;
             height = Math.random() * 50 + 180;
@@ -402,11 +402,11 @@ function createLevel1() {
             scale = {x: width, y: height, z: width};
             pos = {x: 200, y: height / 2, z: origin};
             quat = {x: 0, y: 0, z: 0, w: 1};
-            has_Boundry = false;
+            has_Boundary = false;
 
             texture = random_Texture();
 
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
             origin -= 50;
         }
@@ -423,7 +423,7 @@ function createLevel1() {
                 theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
                 obj.name = "Enemy";
 
-                let pos ={ x: -10, y: 103, z: 0};
+                let pos ={ x: -5, y: 103, z: 0};
 
                 obj.scene.position.x = pos.x;
                 obj.scene.position.y = pos.y;
