@@ -437,3 +437,9 @@ Commit 24:
   Removed unnecessary load_Menu style from css and index, and switched code to use load css style. Also began work on level designing and
 will implement level objects when partly finished with paper design. (Level design is being done with graph paper)
 
+3/10/2020 8:35pm-9:28pm, 3/11/2020 1:12pm - 3:35pm
+Semira Pinder
+Commit #1 week 7
+
+Texture changes during each animation, but it is not an individual change. Will fix the jumping, and will look into different face animations with the 
+textures.
