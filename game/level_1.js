@@ -30,6 +30,9 @@ function createLevel1() {
 
     scene.add( hemiLight );
 
+    var light = new THREE.AmbientLight( 0x404040, 0.7 ); // soft white light
+    scene.add( light );
+
     // add directional light
     let dirLight = new THREE.DirectionalLight( 0xffffff , 0.75);
     dirLight.color.setHSL( 0.1, 1, 0.95 );
@@ -437,7 +440,7 @@ function createLevel1() {
                 theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
                 obj.name = "Enemy";
 
-                let pos ={ x: -5, y: 103, z: 0};
+                let pos ={ x: -5, y: 103, z: -5};
 
                 obj.scene.position.x = pos.x;
                 obj.scene.position.y = pos.y;
@@ -452,11 +455,11 @@ function createLevel1() {
                 let transform = new Ammo.btTransform();
                 transform.setIdentity();
                 transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
-                transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
+                transform.setRotation( new Ammo.btQuaternion( 0, -.5, 0, 1 ) );
                 let motionState = new Ammo.btDefaultMotionState( transform );
 
-                colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2.5, box.y/3, box.z/2.5));
-                colShape.setMargin( 0.5 );
+                colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/3.5, box.y/3.5, box.z/3.5));
+                //colShape.setMargin( 0.5 );
 
                 let localInertia = new Ammo.btVector3( 0, 0, 0 );
                 colShape.calculateLocalInertia( 1, localInertia );
@@ -687,7 +690,7 @@ function createLevel1() {
             //start the next animation in the queue with crossFadeFrom, the previous action is faded out while the next one is faded in
             theMixer.clipAction(anims[animationNum]).reset();
             theMixer.clipAction(anims[animationNum]).play();
-            e.action.crossFadeTo(theMixer.clipAction(anims[animationNum]), .2, false);
+            e.action.crossFadeTo(theMixer.clipAction(anims[animationNum]), .4, false);
 
         }
         secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
