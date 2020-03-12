@@ -1,6 +1,6 @@
 function create_Start_Menu() {	
 	let loader = new THREE.FontLoader();
-	let loadBar = document.getElementById('load_Menu');
+	let loadBar = document.getElementById('load');
 
 	scene.background = new THREE.Color(0x0f0f0f);
 
@@ -51,7 +51,7 @@ function create_Start_Menu() {
         	function(xhr){//onProgress
 			loadBar.innerHTML = "<h2>Loading Fonts " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-				document.getElementById("load_Menu").style.display = "none";
+				document.getElementById("load").style.display = "none";
 				document.getElementById("blocker").style.display = "none";
 			}
 			},
