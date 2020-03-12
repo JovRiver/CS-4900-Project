@@ -694,20 +694,7 @@ function createLevel1() {
     }
     function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
-        let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xff0000 } );
-        let sprite = new THREE.Sprite( spriteMaterial );
-        let crosshairPercentX = 50; //middle horizontally
-        let crosshairPercentY = 50; //middle vertically
-        let crosshairPositionX = (crosshairPercentX / 100) * 2 - 1;
-        let crosshairPositionY = (crosshairPercentY / 100) * 2 - 1;
-        sprite.position.x = crosshairPositionX * camera.aspect;
-        sprite.position.y = crosshairPositionY;
-        sprite.position.z = -1.5;
-        sprite.scale.set(.1, .1, .1)
-
-
-        scene.add(sprite);
-        camera.add( sprite );
+        addSprite(spriteMap, 50, 50);
     }
 
     function createReset(){

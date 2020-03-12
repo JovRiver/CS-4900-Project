@@ -214,3 +214,53 @@ function random_Texture() {
         return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_10.jpg')};
     }
 }
+
+function test(){
+    //variables
+    let i, width, height, depth,
+        vertices, face, triangles = [];
+
+    //grab faces and triangles
+    for ( i = 0; i < geometry.faces.length; i++ ) {
+        face = geometry.faces[i];
+        if ( face instanceof THREE.Face3) {
+
+            triangles.push([
+                { x: vertices[face.a].x, y: vertices[face.a].y, z: vertices[face.a].z },
+                { x: vertices[face.b].x, y: vertices[face.b].y, z: vertices[face.b].z },
+                { x: vertices[face.c].x, y: vertices[face.c].y, z: vertices[face.c].z }
+            ]);
+
+        } else if ( face instanceof THREE.Face4 ) {
+
+            triangles.push([
+                { x: vertices[face.a].x, y: vertices[face.a].y, z: vertices[face.a].z },
+                { x: vertices[face.b].x, y: vertices[face.b].y, z: vertices[face.b].z },
+                { x: vertices[face.d].x, y: vertices[face.d].y, z: vertices[face.d].z }
+            ]);
+            triangles.push([
+                { x: vertices[face.b].x, y: vertices[face.b].y, z: vertices[face.b].z },
+                { x: vertices[face.c].x, y: vertices[face.c].y, z: vertices[face.c].z },
+                { x: vertices[face.d].x, y: vertices[face.d].y, z: vertices[face.d].z }
+            ]);
+
+        }
+    }
+}
+
+function addSprite(spriteMap, xPercent,yPercent){
+    let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xff0000 } );
+    let sprite = new THREE.Sprite( spriteMaterial );
+    let crosshairPercentX = xPercent; //middle horizontally
+    let crosshairPercentY = yPercent; //middle vertically
+    let crosshairPositionX = (crosshairPercentX / 100) * 2 - 1;
+    let crosshairPositionY = (crosshairPercentY / 100) * 2 - 1;
+    sprite.position.x = crosshairPositionX * camera.aspect;
+    sprite.position.y = crosshairPositionY;
+    sprite.position.z = -1.5;
+    sprite.scale.set(.1, .1, .1)
+
+
+    scene.add(sprite);
+    camera.add( sprite );
+}
