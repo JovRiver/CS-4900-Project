@@ -477,10 +477,9 @@ function createLevel1() {
                 //animation for catGun
                 anims = obj.animations;
 
-                /*anims.forEach(function(e){
-                    //e.repetitions = 2;//each animation only plays 2 times before stopping
-                    e.setLoop(THREE.LoopRepeat, 2);
-                });*/
+                anims.forEach(function(e){
+                    theMixer.clipAction(e);
+                });
 
                 theMixer.clipAction(anims[0]).play();//"death" doesn't play for some reason
 
@@ -680,13 +679,16 @@ function createLevel1() {
     function catAnimations(e){//e contains the type action and loopDelta
         //stop the current animation
         if (secondLoopBool){//if it's on the 2nd loop, adjust the animationMixer so that we don't have to do this later
-            e.action.stop(); //not needed since each animation runs only twice before stopping
+            //e.action.stop();
             animationNum++;
             if (animationNum == anims.length)
                 animationNum = 0;
-
-            //start the next animation in the queue
+            //if(e.action.clip.name == "")
+            //start the next animation in the queue with crossFadeFrom, the previous action is faded out while the next one is faded in
+            theMixer.clipAction(anims[animationNum]).reset();
             theMixer.clipAction(anims[animationNum]).play();
+            e.action.crossFadeTo(theMixer.clipAction(anims[animationNum]), .2, false);
+
         }
         secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
         //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
