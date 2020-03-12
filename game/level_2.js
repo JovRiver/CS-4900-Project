@@ -128,10 +128,9 @@ function createLevel2() {
     setupPhysicsWorld();
     initDebug();
     gamePlay = true;
-    createPlayer();
 
     //createLevel1.createSkyBox();
     createPlatform();
-    
+    createPlayer();
     sound_Loader();
 }
