@@ -301,6 +301,14 @@ function renderFrame(){
 		if(gamePlay){
 			movePlayer();
 			updateCamera();
+			//if(scene.getObjectByName( "Hook_Box" ) != null){
+			//	var a = new THREE.Vector3( 0, 5000, 5000 );
+			//	a.applyQuaternion(camera.quaternion);
+			//	let temp = new Ammo.btVector3(a.x,a.y,a.z);
+			//	scene.getObjectByName( "Hook_Box" ).userData.physicsBody.setAngularVelocity(temp);
+
+			//}
+
 		}
 		else {
 			camera.position.set(0, 200, 0);

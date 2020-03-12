@@ -705,10 +705,46 @@ function createLevel1() {
     function createReset(){
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Reset box
+        /*
 
+
+        var uniforms, mesh;
+        var textureLoader = new THREE.TextureLoader();
+
+				uniforms = {
+
+					"fogDensity": { value: 0.45 },
+					"fogColor": { value: new THREE.Vector3( 0, 0, 0 ) },
+					"time": { value: 1.0 },
+					"uvScale": { value: new THREE.Vector2( 3.0, 1.0 ) },
+					"texture1": { value: textureLoader.load( 'texture/lava/cloud.png' ) },
+					"texture2": { value: textureLoader.load( 'texture/lava/lavatile.jpg' ) }
+
+				};
+
+				uniforms[ "texture1" ].value.wrapS = uniforms[ "texture1" ].value.wrapT = THREE.RepeatWrapping;
+				uniforms[ "texture2" ].value.wrapS = uniforms[ "texture2" ].value.wrapT = THREE.RepeatWrapping;
+                var vertexShader = createShaderFromScriptElement(gl, "vertexShader");
+                var fragmentShader = createShaderFromScriptElement(gl, "fragmentShader");
+				var material = new THREE.ShaderMaterial( {
+
+					uniforms: uniforms,
+					vertexShader: vertexShader,
+					fragmentShader: fragmentShader
+
+				} );
+
+				mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(), material );
+                mesh.scale.set(200, 1, 200);
+                mesh.position.set(0, 80, 0);
+				scene.add( mesh );
+
+
+
+        */
         texture = new THREE.MeshLambertMaterial({visible: false});
         let resetBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
-        resetBox.scale.set(200, 200, 200);
+        resetBox.scale.set(200, 1, 200);
         resetBox.position.set(0, 80, 0);
         resetBox.name ="Reset_Box";
         scene.add(resetBox);
