@@ -88,12 +88,12 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
     }
 }
 
-function createGrapplingHook(platform){
+function createGrapplingHook(vect){
     // The rope
     // Rope graphic object
     let ropeNumSegments = 10;
     let ropeLength = 10;
-    let ropeMass = 3;
+    let ropeMass = 0.5;
     let ropePos = player.position.clone();
     ropePos.y += 1;
 
@@ -122,7 +122,7 @@ function createGrapplingHook(platform){
     // Rope physic object
     let softBodyHelpers = new Ammo.btSoftBodyHelpers();
     let ropeStart = new Ammo.btVector3( ropePos.x, ropePos.y, ropePos.z );
-    let ropeEnd = new Ammo.btVector3( ropePos.x, ropePos.y + ropeLength, ropePos.z );
+    let ropeEnd = new Ammo.btVector3( vect.x, vect.y , vect.z );
     let ropeSoftBody = softBodyHelpers.CreateRope( physicsWorld.getWorldInfo(), ropeStart, ropeEnd, ropeNumSegments - 1, 0 );
     let sbConfig = ropeSoftBody.get_m_cfg();
     sbConfig.set_viterations( 10 );
@@ -135,11 +135,47 @@ function createGrapplingHook(platform){
     ropeSoftBody.setActivationState( STATE.DISABLE_DEACTIVATION );
 
 
+    //Create temp physics object at raycast position
+    let texture = new THREE.MeshLambertMaterial();
+    let hookBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+    hookBox.scale.set(1, 1, 1);
+    hookBox.position.set(vect.x, vect.y, vect.z);
+    hookBox.name = "Hook_Box"
+    scene.add(hookBox);
+
+    let transform = new Ammo.btTransform();
+    transform.setIdentity();
+    transform.setOrigin(new Ammo.btVector3(vect.x, vect.y, vect.z));
+    transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
+    let motionState = new Ammo.btDefaultMotionState(transform);
+    let colShape = new Ammo.btBoxShape(new Ammo.btVector3(1 * 0.5, 1 * 0.5, 1 * 0.5));
+    let localInertia = new Ammo.btVector3(0, 0, 0);
+    colShape.calculateLocalInertia(0, localInertia);
+    let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
+    let hookBoxBody = new Ammo.btRigidBody(rbInfo);
+    hookBoxBody.setFriction(4);
+    hookBoxBody.setRollingFriction(10);
+    hookBox.userData.physicsBody = hookBoxBody;
+    physicsWorld.addRigidBody(hookBoxBody, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
+
+
+
 
     // Glue the rope extremes to the ball and the arm
     let influence = 1;
     ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
-    ropeSoftBody.appendAnchor( ropeNumSegments, platform.userData.physicsBody, true, influence );
+    ropeSoftBody.appendAnchor( ropeNumSegments, hookBox.userData.physicsBody, true, influence );
+
+    let moveX =  playerMoveDirection.right - playerMoveDirection.left;
+    let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
+    let vertex = new THREE.Vector3(moveX,0,moveZ);
+    vertex.applyQuaternion(camera.quaternion);
+
+    let resultantImpulse = new Ammo.btVector3( vertex.x, 0, vertex.z );
+    resultantImpulse.op_mul(20);
+
+    let physicsBody = player.userData.physicsBody;
+    physicsBody.setLinearVelocity ( resultantImpulse );
 
 }
 

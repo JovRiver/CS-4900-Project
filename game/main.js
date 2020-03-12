@@ -1,5 +1,5 @@
 //variable declaration section
-let physicsWorld, renderer, stats, sound, controls, rigidBodies = [], platforms = [], tmpTrans = null;
+let physicsWorld, renderer, stats, sound, controls, rigidBodies = [], platforms = [], resetPlatform = [], tmpTrans = null;
 let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
 
@@ -9,9 +9,11 @@ let a = false;
 let b = false;
 let flagCallBack = null;
 let movementCallBack = null;
+let resetCallBack = null;
 let canJump = true;
 let canMove = true;
 let rope = null;
+let resetPos = {x: 0, y: 0, z: 0};
 
 let scene;
 let camera;
@@ -40,7 +42,7 @@ const STATE = {
 	DISABLE_SIMULATION : 5
 }
 
-let level = 0;	//set to 0 for main menu, 1 or higher for levels
+let level = 1;	//set to 0 for main menu, 1 or higher for levels
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let in_Game_Menu_Group; // in_Game_Menu_Group to hold menu items for raycaster detection
@@ -58,6 +60,7 @@ function start (){
 	ammoTmpQuat = new Ammo.btQuaternion();
 	flagCallBack = new Ammo.ConcreteContactResultCallback();
 	movementCallBack = new Ammo.ConcreteContactResultCallback();
+	resetCallBack = new Ammo.ConcreteContactResultCallback();
 
 	//Setup the renderer
 	renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -122,6 +125,7 @@ function updatePhysics( deltaTime ){
 	physicsWorld.stepSimulation( deltaTime, 10 );
 	if(a && b){
 		physicsWorld.contactPairTest(player.userData.physicsBody, flag.userData.physicsBody, flagCallBack );
+		physicsWorld.contactPairTest(player.userData.physicsBody, resetPlatform[0].userData.physicsBody, resetCallBack );
 		if(!canJump || !canMove){
 			physicsWorld.contactTest(player.userData.physicsBody, movementCallBack);
 		}
@@ -170,6 +174,21 @@ movementCallBack.addSingleResult = function () {
 		playerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 	}
 }
+
+resetCallBack.addSingleResult = function () {
+	if(gamePlay){
+		let velo = new Ammo.btVector3( 0, 0, 0 );
+		player.userData.physicsBody.setLinearVelocity(velo);
+		player.position.set(resetPos.x, resetPos.y, resetPos.z);
+		let transform = new Ammo.btTransform();
+		transform.setIdentity();
+		transform.setOrigin(new Ammo.btVector3(resetPos.x, resetPos.y, resetPos.z));
+		transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
+		let motionState = new Ammo.btDefaultMotionState( transform );
+		player.userData.physicsBody.setMotionState(motionState);
+	}
+}
+
 
 
 flagCallBack.addSingleResult = function () {
@@ -258,7 +277,6 @@ function renderFrame(){
 			}
 		}
 		 */
-		console.log(physicsWorld.getDispatcher().getNumManifolds())
 		if(physicsWorld.getDispatcher().getNumManifolds() < 2){
 			canMove = false;
 		}
@@ -338,17 +356,16 @@ function onWindowResize() {
 
 function onMouseDown(event){
 	if(event.which === 3){
-
-		var direction = new THREE.Vector3(0,0,0);
-		var raycasterRope = new THREE.Raycaster(); // create once and reuse
+		let direction = new THREE.Vector3(0,0,0);
+		let raycasterRope = new THREE.Raycaster(); // create once and reuse
 		controls.getDirection( direction );
 		raycasterRope.set( controls.getObject().position, direction );
 		raycasterRope.near = 1;
-		raycasterRope.far = 50;
-		var intersects = raycasterRope.intersectObjects( platforms );
+		raycasterRope.far = 12;
+		let intersects = raycasterRope.intersectObjects( platforms );
 		for ( var i = 0; i < intersects.length; i++ ) {
 			if(intersects.length === 1){
-				createGrapplingHook(intersects[i].object);
+				createGrapplingHook(intersects[i].point);
 			}
 
 
@@ -363,6 +380,11 @@ function onMouseUp(event){
 			physicsWorld.removeCollisionObject(rope.userData.physicsBody);
 			scene.remove(rope);
 		}
+		if(scene.getObjectByName( "Hook_Box" ) != null){
+			physicsWorld.removeCollisionObject(scene.getObjectByName( "Hook_Box" ).userData.physicsBody);
+			scene.remove(scene.getObjectByName( "Hook_Box" ));
+		}
+
 
 
 
@@ -397,7 +419,9 @@ function onKeyDown (event ) {
 			break;
 
 		case 32: // space
+			console.log(canJump);
 			if(canJump){
+
 				tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 				playerMoveDirection.forward = 0;
 				playerMoveDirection.left = 0;
