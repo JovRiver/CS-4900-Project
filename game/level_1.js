@@ -107,6 +107,19 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Grappling hook box
+        pos = {x: -9, y: 109.5, z: -65};
+        scale = {x: 2, y: 1, z: 1};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        pos = {x: -13, y: 109.5, z: -83};
+        scale = {x: 2, y: 1, z: 1};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P1
 
@@ -618,6 +631,7 @@ function createLevel1() {
     function createPlayer(){
         //var pos = {x: 0, y: 2, z: 3};
         let pos = {x: 0, y: 105, z: 0};
+        resetPos = {x: 0, y: 101, z: 0};
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};
         let mass = 1;
@@ -656,6 +670,7 @@ function createLevel1() {
         player.userData.physicsBody = body;
         player.userData.physicsBody.set
 
+
         rigidBodies.push(player);
         a = true;
 
@@ -676,16 +691,65 @@ function createLevel1() {
         //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
 
     }
+    function createCrosshair() {
+        let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
+        let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xff0000 } );
+        let sprite = new THREE.Sprite( spriteMaterial );
+        let crosshairPercentX = 50; //middle horizontally
+        let crosshairPercentY = 50; //middle vertically
+        let crosshairPositionX = (crosshairPercentX / 100) * 2 - 1;
+        let crosshairPositionY = (crosshairPercentY / 100) * 2 - 1;
+        sprite.position.x = crosshairPositionX * camera.aspect;
+        sprite.position.y = crosshairPositionY;
+        sprite.position.z = -1.5;
+        sprite.scale.set(.1, .1, .1)
+
+
+        scene.add(sprite);
+        camera.add( sprite );
+    }
+
+    function createReset(){
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Reset box
+
+        texture = new THREE.MeshLambertMaterial({visible: false});
+        let resetBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+        resetBox.scale.set(200, 200, 200);
+        resetBox.position.set(0, 80, 0);
+        resetBox.name ="Reset_Box";
+        scene.add(resetBox);
+
+        let transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin(new Ammo.btVector3(0, 80, 0)); //set to middle of map
+        transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
+        let motionState = new Ammo.btDefaultMotionState(transform);
+        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(300 * 0.5 + 0.8, 1  * 0.5 + 0.5, 1000  * 0.5 + 0.8));
+        let localInertia = new Ammo.btVector3(0, 0, 0);
+        colShape.calculateLocalInertia(0, localInertia);
+        let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
+        let body = new Ammo.btRigidBody(rbInfo);
+        body.setFriction(4);
+        body.setRollingFriction(10);
+        resetBox.userData.physicsBody = body;
+        physicsWorld.addRigidBody(body, ghostGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
+        resetPlatform.push(resetBox);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    }
 
     setupPhysicsWorld();
     initDebug();
     gamePlay = true;
     createPlayer();
+    createCrosshair();
+    createReset();
 
     createSkyBox();
     createGround();
     create_Course();
     create_Boundary();
     after_Game_Menu();
+
     object_Loader();
 }
