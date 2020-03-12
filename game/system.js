@@ -179,14 +179,6 @@ function createGrapplingHook(vect){
 
 }
 
-//function for later use
-function lockGrapplingHook(arm){
-    // Glue the rope extremes to the ball and the arm
-    //let influence = 1;
-    //ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
-    //ropeSoftBody.appendAnchor( ropeNumSegments, arm.userData.physicsBody, true, influence );
-}
-
 function random_Texture() {
     let picker = Math.floor(Math.random() * 9);
 

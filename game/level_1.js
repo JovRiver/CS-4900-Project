@@ -109,6 +109,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Grappling hook box
+        texture = new THREE.MeshLambertMaterial({color: 0x00FF00});
         pos = {x: -9, y: 109.5, z: -65};
         scale = {x: 2, y: 1, z: 1};
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);

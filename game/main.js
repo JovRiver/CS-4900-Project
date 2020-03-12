@@ -134,15 +134,15 @@ function updatePhysics( deltaTime ){
 
 	// Update rope
 	if(rope != null){
-		var softBody = rope.userData.physicsBody;
-		var ropePositions = rope.geometry.attributes.position.array;
-		var numVerts = ropePositions.length / 3;
-		var nodes = softBody.get_m_nodes();
-		var indexFloat = 0;
-		for ( var i = 0; i < numVerts; i ++ ) {
+		let softBody = rope.userData.physicsBody;
+		let ropePositions = rope.geometry.attributes.position.array;
+		let numVerts = ropePositions.length / 3;
+		let nodes = softBody.get_m_nodes();
+		let indexFloat = 0;
+		for ( let i = 0; i < numVerts; i ++ ) {
 
-			var node = nodes.at( i );
-			var nodePos = node.get_m_x();
+			let node = nodes.at( i );
+			let nodePos = node.get_m_x();
 			ropePositions[ indexFloat++ ] = nodePos.x();
 			ropePositions[ indexFloat++ ] = nodePos.y();
 			ropePositions[ indexFloat++ ] = nodePos.z();
@@ -363,7 +363,7 @@ function onMouseDown(event){
 		raycasterRope.near = 1;
 		raycasterRope.far = 12;
 		let intersects = raycasterRope.intersectObjects( platforms );
-		for ( var i = 0; i < intersects.length; i++ ) {
+		for ( let i = 0; i < intersects.length; i++ ) {
 			if(intersects.length === 1){
 				createGrapplingHook(intersects[i].point);
 			}
