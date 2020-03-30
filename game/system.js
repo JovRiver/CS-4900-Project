@@ -88,6 +88,14 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
     }
 }
 
+function createCylinderGeometry(rTop, rBottom, height, texture) {
+    let cylinder_Geometry = new THREE.CylinderBufferGeometry(rTop, rBottom, height, 32);
+    let cylinder_Texture = new THREE.MeshLambertMaterial(texture);
+    let cylinder = new THREE.Mesh(cylinder_Geometry, cylinder_Texture);
+
+    scene.add(cylinder);
+}
+
 function createGrapplingHook(vect){
     // The rope
     // Rope graphic object
@@ -212,6 +220,16 @@ function random_Texture() {
 
     else {
         return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_10.jpg')};
+    }
+}
+
+function level_1_Textures(text) {
+    switch (text) {
+        case 1: return {map: new THREE.TextureLoader().load('texture/level1/stone_Walkway.jpg')};
+
+        case 2: return {map: new THREE.TextureLoader().load('texture/level1/grass.jpg')};
+
+        case 3: return {map: new THREE.TextureLoader().load('texture/level1/building_Type_2.jpg')};
     }
 }
 
