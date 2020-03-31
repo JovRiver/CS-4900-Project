@@ -88,12 +88,34 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
     }
 }
 
-function createCylinderGeometry(rTop, rBottom, height, texture) {
+function createCylinderGeometry(rTop, rBottom, height, pos, quat, texture) {
     let cylinder_Geometry = new THREE.CylinderBufferGeometry(rTop, rBottom, height, 32);
     let cylinder_Texture = new THREE.MeshLambertMaterial(texture);
+    cylinder_Texture.map.wrapS = cylinder_Texture.map.wrapT = THREE.RepeatWrapping;
+    cylinder_Texture.map.repeat.set(2, 10);
     let cylinder = new THREE.Mesh(cylinder_Geometry, cylinder_Texture);
+    cylinder.position.set(pos.x, pos.y, pos.z);
 
     scene.add(cylinder);
+
+    let transform = new Ammo.btTransform();
+    transform.setIdentity();
+    // set origin using each objects x,y,z coordinates
+    transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+    transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w));
+    let motionState = new Ammo.btDefaultMotionState(transform);
+    // set bounding box using each objects x,y,z scale
+    let colShape = new Ammo.btBoxShape(new Ammo.btVector3(rTop * 0.8 + 1, height * 0.5 + 0.5, rTop * 0.8 + 1));
+    // colShape.setMargin(0.05);
+    let localInertia = new Ammo.btVector3(0, 0, 0);
+    colShape.calculateLocalInertia(0, localInertia);
+    let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
+    let body = new Ammo.btRigidBody(rbInfo);
+    body.setFriction(4);
+    body.setRollingFriction(10);
+    cylinder.userData.physicsBody = body;
+    physicsWorld.addRigidBody(body, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
+    platforms.push(cylinder);
 }
 
 function createGrapplingHook(vect){
@@ -229,7 +251,7 @@ function level_1_Textures(text) {
 
         case 2: return {map: new THREE.TextureLoader().load('texture/level1/grass.jpg')};
 
-        case 3: return {map: new THREE.TextureLoader().load('texture/level1/building_Type_2.jpg')};
+        case 3: return {map: new THREE.TextureLoader().load('texture/level1/column.jpg')};
     }
 }
 
