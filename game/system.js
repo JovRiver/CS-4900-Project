@@ -51,18 +51,16 @@ function showStats(){
 function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
 
     let base_Texture = new THREE.MeshLambertMaterial(texture);
-    if (has_Boundary === false) {
-        base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
-        base_Texture.map.repeat.set(2, 10);
-    }
+    base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
+    base_Texture.map.repeat.set(5, 2);
+
     let box = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
     box.scale.set(scale.x, scale.y, scale.z);
     box.position.set(pos.x, pos.y, pos.z);
 
-    if(has_Boundary === true){
-        box.castShadow = true;
-        box.receiveShadow = true;
-    }
+    box.castShadow = true;
+    box.receiveShadow = true;
+
     scene.add(box);
 
     if (has_Boundary === true) {
@@ -74,7 +72,7 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w));
         let motionState = new Ammo.btDefaultMotionState(transform);
         // set bounding box using each objects x,y,z scale
-        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 0.8, scale.y * 0.5 + 0.5, scale.z * 0.5 + 0.8));
+        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 0.9, scale.y * 0.5 + 0.5, scale.z * 0.5 + 0.9));
         // colShape.setMargin(0.05);
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
@@ -92,7 +90,7 @@ function createCylinderGeometry(rTop, rBottom, height, pos, quat, texture) {
     let cylinder_Geometry = new THREE.CylinderBufferGeometry(rTop, rBottom, height, 32);
     let cylinder_Texture = new THREE.MeshLambertMaterial(texture);
     cylinder_Texture.map.wrapS = cylinder_Texture.map.wrapT = THREE.RepeatWrapping;
-    cylinder_Texture.map.repeat.set(2, 10);
+    cylinder_Texture.map.repeat.set(2, 5);
     let cylinder = new THREE.Mesh(cylinder_Geometry, cylinder_Texture);
     cylinder.position.set(pos.x, pos.y, pos.z);
 
@@ -105,7 +103,7 @@ function createCylinderGeometry(rTop, rBottom, height, pos, quat, texture) {
     transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w));
     let motionState = new Ammo.btDefaultMotionState(transform);
     // set bounding box using each objects x,y,z scale
-    let colShape = new Ammo.btBoxShape(new Ammo.btVector3(rTop * 0.8 + 1, height * 0.5 + 0.5, rTop * 0.8 + 1));
+    let colShape = new Ammo.btBoxShape(new Ammo.btVector3(rTop * 0.8 + 1.5, height * 0.5 + 0.5, rTop * 0.8 + 1.5));
     // colShape.setMargin(0.05);
     let localInertia = new Ammo.btVector3(0, 0, 0);
     colShape.calculateLocalInertia(0, localInertia);
@@ -116,6 +114,25 @@ function createCylinderGeometry(rTop, rBottom, height, pos, quat, texture) {
     cylinder.userData.physicsBody = body;
     physicsWorld.addRigidBody(body, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
     platforms.push(cylinder);
+}
+
+function createBoundingBox(pos, scale, quat) {
+    let transform = new Ammo.btTransform();
+    transform.setIdentity();
+    // set origin using each objects x,y,z coordinates
+    transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+    transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w));
+    let motionState = new Ammo.btDefaultMotionState(transform);
+    // set bounding box using each objects x,y,z scale
+    let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 0.8, scale.y * 0.5 + 0.5, scale.z * 0.5 + 0.8));
+    // colShape.setMargin(0.05);
+    let localInertia = new Ammo.btVector3(0, 0, 0);
+    colShape.calculateLocalInertia(0, localInertia);
+    let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
+    let body = new Ammo.btRigidBody(rbInfo);
+    body.setFriction(4);
+    body.setRollingFriction(10);
+    physicsWorld.addRigidBody(body, buildingGroup, playerGroup);
 }
 
 function createGrapplingHook(vect){
@@ -252,6 +269,8 @@ function level_1_Textures(text) {
         case 2: return {map: new THREE.TextureLoader().load('texture/level1/grass.jpg')};
 
         case 3: return {map: new THREE.TextureLoader().load('texture/level1/column.jpg')};
+
+        case 4: return {map: new THREE.TextureLoader().load('texture/level1/grappleBox.jpg')};
     }
 }
 

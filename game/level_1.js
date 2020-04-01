@@ -81,6 +81,10 @@ function createLevel1() {
 
         //PLATFORMS DENOTED BY P#
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 1 BEGIN
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // START PLATFORM
 
@@ -574,12 +578,606 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 1 END
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 2 BEGIN
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P31
+
+        scale = {x: 25, y: 2.5, z: 5.5};
+        pos = {x: 0, y: 107.5, z: -420};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P32
+
+        scale = {x: 20, y: 11, z: 4.5};
+        pos = {x: 0, y: 93.5, z: -420};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P33
+
+        scale = {x: 20, y: 11, z: 10};
+        pos = {x: 0, y: 93.5, z: -435};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P34
+
+        scale = {x: 120, y: 1, z: 30};
+        pos = {x: 0, y: 91.5, z: -435};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P35A
+
+        scale = {x: 30, y: 1, z: 80};
+        pos = {x: -45, y: 91.5, z: -490};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P35B
+
+        scale = {x: 30, y: 1, z: 80};
+        pos = {x: -45, y: 91.5, z: -570};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P36A
+
+        scale = {x: 30, y: 1, z: 80};
+        pos = {x: 45, y: 91.5, z: -490};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P36B
+
+        scale = {x: 30, y: 1, z: 80};
+        pos = {x: 45, y: 91.5, z: -570};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P37
+
+        scale = {x: 120, y: 1, z: 30};
+        pos = {x: 0, y: 91.5, z: -625};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P38
+
+        scale = {x: 10, y: 1, z: 30};
+        pos = {x: 0, y: 91.5, z: -465};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P39
+
+        scale = {x: 60, y: 1, z: 10};
+        pos = {x: 0, y: 91.5, z: -485};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P40
+
+        scale = {x: 10, y: 1, z: 30};
+        pos = {x: 0, y: 91.5, z: -505};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P41
+
+        scale = {x: 20, y: 1, z: 10};
+        pos = {x: -20, y: 91.5, z: -530};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P42
+
+        scale = {x: 20, y: 1, z: 10};
+        pos = {x: 20, y: 91.5, z: -530};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P43
+
+        scale = {x: 10, y: 1, z: 30};
+        pos = {x: 0, y: 91.5, z: -555};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P44
+
+        scale = {x: 60, y: 1, z: 10};
+        pos = {x: 0, y: 91.5, z: -575};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P45
+
+        scale = {x: 10, y: 1, z: 30};
+        pos = {x: 0, y: 91.5, z: -595};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // G1
+
+        scale = {x: 30, y: 0.8, z: 30};
+        pos = {x: -15, y: 91.5, z: -465};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(2));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // G2
+
+        scale = {x: 30, y: 0.8, z: 30};
+        pos = {x: 15, y: 91.5, z: -465};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(2));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // G3
+
+        scale = {x: 30, y: 0.8, z: 40};
+        pos = {x: -15, y: 91.5, z: -510};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(2));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // G4
+
+        scale = {x: 30, y: 0.8, z: 40};
+        pos = {x: 15, y: 91.5, z: -510};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(2));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // G5
+
+        scale = {x: 30, y: 0.8, z: 40};
+        pos = {x: -15, y: 91.5, z: -550};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(2));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // G6
+
+        scale = {x: 30, y: 0.8, z: 40};
+        pos = {x: 15, y: 91.5, z: -550};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(2));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // G7
+
+        scale = {x: 30, y: 0.8, z: 30};
+        pos = {x: -15, y: 91.5, z: -595};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(2));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // G8
+
+        scale = {x: 30, y: 0.8, z: 30};
+        pos = {x: 15, y: 91.5, z: -595};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = false;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(2));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P46
+
+        scale = {x: 30, y: 1, z: 20};
+        pos = {x: 25, y: 99.6, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P47
+
+        scale = {x: 20, y: 2, z: 20};
+        pos = {x: 25, y: 107.5, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // PB1
+
+        scale = {x: 10, y: 1, z: 20};
+        pos = {x: -25, y: 91.5, z: -680};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // PB2
+
+        scale = {x: 10, y: 1, z: 20};
+        pos = {x: -25, y: 91.5, z: -720};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // PB3
+
+        scale = {x: 10, y: 1, z: 20};
+        pos = {x: -35, y: 95.5, z: -740};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // PB4
+
+        scale = {x: 10, y: 1, z: 20};
+        pos = {x: -25, y: 99.5, z: -760};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // PB5
+
+        scale = {x: 10, y: 1, z: 40};
+        pos = {x: -25, y: 99.5, z: -810};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // PB6
+
+        scale = {x: 10, y: 1, z: 60};
+        pos = {x: -35, y: 99.5, z: -850};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // PB7
+
+        scale = {x: 20, y: 1, z: 10};
+        pos = {x: -20, y: 99.5, z: -875};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // PB8
+
+        scale = {x: 10, y: 1, z: 20};
+        pos = {x: -5, y: 95.5, z: -850};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // PB9
+
+        scale = {x: 10, y: 1, z: 170};
+        pos = {x: 55, y: 95.5, z: -765};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P48
+
+        // GRAPPLE BOX
+        scale = {x: 2, y: 2, z: 2};
+        pos = {x: 25, y: 111.5, z: -685};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(4));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P49
+
+        // GRAPPLE BOX
+        scale = {x: 2, y: 2, z: 2};
+        pos = {x: 25, y: 111.5, z: -725};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(4));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P50
+
+        // GRAPPLE BOX
+        scale = {x: 2, y: 2, z: 2};
+        pos = {x: 25, y: 111.5, z: -765};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(4));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P51
+
+        // GRAPPLE BOX
+        scale = {x: 2, y: 2, z: 2};
+        pos = {x: 25, y: 111.5, z: -805};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(4));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P52
+
+        // GRAPPLE BOX
+        scale = {x: 2, y: 2, z: 2};
+        pos = {x: 25, y: 111.5, z: -845};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(4));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // H1
+
+        scale = {x: 35, y: 1, z: 2.5};
+        pos = {x: 40, y: 112, z: -685};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // H2
+
+        scale = {x: 35, y: 1, z: 2.5};
+        pos = {x: 40, y: 112, z: -725};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // H3
+
+        scale = {x: 35, y: 1, z: 2.5};
+        pos = {x: 40, y: 112, z: -765};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // H4
+
+        scale = {x: 35, y: 1, z: 2.5};
+        pos = {x: 40, y: 112, z: -805};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // H5
+
+        scale = {x: 35, y: 1, z: 2.5};
+        pos = {x: 40, y: 112, z: -845};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P53
+
+        scale = {x: 10, y: 1, z: 60};
+        pos = {x: 5, y: 99.5, z: -900};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        pos = {x: 0, y: 91.5, z: -530};
+        scale = {x: 120, y: 1, z: 220};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        createBoundingBox(pos, scale, quat); // bounding box for large area on page 2 of level 1
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 2 END
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     }
 
     function create_Walls() {
         let scale, pos, quat, has_Boundary;
 
         // WALLS DENOTED BY W#
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 1 BEGIN
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W1A
@@ -749,6 +1347,150 @@ function createLevel1() {
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 1 END
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 2 BEGIN
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W9
+        
+        scale = {x: 50, y: 17.5, z: 4.5};
+        pos = {x: -35, y: 100, z: -420};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W10
+        
+        scale = {x: 50, y: 17.5, z: 4.5};
+        pos = {x: 35, y: 100, z: -420};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W11A
+        
+        scale = {x: 4.5, y: 17.5, z: 110};
+        pos = {x: -57.75, y: 100, z: -475};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W11B
+        
+        scale = {x: 4.5, y: 17.5, z: 110};
+        pos = {x: -57.75, y: 100, z: -585};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W12A
+        
+        scale = {x: 4.5, y: 17.5, z: 110};
+        pos = {x: 57.75, y: 100, z: -475};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W12B
+        
+        scale = {x: 4.5, y: 17.5, z: 110};
+        pos = {x: 57.75, y: 100, z: -585};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W13A
+        
+        scale = {x: 30, y: 17.5, z: 4.5};
+        pos = {x: -45, y: 100, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W13B
+        
+        scale = {x: 10, y: 9, z: 4.5};
+        pos = {x: -25, y: 104.25, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W14
+        
+        scale = {x: 40, y: 17.5, z: 4.5};
+        pos = {x: 0, y: 100, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W15A
+        
+        scale = {x: 30, y: 17.5, z: 4.5};
+        pos = {x: 45, y: 100, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // W15B
+        
+        scale = {x: 20, y: 9, z: 5};
+        pos = {x: 25, y: 95.5, z: -640};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 2 END
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -756,6 +1498,10 @@ function createLevel1() {
         let rTop, rBottom, height, pos, quat, texture;
 
         // COLUMNS DENOTED BY C#
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 1 BEGIN
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // C1
@@ -800,7 +1546,7 @@ function createLevel1() {
         createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // C2
+        // C4
 
         rTop = 2.5;
         rBottom = 2.5;
@@ -812,6 +1558,217 @@ function createLevel1() {
         texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
 
         createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 1 END
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 2 BEGIN
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C5
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 18;
+
+        pos = {x: -45, y: 99.5, z: -435};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C6
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 18;
+
+        pos = {x: 45, y: 99.5, z: -435};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C7
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 18;
+
+        pos = {x: -45, y: 99.5, z: -495};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C8
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 18;
+
+        pos = {x: 45, y: 99.5, z: -495};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C9
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 18;
+
+        pos = {x: -45, y: 99.5, z: -565};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C10
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 18;
+
+        pos = {x: 45, y: 99.5, z: -565};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C11
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 18;
+
+        pos = {x: -45, y: 99.5, z: -625};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C12
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 18;
+
+        pos = {x: 45, y: 99.5, z: -625};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C13
+
+        rTop = 20;
+        rBottom = 20;
+        height = 1.1;
+
+        pos = {x: 0, y: 91.5, z: -530};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C14
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 16;
+
+        pos = {x: 55, y: 103.5, z: -685};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C15
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 16;
+
+        pos = {x: 55, y: 103.5, z: -725};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C16
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 16;
+
+        pos = {x: 55, y: 103.5, z: -765};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C17
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 16;
+
+        pos = {x: 55, y: 103.5, z: -805};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // C18
+
+        rTop = 2.5;
+        rBottom = 2.5;
+        height = 16;
+
+        pos = {x: 55, y: 103.5, z: -845};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  PAGE 2 END
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
@@ -1020,7 +1977,7 @@ function createLevel1() {
 
     function createPlayer(){
         //let pos = {x: 0, y: 105, z: 0}; // actual start
-        let pos = {x: 0, y: 98.3, z: -347.5}; // test start
+        let pos = {x: 25, y: 105, z: -640}; // test start
         resetPos = {x: 0, y: 101, z: 0};
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};
