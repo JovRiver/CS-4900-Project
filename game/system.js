@@ -268,9 +268,7 @@ function level_1_Textures(text) {
 
         case 2: return {map: new THREE.TextureLoader().load('texture/level1/grass.jpg')};
 
-        case 3: return {map: new THREE.TextureLoader().load('texture/level1/column.jpg')};
-
-        case 4: return {map: new THREE.TextureLoader().load('texture/level1/grappleBox.jpg')};
+        case 3: return {map: new THREE.TextureLoader().load('texture/level1/grappleBox.jpg')};
     }
 }
 
