@@ -527,3 +527,10 @@ Commit 34:
   Completed outline of page 5 of level 1 with a few platforms still needed, otherwise the rest is cosmetic needs that can be filled
 in at a later time.
 
+4/2/2020
+Ryan Slaybaugh:
+Commit 35:
+
+  Continued working on page 5, completing all necessary platforms, all that remains is cosmetic changes and maybe some additional platforms
+to fill out the level. There is a noticeable lag when first viewing the entire level so I will look into that next week for the code
+optimization work.
