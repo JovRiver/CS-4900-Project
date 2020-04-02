@@ -1635,14 +1635,161 @@ function createLevel1() {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // P155 // FLAG BASE
 
-        scale = {x: 30, y: 12, z: 20};
-        pos = {x: 5, y: 117.5, z: -2170};
+        scale = {x: 30, y: 20, z: 20};
+        pos = {x: 5, y: 121.5, z: -2170};
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundary = true;
 
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // FLAG AREA PLATFORMS OUTER
+
+        scale = {x: 2.5, y: 40, z: 20};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        for (let i = 0; i < 5; i++) {
+            pos = {x: -51.249, y: 131.5, z: -2040 - (i * 40)};
+
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+            pos = {x: 61.249, y: 131.5, z: -2040 - (i * 40)};
+
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        }
+
+        scale = {x: 20, y: 40, z: 2.5};
+
+        for (let i = 0; i < 2; i++) {
+            pos = {x: -30 + (i * 70), y: 131.5, z: -2018.751};
+
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+            pos = {x: -30 + (i * 70), y: 131.5, z: -2221.249};
+
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        }
+
+        scale = {x: 200, y: 5, z: 7.5};
+        pos = {x: 5, y: 154, z: -2040};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        for (let i = 0; i < 5; i++) {
+            let beam = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+            beam.position.set(pos.x, pos.y, pos.z - (i * 40));
+            beam.scale.set(scale.x, scale.y, scale.z);
+
+            scene.add(beam);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // FLAG AREA PLATORMS INNER
+
+        scale = {x: 30, y: 1, z: 10};
+        pos = {x: 5, y: 116.5, z: -2055};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        
+        scale = {x: 30, y: 1, z: 10};
+        pos = {x: 5, y: 116.5, z: -2095};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        scale = {x: 30, y: 1, z: 10};
+        pos = {x: 5, y: 127.5, z: -2195};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        scale = {x: 10, y: 1, z: 20};
+        quat = {x: 0, y: 0, z: 0, w: 1};
+        has_Boundary = true;
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        for (let i = 0; i < 3; i++) {
+            pos = {x: -25, y: 119.5 + (i * 4), z: -2120 - (i * 40)};
+
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+            pos = {x: 35, y: 119.5 + (i * 4), z: -2120 - (i * 40)};
+            
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P156
+
+        scale = {x: 110, y: 5, z: 300};
+        pos = {x: -47.5, y: 168, z: -2120};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        let roofL = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+        roofL.position.set(pos.x, pos.y, pos.z);
+        roofL.scale.set(scale.x, scale.y, scale.z);
+        roofL.rotation.z = THREE.Math.degToRad(15);
+
+        scene.add(roofL);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P157
+
+        scale = {x: 110, y: 5, z: 300};
+        pos = {x: 57.5, y: 168, z: -2120};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        let roofR = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+        roofR.position.set(pos.x, pos.y, pos.z);
+        roofR.scale.set(scale.x, scale.y, scale.z);
+        roofR.rotation.z = THREE.Math.degToRad(-15);
+
+        scene.add(roofR);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P158
+
+        scale = {x: 200, y: 5, z: 7.5};
+        pos = {x: 5, y: 156, z: -1980};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        let beamF = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+        beamF.position.set(pos.x, pos.y, pos.z);
+        beamF.scale.set(scale.x, scale.y, scale.z);
+
+        scene.add(beamF);
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // P159
+
+        scale = {x: 200, y: 5, z: 7.5};
+        pos = {x: 5, y: 156, z: -2260};
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+
+        let beamR = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+        beamR.position.set(pos.x, pos.y, pos.z);
+        beamR.scale.set(scale.x, scale.y, scale.z);
+
+        scene.add(beamR);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  PAGE 5 END
@@ -2492,10 +2639,20 @@ function createLevel1() {
 
         for (let i = 0; i < 2; i++) {
             pos = {x: -35, y: 109.5, z: -1825 - (i * 20)};
+            let pillarTop = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+                pillarTop.position.set(pos.x, pos.y + 11.5, pos.z);
+                pillarTop.scale.set(7.5, 3, 7.5);
+
+                scene.add(pillarTop);
 
             createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
 
             pos = {x: 45, y: 109.5, z: -1825 - (i * 20)};
+            pillarTop = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+                pillarTop.position.set(pos.x, pos.y + 11.5, pos.z);
+                pillarTop.scale.set(7.5, 3, 7.5);
+
+                scene.add(pillarTop);
 
             createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
         }
@@ -2511,10 +2668,22 @@ function createLevel1() {
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
 
         for (let i = 0; i < 8; i++) {
-            if (i < 4)
+            if (i < 4) {
                 pos = {x: -90 + (i * 20), y: 131.5, z: -1980};
-            else
+                let pillarTop = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+                pillarTop.position.set(pos.x, pos.y + 21.5, pos.z);
+                pillarTop.scale.set(7.5, 3, 7.5);
+
+                scene.add(pillarTop);
+            }
+            else {
                 pos = {x: -90 + (i * 20) + 50, y: 131.5, z: -1980};
+                let pillarTop = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+                pillarTop.position.set(pos.x, pos.y + 21.5, pos.z);
+                pillarTop.scale.set(7.5, 3, 7.5);
+
+                scene.add(pillarTop);
+            }
 
             createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
         }
@@ -2531,10 +2700,20 @@ function createLevel1() {
 
         for (let i = 0; i < 13; i++) {
             pos = {x: -90, y: 131.5, z: -2000 - (i * 20)};
+            let pillarTop = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+                pillarTop.position.set(pos.x, pos.y + 21.5, pos.z);
+                pillarTop.scale.set(7.5, 3, 7.5);
+
+                scene.add(pillarTop);
 
             createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
 
             pos = {x: 100, y: 131.5, z: -2000 - (i * 20)};
+            pillarTop = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+                pillarTop.position.set(pos.x, pos.y + 21.5, pos.z);
+                pillarTop.scale.set(7.5, 3, 7.5);
+
+                scene.add(pillarTop);
 
             createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
         }
@@ -2550,11 +2729,23 @@ function createLevel1() {
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
 
         for (let i = 0; i < 10; i++) {
-            if (i < 5)
+            if (i < 5) {
                 pos = {x: -90 + (i * 20), y: 131.5, z: -2260};
-            else
-                pos = {x: -90 + (i * 20) + 10, y: 131.5, z: -2260};
+                let pillarTop = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+                pillarTop.position.set(pos.x, pos.y + 21.5, pos.z);
+                pillarTop.scale.set(7.5, 3, 7.5);
 
+                scene.add(pillarTop);
+            }
+            else {
+                pos = {x: -90 + (i * 20) + 10, y: 131.5, z: -2260};
+                let pillarTop = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+                pillarTop.position.set(pos.x, pos.y + 21.5, pos.z);
+                pillarTop.scale.set(7.5, 3, 7.5);
+
+                scene.add(pillarTop);
+            }
+            
             createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
         }
 
@@ -2666,7 +2857,7 @@ function createLevel1() {
                 //	if (child instanceof THREE.Mesh)
                 //		child.material.map = tex;
                 //});
-                let pos ={ x: 5, y: 124, z: -2170};
+                let pos ={ x: 5, y: 131.5, z: -2170};
                 obj.name = "Flag";
                 obj.position.set(pos.x, pos.y, pos.z);//moves the mesh
                 obj.scale.set( .3, .3, .3 );
