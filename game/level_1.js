@@ -1,4 +1,5 @@
-let animationNum = 0,secondLoopBool = false, anims;
+//variables for the catGun and bullets
+let animationNum = 0, secondLoopBool = false, anims, shooterAnim, bullet, kitty;
 
 function createLevel1() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -1911,12 +1912,14 @@ function createLevel1() {
                 theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
                 obj.name = "Enemy";
 
-                let pos ={ x: -5, y: 103, z: -5};
+                //let pos ={ x: -5, y: 103, z: -5};
+                let pos ={x: 5, y: 105, z: -1340};
 
                 obj.scene.position.x = pos.x;
                 obj.scene.position.y = pos.y;
                 obj.scene.position.z = pos.z;
                 obj.scene.rotation.y = -1.2;
+                kitty = obj;
 
                 scene.add(obj.scene);
 
@@ -1950,9 +1953,12 @@ function createLevel1() {
 
                 //animation for catGun
                 anims = obj.animations;
-
+                let j = 0;
                 anims.forEach(function(e){
                     theMixer.clipAction(e);
+                    if(e.name.match("Shoot") != null)//gets the index of anims that has the shoot clip 
+                        shooterAnim = j;
+                    j++;
                 });
 
                 theMixer.clipAction(anims[0]).play();//"death" doesn't play for some reason
@@ -1960,8 +1966,10 @@ function createLevel1() {
                 theMixer.addEventListener('loop', catAnimations);//'finished' does not count a loop ending as finished,
                 //setting amount of repetitions doesn't work either, fix soon
 
-
-
+                let meshMaterialBullet = new THREE.MeshBasicMaterial({color: 0xCFC669});
+                let geoBullet = new THREE.SphereGeometry(.5, .5, .5);
+                bullet = new THREE.Mesh(geoBullet, meshMaterialBullet);
+                bullet.name = "ABullet";
 
 
                 loadBar.innerHTML = "";
@@ -2151,7 +2159,9 @@ function createLevel1() {
     }
 
     function catAnimations(e){//e contains the type action and loopDelta
-        //stop the current animation
+        //when this is called at the end of a loop, it checks if this is the second time the loop has run.
+        //If not, then the
+
         if (secondLoopBool){//if it's on the 2nd loop, adjust the animationMixer so that we don't have to do this later
             //e.action.stop();
             animationNum++;
@@ -2161,6 +2171,14 @@ function createLevel1() {
             //start the next animation in the queue with crossFadeFrom, the previous action is faded out while the next one is faded in
             theMixer.clipAction(anims[animationNum]).reset();
             theMixer.clipAction(anims[animationNum]).play();
+
+            //shoot a bullet if the animation's the correct one, "Shoot"
+            if(animationNum == shooterAnim)//matches returns an array with matches or null if nothing's found.
+                shootBullet();
+
+            else
+            scene.remove(scene.getObjectByName(bullet.name));
+
             e.action.crossFadeTo(theMixer.clipAction(anims[animationNum]), .4, false);
 
         }
@@ -2169,6 +2187,15 @@ function createLevel1() {
 
     }
     
+    function shootBullet(){
+        //kitty.scene.position
+        scene.add(bullet);
+        bullet.position.x = kitty.scene.position.x;
+        bullet.position.y = kitty.scene.position.y;
+        bullet.position.z = kitty.scene.position.z+1;
+        
+    }
+
     function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
         addSprite(spriteMap, 50, 50);
