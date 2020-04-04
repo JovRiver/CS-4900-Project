@@ -535,9 +535,14 @@ Commit 35:
 to fill out the level. There is a noticeable lag when first viewing the entire level so I will look into that next week for the code
 optimization work.
 
-4/4/2020
+4/3/2020
 Ryan Slaybaugh:
 Commit 36:
 
   Finished with level designing and working on improving code readability and cosmetic changes.
 
+4/3/2020
+Ryan Slaybaugh:
+Commit 37:
+
+  Continued optimizations to code for the objects and I changed around one stretch of platforms on page 2 of the level design.
