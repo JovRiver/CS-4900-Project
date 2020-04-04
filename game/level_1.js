@@ -57,26 +57,6 @@ function createLevel1() {
         scene.add(box);
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-
-    //  NOTE, THE PLAYER CAN JUMP 45 UNITS LONG AND 5 UNITS HIGH
-
-    /////////////////////////////////////////////////////////////////////////////
-
-    function createGround() {
-    /*  
-        let groundMaterial = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/city_Ground_1.jpg')});
-        groundMaterial.map.wrapS = groundMaterial.map.wrapT = THREE.RepeatWrapping;
-        groundMaterial.map.repeat.set(20, 20);
-        let ground = new THREE.Mesh(new THREE.BoxBufferGeometry(), groundMaterial);
-        ground.position.set(0, 0, 0);
-        ground.scale.set(10000, 0.5, 10000);
-        ground.receiveShadow = true;
-
-        scene.add(ground);
-    */
-    }
-
     function create_Course() {
         let scale, pos, quat, texture, has_Boundary;
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -807,7 +787,41 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // W13-17 // FAR WALL AREA 2
+        // W13-20
+        
+        scale = {x: 1, y: 17.5, z: 20};
+
+        for (let i = 0; i < 4; i++) {
+            if (i < 2) {
+                pos = {x: -30.5, y: 100, z: -460 - (i * 50)};
+            }
+            else {
+                pos = {x: -30.5, y: 100, z: -460 - (i * 50) + 10};
+            }
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+            if (i < 2) {
+                pos = {x: 30.5, y: 100, z: -460 - (i * 50)};
+            }
+            else {
+                pos = {x: 30.5, y: 100, z: -460 - (i * 50) + 10};
+            }
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        }
+
+        /////////////////////////////////////////////////////////////////////
+        // W21-22
+        
+        scale = {x: 20, y: 17.5, z: 1};
+
+        pos = {x: -20, y: 100, z: -610.5};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        pos = {x: 20, y: 100, z: -610.5};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+
+        /////////////////////////////////////////////////////////////////////
+        // W23-27 // FAR WALL AREA 2
 
         scale = {x: 30, y: 17.5, z: 4.5};
 
@@ -838,7 +852,7 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////
-        // W16-17
+        // W28-29
         
         scale = {x: 60, y: 20, z: 1};
 
@@ -849,7 +863,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // W18-25
+        // W30-37
         
         scale = {x: 1, y: 25, z: 50};
 
@@ -862,7 +876,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // W26
+        // W38
         
         scale = {x: 60, y: 20, z: 1};
         pos = {x: 10, y: 103.5, z: -1720};
@@ -877,7 +891,7 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////
-        // W27-28 // FRONT WALLS OF TEMPLE
+        // W39-40 // FRONT WALLS OF TEMPLE
         
         scale = {x: 60, y: 40, z: 1};
 
@@ -888,7 +902,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // W29-30 // SIDE WALLS OF TEMPLE
+        // W41-42 // SIDE WALLS OF TEMPLE
         
         scale = {x: 1, y: 40, z: 240};
 
@@ -899,14 +913,14 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // W31 // BACK WALL OF TEMPLE
+        // W43 // BACK WALL OF TEMPLE
         
         scale = {x: 150, y: 40, z: 1};
         pos = {x: 5, y: 131.5, z: -2239.6};
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // W32 // FRONT CENTER WALL OF TEMPLE
+        // W44 // FRONT CENTER WALL OF TEMPLE
         
         scale = {x: 30, y: 32, z: 1};
         pos = {x: 5, y: 135.5, z: -2000.4};
