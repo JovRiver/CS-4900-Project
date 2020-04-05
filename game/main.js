@@ -408,90 +408,107 @@ function onMouseUp(event){
 }
 
 function onKeyDown (event ) {
-	switch ( event.keyCode ) {
-		case 87: // w
-			if(canMove){
-				playerMoveDirection.forward = 1;
-			}
-			break;
+	if (gamePlay) {
+		switch (event.keyCode) {
+			case 87: // w
+				if (canMove) {
+					playerMoveDirection.forward = 1;
+				}
+				break;
 
-		case 65: // a
-			if(canMove) {
-				playerMoveDirection.left = 1;
-			}
-			break;
+			case 65: // a
+				if (canMove) {
+					playerMoveDirection.left = 1;
+				}
+				break;
 
-		case 83: // s
-			if(canMove) {
-				playerMoveDirection.back = 1;
-			}
-			break;
+			case 83: // s
+				if (canMove) {
+					playerMoveDirection.back = 1;
+				}
+				break;
 
-		case 68: // d
-			if(canMove) {
-				playerMoveDirection.right = 1;
-			}
-			break;
+			case 68: // d
+				if (canMove) {
+					playerMoveDirection.right = 1;
+				}
+				break;
 
-		case 32: // space
-			if(canJump){
+			case 32: // space
+				if (canJump) {
 
-				tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
-				playerMoveDirection.forward = 0;
-				playerMoveDirection.left = 0;
-				playerMoveDirection.back = 0;
-				playerMoveDirection.right = 0;
-				canMove = false;
-				canJump = false;
-				landing = true;
-				let resultantImpulse = new Ammo.btVector3( 0, 5, 0 );
-				resultantImpulse.op_mul(2);
-				let physicsBody = player.userData.physicsBody;
-				physicsBody.applyImpulse( resultantImpulse );
-			}
-			break;
+					tempPlayerMoveDirection = {
+						left: playerMoveDirection.left,
+						right: playerMoveDirection.right,
+						forward: playerMoveDirection.forward,
+						back: playerMoveDirection.back
+					}
+					playerMoveDirection.forward = 0;
+					playerMoveDirection.left = 0;
+					playerMoveDirection.back = 0;
+					playerMoveDirection.right = 0;
+					canMove = false;
+					canJump = false;
+					landing = true;
+					let resultantImpulse = new Ammo.btVector3(0, 5, 0);
+					resultantImpulse.op_mul(2);
+					let physicsBody = player.userData.physicsBody;
+					physicsBody.applyImpulse(resultantImpulse);
+				}
+				break;
 
-		case 16: // shift
-			//player.scale.set(1, 1, 1);
-			break;
+			case 16: // shift
+				//player.scale.set(1, 1, 1);
+				break;
 
-		case 81: // q
-			if(canJump){
-				tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
-				playerMoveDirection.forward = 0;
-				playerMoveDirection.left = 0;
-				playerMoveDirection.back = 0;
-				playerMoveDirection.right = 0;
-				canMove = false;
-				canJump = false;
-				landing = true;
-				let jump = new THREE.Vector3(-5,5,0);
-				jump.applyQuaternion(camera.quaternion);
-				let resultantImpulse = new Ammo.btVector3( jump.x, 5, jump.z );
-				resultantImpulse.op_mul(2);
-				let physicsBody = player.userData.physicsBody;
-				physicsBody.applyImpulse( resultantImpulse );
-			}
-			break;
+			case 81: // q
+				if (canJump) {
+					tempPlayerMoveDirection = {
+						left: playerMoveDirection.left,
+						right: playerMoveDirection.right,
+						forward: playerMoveDirection.forward,
+						back: playerMoveDirection.back
+					}
+					playerMoveDirection.forward = 0;
+					playerMoveDirection.left = 0;
+					playerMoveDirection.back = 0;
+					playerMoveDirection.right = 0;
+					canMove = false;
+					canJump = false;
+					landing = true;
+					let jump = new THREE.Vector3(-5, 5, 0);
+					jump.applyQuaternion(camera.quaternion);
+					let resultantImpulse = new Ammo.btVector3(jump.x, 5, jump.z);
+					resultantImpulse.op_mul(2);
+					let physicsBody = player.userData.physicsBody;
+					physicsBody.applyImpulse(resultantImpulse);
+				}
+				break;
 
-		case 69: // e
-			if(canJump){
-				tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
-				playerMoveDirection.forward = 0;
-				playerMoveDirection.left = 0;
-				playerMoveDirection.back = 0;
-				playerMoveDirection.right = 0;
-				canMove = false;
-				canJump = false;
-				landing = true;
-				let jump = new THREE.Vector3(5,5,0);
-				jump.applyQuaternion(camera.quaternion);
-				let resultantImpulse = new Ammo.btVector3( jump.x, 5, jump.z );
-				resultantImpulse.op_mul(2);
-				let physicsBody = player.userData.physicsBody;
-				physicsBody.applyImpulse( resultantImpulse );
-			}
-			break;
+			case 69: // e
+				if (canJump) {
+					tempPlayerMoveDirection = {
+						left: playerMoveDirection.left,
+						right: playerMoveDirection.right,
+						forward: playerMoveDirection.forward,
+						back: playerMoveDirection.back
+					}
+					playerMoveDirection.forward = 0;
+					playerMoveDirection.left = 0;
+					playerMoveDirection.back = 0;
+					playerMoveDirection.right = 0;
+					canMove = false;
+					canJump = false;
+					landing = true;
+					let jump = new THREE.Vector3(5, 5, 0);
+					jump.applyQuaternion(camera.quaternion);
+					let resultantImpulse = new Ammo.btVector3(jump.x, 5, jump.z);
+					resultantImpulse.op_mul(2);
+					let physicsBody = player.userData.physicsBody;
+					physicsBody.applyImpulse(resultantImpulse);
+				}
+				break;
+		}
 	}
 }
 
