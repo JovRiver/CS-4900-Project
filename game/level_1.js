@@ -1,5 +1,5 @@
 //variables for the catGun and bullets
-let animationNum = 0, secondLoopBool = false, anims, shooterAnim, bullet, bulletInScene = false, kitty, bulletChange, catAimer;
+let animationNum = 0, secondLoopBool = false, anims, shooterAnim, bullet, bulletInScene = false, kitty, bulletChange, bulletSpeed = 1, catAimer, aimerVisible = false;
 let x, y, z;
 //reduce amount of global variables later
 
@@ -1929,15 +1929,15 @@ function createLevel1() {
                 let materialAimer = new THREE.MeshBasicMaterial({color: 0xC0F0F0});
                 let geoAimer = new THREE.SphereGeometry(1, 10, 10);
                 catAimer = new THREE.Mesh(geoAimer, materialAimer);
-                //catAimer = new THREE.Object3D();
-                //catAimer.visible = false;
+                catAimer.visible = aimerVisible;
 
                 obj.scene.children[2].add(catAimer);
-                catAimer.position.x += 3;//in local
-                catAimer.positionyx -= 3;//in local
+                catAimer.position.copy(obj.scene.children[2].position);
 
-                //scene.add(catAimer);
-                scene.add(obj.scene);
+                catAimer.position.x += 1;//in local
+                //catAimer.position.y += 2;//in local
+                //catAimer.position.z += 1;//in local
+
 
 
 
@@ -1985,11 +1985,13 @@ function createLevel1() {
                 //setting amount of repetitions doesn't work either, fix soon
 
                 let meshMaterialBullet = new THREE.MeshBasicMaterial({color: 0xCFC669});
-                let geoBullet = new THREE.SphereGeometry(2, 10, 10);
+                let geoBullet = new THREE.SphereGeometry(.5, 10, 10);
                 bullet = new THREE.Mesh(geoBullet, meshMaterialBullet);
                 bullet.name = "ABullet";
                 //bullet.matrixWorldNeedsUpdate = true;//needed when editing the matrix of an object3d
                 scene.add(bullet);
+                //obj.scene.children[2].add(bullet);
+                scene.add(obj.scene);
 
                 loadBar.innerHTML = "";
             },
@@ -2191,10 +2193,8 @@ function createLevel1() {
             theMixer.clipAction(anims[animationNum]).play();
 
             //shoot a bullet if the animation's the correct one, "Shoot"
-            if(animationNum == shooterAnim)//matches returns an array with matches or null if nothing's found.
-                shootBullet();
 
-            else{
+            if(animationNum != shooterAnim){//bullet's not visible for now
             //scene.remove(scene.getObjectByName(bullet.name));
                 bullet.visible = false;
                 bulletInScene = false;
@@ -2202,6 +2202,9 @@ function createLevel1() {
             e.action.crossFadeTo(theMixer.clipAction(anims[animationNum]), .4, false);
 
         }
+        if(animationNum == shooterAnim)//matches returns an array with matches or null if nothing's found.
+            shootBullet();
+
         secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
         //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
 
@@ -2209,30 +2212,31 @@ function createLevel1() {
     
     function shootBullet(){
         //set position of the bullet initially
-        //scene.add(bullet);
         bullet.visible = true;
         //putting the bullet right in front of the cat, https://stackoverflow.com/questions/37641773/three-js-how-to-copy-object-direction-that-its-facing helped with this
         
         //put the aimer in place since it keeps moving for now
         //localToWorld may be destructive to the data, https://stackoverflow.com/questions/44676015/localtoworld-weird-behaviour
-        /*catAimer.position.copy(kitty.scene.children[2].localToWorld(kitty.scene.children[2].position.clone()));
-        catAimer.position.x += 3;//do this while it's in local position, then convert to world
-
-        let temp = catAimer.position.clone();
-        bullet.position.copy(temp);
-        x = temp.x * 1/kitty.scene.position.x;
-        y = temp.y * 1/kitty.scene.position.y;
-        z = temp.z * 1/kitty.scene.position.z;
-*/
+        
         //convert aimer position to world, while keeping the original position untouched.
         let temp = kitty.scene.children[2].localToWorld(catAimer.position.clone());
 
         //put bullet in the aimer position, then set the movement values
         bullet.position.copy(temp);
-        x = temp.x * 1/kitty.scene.position.x;
-        y = temp.y * 1/kitty.scene.position.y;
-        z = temp.z * 1/kitty.scene.position.z;
+        bulletChange = new THREE.Vector3(
+            kitty.scene.children[2].position.x,
+            kitty.scene.children[2].position.y,
+            kitty.scene.children[2].position.z);
 
+        bulletChange.copy(kitty.scene.children[2].localToWorld(bulletChange.clone()));
+        bulletChange.copy(new THREE.Vector3(
+            -(bulletChange.x - temp.x),
+            bulletChange.y - temp.y,
+            -(bulletChange.z - temp.z)
+        )
+        );//the cat was aligned weird in blender i think
+        
+        bulletChange.multiplyScalar(bulletSpeed);
 
         //set movement of the bullet, was going to edit with this
         /*bulletChange = new THREE.Matrix4();

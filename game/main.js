@@ -337,14 +337,12 @@ function renderFrame(){
 		theMixer.update(deltaTime);//updates the time for the animations with the THREE.Clock object
 	}
 	if(bulletInScene){//if there's a bullet in the scene, takes the slope of the original shot and make it move
-		//bullet.matrix.setPosition(bulletChange);
-		/*bullet.translateX(x);
-		bullet.translateY(y);
-		bullet.translateZ(z);*/
-		bullet.position.x += x;
+		/*bullet.position.x += x;
 		bullet.position.y += y;
-		bullet.position.z += z;
+		bullet.position.z += z;*/
 		//bullet.applyMatrix(new THREE.Matrix4().makeTranslation(x, y, z));
+		bullet.position.add(bulletChange);
+
 	}
 
 	renderFrameId = requestAnimationFrame( renderFrame );
