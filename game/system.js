@@ -72,7 +72,7 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w));
         let motionState = new Ammo.btDefaultMotionState(transform);
         // set bounding box using each objects x,y,z scale
-        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 0.9, scale.y * 0.5 + 0.5, scale.z * 0.5 + 0.9));
+        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 +.01, scale.y * 0.5 +.5 , scale.z * 0.5+.01));
         // colShape.setMargin(0.05);
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
@@ -223,6 +223,7 @@ function createGrapplingHook(vect){
 
     let physicsBody = player.userData.physicsBody;
     physicsBody.setLinearVelocity ( resultantImpulse );
+    //todo Make player move towards the direction of grappling hook.
 
 }
 
@@ -268,12 +269,21 @@ function level_1_Textures(text) {
 
         case 2: return {map: new THREE.TextureLoader().load('texture/level1/grass.jpg')};
 
-        case 3: return {map: new THREE.TextureLoader().load('texture/level1/column.jpg')};
-
-        case 4: return {map: new THREE.TextureLoader().load('texture/level1/grappleBox.jpg')};
+        case 3: return {map: new THREE.TextureLoader().load('texture/level1/grappleBox.jpg')};
     }
 }
 
+function level_2_Textures(text) {
+    switch (text) {
+        case 1: return {map: new THREE.TextureLoader().load('texture/level1/stone_Walkway.jpg')};
+
+        case 2: return {map: new THREE.TextureLoader().load('texture/level1/grass.jpg')};
+
+        case 3: return {map: new THREE.TextureLoader().load('texture/level1/grappleBox.jpg')};
+    }
+}
+
+//Test code for autogenerating collision for models.
 function test(){
     //variables
     let i, width, height, depth,

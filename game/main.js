@@ -12,8 +12,11 @@ let movementCallBack = null;
 let resetCallBack = null;
 let canJump = true;
 let canMove = true;
+let landing = false;
 let rope = null;
 let resetPos = {x: 0, y: 0, z: 0};
+
+let customUniforms, lava;
 
 let scene;
 let camera;
@@ -67,6 +70,7 @@ function start (){
 	renderer.setClearColor( 0xbfd1e5 );
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
+
 	document.body.appendChild( renderer.domElement );
 
 	renderer.shadowMap.enabled = true;
@@ -126,6 +130,20 @@ function updatePhysics( deltaTime ){
 	if(a && b){
 		physicsWorld.contactPairTest(player.userData.physicsBody, flag.userData.physicsBody, flagCallBack );
 		physicsWorld.contactPairTest(player.userData.physicsBody, resetPlatform[0].userData.physicsBody, resetCallBack );
+
+		let position = new THREE.Vector3();
+		camera.getWorldPosition(position);
+		let direction =  new THREE.Vector3(0,-1,0);
+		let movementCaster = new THREE.Raycaster(); // create once and reuse
+		movementCaster.set( position, direction );
+		movementCaster.near = 1;
+		movementCaster.far = 3;
+		let intersects = movementCaster.intersectObjects( platforms );
+		if(intersects.length < 1){
+			canMove = false;
+			canJump = false;
+		}
+
 		if(!canJump || !canMove){
 			physicsWorld.contactTest(player.userData.physicsBody, movementCallBack);
 		}
@@ -168,10 +186,17 @@ function updatePhysics( deltaTime ){
 }
 
 movementCallBack.addSingleResult = function () {
+	//todo Fix sliding off platform flying movement
 	if(gamePlay){
-		canMove = true;
-		canJump = true;
-		playerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
+
+			canMove = true;
+			canJump = true;
+
+		if(landing){
+			playerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
+			landing = false;
+		}
+
 	}
 }
 
@@ -186,6 +211,7 @@ resetCallBack.addSingleResult = function () {
 		transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
 		let motionState = new Ammo.btDefaultMotionState( transform );
 		player.userData.physicsBody.setMotionState(motionState);
+
 	}
 }
 
@@ -194,8 +220,6 @@ resetCallBack.addSingleResult = function () {
 flagCallBack.addSingleResult = function () {
 	if(gamePlay){
 		let gameTime = gameClock.getDelta();
-		console.log("COLLIDE");
-		console.log(gameTime);
 		gamePlay = false;
 		controls.unlock();
 
@@ -237,23 +261,24 @@ flagCallBack.addSingleResult = function () {
 };
 
 function movePlayer(){
+	if(canMove){
+		let scalingFactor = 20; //move speed
 
-	let scalingFactor = 20; //move speed
+		let moveX =  playerMoveDirection.right - playerMoveDirection.left;
+		let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
+		let moveY =  0;
 
-	let moveX =  playerMoveDirection.right - playerMoveDirection.left;
-	let moveZ =  playerMoveDirection.back - playerMoveDirection.forward;
-	let moveY =  0;
+		let vertex = new THREE.Vector3(moveX,moveY,moveZ);
+		vertex.applyQuaternion(camera.quaternion);
 
-	let vertex = new THREE.Vector3(moveX,moveY,moveZ);
-	vertex.applyQuaternion(camera.quaternion);
+		if( moveX == 0 && moveY == 0 && moveZ == 0) return;
 
-	if( moveX == 0 && moveY == 0 && moveZ == 0) return;
+		let resultantImpulse = new Ammo.btVector3( vertex.x, 0, vertex.z );
+		resultantImpulse.op_mul(scalingFactor);
 
-	let resultantImpulse = new Ammo.btVector3( vertex.x, 0, vertex.z );
-	resultantImpulse.op_mul(scalingFactor);
-
-	let physicsBody = player.userData.physicsBody;
-	physicsBody.setLinearVelocity ( resultantImpulse );
+		let physicsBody = player.userData.physicsBody;
+		physicsBody.setLinearVelocity ( resultantImpulse );
+	}
 }
 
 function updateCamera(){
@@ -268,18 +293,7 @@ function renderFrame(){
 	if (level > 0) {
 		updatePhysics( deltaTime );
 		stats.update();
-		/*
-		for(int i = 0; i < physicsWorld.getDispatcher().getNumManifolds(); i++){
-			if(physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody0() == player.userData.physicsBody || physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody1() == player.userData.physicsBody){
-				if(physicsWorld.getDispatcher().getManifoldByIndexInternal(i).getBody0() == player.userData.physicsBody){
-
-				}
-			}
-		}
-		 */
-		if(physicsWorld.getDispatcher().getNumManifolds() < 2){
-			canMove = false;
-		}
+		customUniforms.time.value += deltaTime;
 
 		if(!startClock){
 			let mins =  Math.floor(gameClock.getElapsedTime()/60);
@@ -301,14 +315,6 @@ function renderFrame(){
 		if(gamePlay){
 			movePlayer();
 			updateCamera();
-			//if(scene.getObjectByName( "Hook_Box" ) != null){
-			//	var a = new THREE.Vector3( 0, 5000, 5000 );
-			//	a.applyQuaternion(camera.quaternion);
-			//	let temp = new Ammo.btVector3(a.x,a.y,a.z);
-			//	scene.getObjectByName( "Hook_Box" ).userData.physicsBody.setAngularVelocity(temp);
-
-			//}
-
 		}
 		else {
 			camera.position.set(0, 200, 0);
@@ -346,6 +352,7 @@ function renderFrame(){
 	}
 
 	renderFrameId = requestAnimationFrame( renderFrame );
+
 	renderer.render(scene, camera);
 
 }
@@ -383,15 +390,12 @@ function onMouseDown(event){
 			if(intersects.length === 1){
 				createGrapplingHook(intersects[i].point);
 			}
-
-
 		}
 	}
 }
 
 function onMouseUp(event){
 	if(event.which === 3){
-		console.log("Right mouse button unclicked");
 		if(rope != null){
 			physicsWorld.removeCollisionObject(rope.userData.physicsBody);
 			scene.remove(rope);
@@ -400,10 +404,6 @@ function onMouseUp(event){
 			physicsWorld.removeCollisionObject(scene.getObjectByName( "Hook_Box" ).userData.physicsBody);
 			scene.remove(scene.getObjectByName( "Hook_Box" ));
 		}
-
-
-
-
 	}
 }
 
@@ -413,7 +413,6 @@ function onKeyDown (event ) {
 			if(canMove){
 				playerMoveDirection.forward = 1;
 			}
-
 			break;
 
 		case 65: // a
@@ -435,7 +434,6 @@ function onKeyDown (event ) {
 			break;
 
 		case 32: // space
-			console.log(canJump);
 			if(canJump){
 
 				tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
@@ -445,6 +443,7 @@ function onKeyDown (event ) {
 				playerMoveDirection.right = 0;
 				canMove = false;
 				canJump = false;
+				landing = true;
 				let resultantImpulse = new Ammo.btVector3( 0, 5, 0 );
 				resultantImpulse.op_mul(2);
 				let physicsBody = player.userData.physicsBody;
@@ -453,7 +452,45 @@ function onKeyDown (event ) {
 			break;
 
 		case 16: // shift
-			player.scale.set(1, 1, 1);
+			//player.scale.set(1, 1, 1);
+			break;
+
+		case 81: // q
+			if(canJump){
+				tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
+				playerMoveDirection.forward = 0;
+				playerMoveDirection.left = 0;
+				playerMoveDirection.back = 0;
+				playerMoveDirection.right = 0;
+				canMove = false;
+				canJump = false;
+				landing = true;
+				let jump = new THREE.Vector3(-5,5,0);
+				jump.applyQuaternion(camera.quaternion);
+				let resultantImpulse = new Ammo.btVector3( jump.x, 5, jump.z );
+				resultantImpulse.op_mul(2);
+				let physicsBody = player.userData.physicsBody;
+				physicsBody.applyImpulse( resultantImpulse );
+			}
+			break;
+
+		case 69: // e
+			if(canJump){
+				tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
+				playerMoveDirection.forward = 0;
+				playerMoveDirection.left = 0;
+				playerMoveDirection.back = 0;
+				playerMoveDirection.right = 0;
+				canMove = false;
+				canJump = false;
+				landing = true;
+				let jump = new THREE.Vector3(5,5,0);
+				jump.applyQuaternion(camera.quaternion);
+				let resultantImpulse = new Ammo.btVector3( jump.x, 5, jump.z );
+				resultantImpulse.op_mul(2);
+				let physicsBody = player.userData.physicsBody;
+				physicsBody.applyImpulse( resultantImpulse );
+			}
 			break;
 	}
 }
@@ -462,18 +499,22 @@ function onKeyUp( event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
 			playerMoveDirection.forward = 0;
+			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
 
 		case 65: // a
 			playerMoveDirection.left = 0;
+			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
 
 		case 83: // s
 			playerMoveDirection.back = 0;
+			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
 
 		case 68: // d
 			playerMoveDirection.right = 0;
+			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
 
 		case 16: // shift

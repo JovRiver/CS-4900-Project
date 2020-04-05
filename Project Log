@@ -553,3 +553,24 @@ Commit 38:
 
   Finished optimizing level objects code and basic cosmetics. I still need to add reset boxes for each "checkpoint" in case the player
 falls off. Otherwise level is basically done with room for cosmetics and texture work.
+
+4/4/2020
+Ryan Slaybaugh:
+Commit 39:
+
+  Added some additional walls to page 2 garden area.
+
+Semira Pinder
+4/4/2020 4:30pm-6:51pm
+Commit #1 of week March 29th- April 5th
+Made a "bullet" sphere that spawns in front of the cat enemy whenever the shoot animation is played.
+
+Semira Pinder
+4/4/2020  6:12pm - 1:11am, 4/5/2020 11:58am-1:49pm
+Commit #2 of week March 29th- April 5th
+Made the "bullet" sphere shoot out of the cat enemy starting in front of the cat . The bulet seems to fire sideways, though.
+
+Semira Pinder
+4/5/2020 1:52pm-4:52pm
+Commit #3 of week March 29th- April 5th
+Fixed the direction of the bullet when it shoots (while the cat is standing up), and edited a few variables so that it looks slightly neater. 
