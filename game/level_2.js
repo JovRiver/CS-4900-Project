@@ -40,7 +40,7 @@ function createLevel2() {
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundry = true;
 
-        texture = new THREE.MeshLambertMaterial({color: 0x83a3d6});
+        texture = new THREE.MeshLambertMaterial(level_2_Textures(1));
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
      }
