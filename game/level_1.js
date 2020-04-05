@@ -701,7 +701,6 @@ function createLevel1() {
 
     function create_Walls() {
         let scale, pos, quat, has_Boundary;
-
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundary = true;
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
@@ -1410,7 +1409,7 @@ function createLevel1() {
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
 
-        //resetPos = {x: 0, y: 101, z: 0};
+        resetPos = {x: 0, y: 101, z: 0};
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};
         let mass = 1;
