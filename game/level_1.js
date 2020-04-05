@@ -1,4 +1,7 @@
-let animationNum = 0,secondLoopBool = false, anims;
+//variables for the catGun and bullets
+let animationNum = 0, secondLoopBool = false, anims, shooterAnim, bullet, bulletInScene = false, kitty, bulletChange, bulletSpeed = 1, catAimer, aimerVisible = false;
+let x, y, z;
+//reduce amount of global variables later
 
 function createLevel1() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 10000 );
@@ -1215,14 +1218,32 @@ function createLevel1() {
                 theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
                 obj.name = "Enemy";
 
-                let pos ={ x: -5, y: 103, z: -5};
+                //let pos ={ x: -5, y: 103, z: -5};
+                let pos ={x: 5, y: 105, z: -1335};
 
                 obj.scene.position.x = pos.x;
                 obj.scene.position.y = pos.y;
                 obj.scene.position.z = pos.z;
                 obj.scene.rotation.y = -1.2;
+                
+                
+                kitty = obj;
+                obj.matrixAutoUpdate = true;//changed from false
 
-                scene.add(obj.scene);
+                let materialAimer = new THREE.MeshBasicMaterial({color: 0xC0F0F0});
+                let geoAimer = new THREE.SphereGeometry(1, 10, 10);
+                catAimer = new THREE.Mesh(geoAimer, materialAimer);
+                catAimer.visible = aimerVisible;
+
+                obj.scene.children[2].add(catAimer);
+                catAimer.position.copy(obj.scene.children[2].position);
+
+                catAimer.position.x += 1;//in local
+                //catAimer.position.y += 2;//in local
+                //catAimer.position.z += 1;//in local
+
+
+
 
                 let vect3 = new THREE.Vector3();
                 let box = new THREE.Box3().setFromObject(obj.scene).getSize(vect3);
@@ -1254,9 +1275,12 @@ function createLevel1() {
 
                 //animation for catGun
                 anims = obj.animations;
-
+                let j = 0;
                 anims.forEach(function(e){
                     theMixer.clipAction(e);
+                    if(e.name.match("Shoot") != null)//gets the index of anims that has the shoot clip 
+                        shooterAnim = j;
+                    j++;
                 });
 
                 theMixer.clipAction(anims[0]).play();//"death" doesn't play for some reason
@@ -1264,9 +1288,14 @@ function createLevel1() {
                 theMixer.addEventListener('loop', catAnimations);//'finished' does not count a loop ending as finished,
                 //setting amount of repetitions doesn't work either, fix soon
 
-
-
-
+                let meshMaterialBullet = new THREE.MeshBasicMaterial({color: 0xCFC669});
+                let geoBullet = new THREE.SphereGeometry(.5, 10, 10);
+                bullet = new THREE.Mesh(geoBullet, meshMaterialBullet);
+                bullet.name = "ABullet";
+                //bullet.matrixWorldNeedsUpdate = true;//needed when editing the matrix of an object3d
+                scene.add(bullet);
+                //obj.scene.children[2].add(bullet);
+                scene.add(obj.scene);
 
                 loadBar.innerHTML = "";
             },
@@ -1440,7 +1469,6 @@ function createLevel1() {
         player = new THREE.Mesh(new THREE.SphereBufferGeometry(radius), new THREE.MeshPhongMaterial({color: 0xff0505}));
 
         player.position.set(pos.x, pos.y, pos.z);
-
         player.castShadow = true;
         player.receiveShadow = true;
 
@@ -1480,7 +1508,9 @@ function createLevel1() {
     }
 
     function catAnimations(e){//e contains the type action and loopDelta
-        //stop the current animation
+        //when this is called at the end of a loop, it checks if this is the second time the loop has run.
+        //If not, then the
+
         if (secondLoopBool){//if it's on the 2nd loop, adjust the animationMixer so that we don't have to do this later
             //e.action.stop();
             animationNum++;
@@ -1490,13 +1520,66 @@ function createLevel1() {
             //start the next animation in the queue with crossFadeFrom, the previous action is faded out while the next one is faded in
             theMixer.clipAction(anims[animationNum]).reset();
             theMixer.clipAction(anims[animationNum]).play();
+
+            //shoot a bullet if the animation's the correct one, "Shoot"
+
+            if(animationNum != shooterAnim){//bullet's not visible for now
+            //scene.remove(scene.getObjectByName(bullet.name));
+                bullet.visible = false;
+                bulletInScene = false;
+            }
             e.action.crossFadeTo(theMixer.clipAction(anims[animationNum]), .4, false);
 
         }
+        if(animationNum == shooterAnim)//matches returns an array with matches or null if nothing's found.
+            shootBullet();
+
         secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
         //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
 
     }
+
+    function shootBullet(){
+        //set position of the bullet initially
+        bullet.visible = true;
+        //putting the bullet right in front of the cat, https://stackoverflow.com/questions/37641773/three-js-how-to-copy-object-direction-that-its-facing helped with this
+        
+        //put the aimer in place since it keeps moving for now
+        //localToWorld may be destructive to the data, https://stackoverflow.com/questions/44676015/localtoworld-weird-behaviour
+        
+        //convert aimer position to world, while keeping the original position untouched.
+        let temp = kitty.scene.children[2].localToWorld(catAimer.position.clone());
+
+        //put bullet in the aimer position, then set the movement values
+        bullet.position.copy(temp);
+        bulletChange = new THREE.Vector3(
+            kitty.scene.children[2].position.x,
+            kitty.scene.children[2].position.y,
+            kitty.scene.children[2].position.z);
+
+        bulletChange.copy(kitty.scene.children[2].localToWorld(bulletChange.clone()));
+        bulletChange.copy(new THREE.Vector3(
+            -(bulletChange.x - temp.x),
+            bulletChange.y - temp.y,
+            -(bulletChange.z - temp.z)
+        )
+        );//the cat was aligned weird in blender i think
+        
+        bulletChange.multiplyScalar(bulletSpeed);
+
+        //set movement of the bullet, was going to edit with this
+        /*bulletChange = new THREE.Matrix4();
+        bulletChange.set(1, 0, 0, (catAimer.position.x/kitty.scene.position.x)*100,
+            0, 1, 0, (catAimer.position.y/kitty.scene.position.y)*10,
+            0, 0, 1, (catAimer.position.z/kitty.scene.position.z)*10, 
+            0, 0, 0, 1);
+        bulletChange.matrixAutoUpdate = true;//edited
+        bullet.matrix.set(bulletChange);*/
+        
+        //tell the main loop that there's a bullet active
+        bulletInScene = true;
+    }
+
 
     function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
