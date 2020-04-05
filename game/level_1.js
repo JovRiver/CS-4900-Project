@@ -1,7 +1,7 @@
 let animationNum = 0,secondLoopBool = false, anims;
 
 function createLevel1() {
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 10000 );
     //scene.fog = new THREE.Fog(0x6c7578, 150, 750);
 
     // add hemisphere light
@@ -578,7 +578,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  PAGE 1 END
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1698,7 +1698,7 @@ function createLevel1() {
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
 
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
-        
+
         scale = {x: 30, y: 1, z: 10};
         pos = {x: 5, y: 116.5, z: -2095};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1729,7 +1729,7 @@ function createLevel1() {
             create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
             pos = {x: 35, y: 119.5 + (i * 4), z: -2120 - (i * 40)};
-            
+
             create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
         }
 
@@ -1807,7 +1807,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W1A
-        
+
         scale = {x: 50, y: 11, z: 1};
         pos = {x: -40.5, y: 114, z: -119.5};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1819,7 +1819,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W1B
-        
+
         scale = {x: 50, y: 11, z: 1};
         pos = {x: -40.5, y: 100, z: -119.5};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1831,7 +1831,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W2A
-        
+
         scale = {x: 50, y: 11, z: 1};
         pos = {x: 40.5, y: 114, z: -119.5};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1843,7 +1843,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W2B
-        
+
         scale = {x: 50, y: 11, z: 1};
         pos = {x: 40.5, y: 100, z: -119.5};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1855,7 +1855,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W3A
-        
+
         scale = {x: 1, y: 11, z: 60};
         pos = {x: -89.5, y: 100, z: -160};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1867,7 +1867,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W3B
-        
+
         scale = {x: 1, y: 11, z: 60};
         pos = {x: -89.5, y: 114, z: -160};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1879,7 +1879,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W4A
-        
+
         scale = {x: 1, y: 11, z: 60};
         pos = {x: 89.5, y: 100, z: -160};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1891,7 +1891,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W4B
-        
+
         scale = {x: 1, y: 11, z: 60};
         pos = {x: 89.5, y: 114, z: -160};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1903,7 +1903,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W5A
-        
+
         scale = {x: 50, y: 11, z: 1};
         pos = {x: -40.5, y: 100, z: -200.5};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1915,7 +1915,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W5B
-        
+
         scale = {x: 50, y: 11, z: 1};
         pos = {x: -40.5, y: 114, z: -200.5};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1927,7 +1927,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W6A
-        
+
         scale = {x: 50, y: 11, z: 1};
         pos = {x: 40.5, y: 100, z: -200.5};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1939,7 +1939,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W6B
-        
+
         scale = {x: 50, y: 11, z: 1};
         pos = {x: 40.5, y: 114, z: -200.5};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1951,7 +1951,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W7
-        
+
         scale = {x: 1, y: 11, z: 60};
         pos = {x: -10.5, y: 100, z: -240};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1963,7 +1963,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W8
-        
+
         scale = {x: 1, y: 11, z: 60};
         pos = {x: 10.5, y: 100, z: -290};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1983,7 +1983,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W9
-        
+
         scale = {x: 50, y: 17.5, z: 4.5};
         pos = {x: -35, y: 100, z: -420};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -1995,7 +1995,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W10
-        
+
         scale = {x: 50, y: 17.5, z: 4.5};
         pos = {x: 35, y: 100, z: -420};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2007,7 +2007,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W11A
-        
+
         scale = {x: 4.5, y: 17.5, z: 110};
         pos = {x: -57.75, y: 100, z: -475};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2019,7 +2019,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W11B
-        
+
         scale = {x: 4.5, y: 17.5, z: 110};
         pos = {x: -57.75, y: 100, z: -585};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2031,7 +2031,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W12A
-        
+
         scale = {x: 4.5, y: 17.5, z: 110};
         pos = {x: 57.75, y: 100, z: -475};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2043,7 +2043,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W12B
-        
+
         scale = {x: 4.5, y: 17.5, z: 110};
         pos = {x: 57.75, y: 100, z: -585};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2055,7 +2055,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W13A
-        
+
         scale = {x: 30, y: 17.5, z: 4.5};
         pos = {x: -45, y: 100, z: -640};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2067,7 +2067,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W13B
-        
+
         scale = {x: 10, y: 9, z: 4.5};
         pos = {x: -25, y: 104.25, z: -640};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2079,7 +2079,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W14
-        
+
         scale = {x: 40, y: 17.5, z: 4.5};
         pos = {x: 0, y: 100, z: -640};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2091,7 +2091,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W15A
-        
+
         scale = {x: 30, y: 17.5, z: 4.5};
         pos = {x: 45, y: 100, z: -640};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2103,7 +2103,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W15B
-        
+
         scale = {x: 20, y: 9, z: 5};
         pos = {x: 25, y: 95.5, z: -640};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2123,7 +2123,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W16
-        
+
         scale = {x: 60, y: 20, z: 1};
         pos = {x: -40, y: 103.5, z: -1370.5};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2135,7 +2135,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W17
-        
+
         scale = {x: 60, y: 20, z: 1};
         pos = {x: 50, y: 103.5, z: -1370.5};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2147,7 +2147,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W18-25
-        
+
         scale = {x: 1, y: 25, z: 50};
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundary = true;
@@ -2166,7 +2166,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W26
-        
+
         scale = {x: 60, y: 20, z: 1};
         pos = {x: 10, y: 103.5, z: -1720};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2186,7 +2186,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W27
-        
+
         scale = {x: 60, y: 40, z: 1};
         pos = {x: -40, y: 131.5, z: -2000.4};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2198,7 +2198,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W28
-        
+
         scale = {x: 60, y: 40, z: 1};
         pos = {x: 50, y: 131.5, z: -2000.4};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2210,7 +2210,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W29
-        
+
         scale = {x: 1, y: 40, z: 240};
         pos = {x: -69.6, y: 131.5, z: -2120};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2222,7 +2222,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W30
-        
+
         scale = {x: 1, y: 40, z: 240};
         pos = {x: 79.6, y: 131.5, z: -2120};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2234,7 +2234,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W31
-        
+
         scale = {x: 150, y: 40, z: 1};
         pos = {x: 5, y: 131.5, z: -2239.6};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2246,7 +2246,7 @@ function createLevel1() {
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // W32
-        
+
         scale = {x: 30, y: 32, z: 1};
         pos = {x: 5, y: 135.5, z: -2000.4};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -2745,14 +2745,14 @@ function createLevel1() {
 
                 scene.add(pillarTop);
             }
-            
+
             createCylinderGeometry(rTop, rBottom, height, pos, quat, texture);
         }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  PAGE 5 END
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -2839,14 +2839,7 @@ function createLevel1() {
     }
 
     function flag_Loader(loadBar){
-        let listener = new THREE.AudioListener();
-        camera.add( listener );
-
-        // create a global audio source
-        sound = new THREE.Audio( listener );
-
-
-        // load a sound and set it as the Audio object's buffer
+        // load a flag
         let loader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
         loader.load(
             "objects/flag/objFlag.obj",
@@ -2912,13 +2905,43 @@ function createLevel1() {
                 loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     document.getElementById("blocker").style.display = "block";
+                    gun_Loader(loadBar);
+                }
+            },
+            function(err){//onError
+                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                console.log("error in loading flag");
+            }
+        );
+    }
+
+    function gun_Loader(loadBar){
+        // load a gun
+        let loader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
+        loader.load(
+            "objects//gun/gun.obj",
+            function(obj) {//onLoad, obj is an Object3D provided by load()
+                obj.name = "Gun";
+                obj.scale.set( .1, .1, .1 );
+                obj.rotation.y = Math.PI;
+                obj.position.x = 3;
+                obj.position.y = -2;
+                obj.position.z = -3;
+                camera.add(obj);
+
+                loadBar.innerHTML = "";
+            },
+            function(xhr){//onProgress
+                loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                    document.getElementById("blocker").style.display = "block";
                     sound_Loader(loadBar);
                     b = true;
                 }
             },
             function(err){//onError
                 loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-                console.log("error in loading sound");
+                console.log("error in loading flag");
             }
         );
     }
@@ -2960,8 +2983,8 @@ function createLevel1() {
 
     function createPlayer(){
         //let pos = {x: 0, y: 105, z: 0}; // actual start
-        let pos = {x: 5, y: 115, z: -1980}; // test start
-        resetPos = {x: 0, y: 101, z: 0};
+        let pos = {x: 5, y: 125, z: -1980}; // test start
+        resetPos = {x: 0, y: 110, z: 0};
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};
         let mass = 1;
@@ -2972,6 +2995,7 @@ function createLevel1() {
 
         player.castShadow = true;
         player.receiveShadow = true;
+
 
         scene.add(player);
 
@@ -3004,6 +3028,8 @@ function createLevel1() {
         rigidBodies.push(player);
         a = true;
 
+
+
     }
 
     function catAnimations(e){//e contains the type action and loopDelta
@@ -3024,7 +3050,7 @@ function createLevel1() {
         //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
 
     }
-    
+
     function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
         addSprite(spriteMap, 50, 50);
@@ -3033,56 +3059,49 @@ function createLevel1() {
     function createReset(){
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Reset box
-        /*
+        let noiseTexture = new THREE.ImageUtils.loadTexture( 'texture/lava/cloud.png' );
+        noiseTexture.wrapS = noiseTexture.wrapT = THREE.RepeatWrapping;
+
+        let lavaTexture = new THREE.ImageUtils.loadTexture( 'texture/lava/lavatile.jpg' );
+        lavaTexture.wrapS = lavaTexture.wrapT = THREE.RepeatWrapping;
 
 
-        var uniforms, mesh;
-        var textureLoader = new THREE.TextureLoader();
+        customUniforms = {
+            baseTexture: 	{ type: "t", value: lavaTexture },
+            baseSpeed: 		{ type: "f", value: 0.05 },
+            noiseTexture: 	{ type: "t", value: noiseTexture },
+            noiseScale:		{ type: "f", value: 0.5337 },
+            alpha: 			{ type: "f", value: 1.0 },
+            time: 			{ type: "f", value: 1.0 }
+        };
 
-				uniforms = {
+        // create custom material from the shader code above
+        //   that is within specially labeled script tags
+        let customMaterial = new THREE.ShaderMaterial(
+            {
+                uniforms: customUniforms,
+                vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+                fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+            }   );
 
-					"fogDensity": { value: 0.45 },
-					"fogColor": { value: new THREE.Vector3( 0, 0, 0 ) },
-					"time": { value: 1.0 },
-					"uvScale": { value: new THREE.Vector2( 3.0, 1.0 ) },
-					"texture1": { value: textureLoader.load( 'texture/lava/cloud.png' ) },
-					"texture2": { value: textureLoader.load( 'texture/lava/lavatile.jpg' ) }
+        lava = new THREE.Mesh( new THREE.BoxBufferGeometry(), customMaterial );
+        lava.scale.set(400, 0.5, 2300);
+        lava.position.set(0, 80, -1120);
+        scene.add( lava );
 
-				};
-
-				uniforms[ "texture1" ].value.wrapS = uniforms[ "texture1" ].value.wrapT = THREE.RepeatWrapping;
-				uniforms[ "texture2" ].value.wrapS = uniforms[ "texture2" ].value.wrapT = THREE.RepeatWrapping;
-                var vertexShader = createShaderFromScriptElement(gl, "vertexShader");
-                var fragmentShader = createShaderFromScriptElement(gl, "fragmentShader");
-				var material = new THREE.ShaderMaterial( {
-
-					uniforms: uniforms,
-					vertexShader: vertexShader,
-					fragmentShader: fragmentShader
-
-				} );
-
-				mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(), material );
-                mesh.scale.set(200, 1, 200);
-                mesh.position.set(0, 80, 0);
-				scene.add( mesh );
-
-
-
-        */
         texture = new THREE.MeshLambertMaterial({visible: false});
         let resetBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
-        resetBox.scale.set(200, 1, 200);
-        resetBox.position.set(0, 80, 0);
+        resetBox.scale.set(200, 0.5, 1150);
+        resetBox.position.set(0, 80, -1120);
         resetBox.name ="Reset_Box";
         scene.add(resetBox);
 
         let transform = new Ammo.btTransform();
         transform.setIdentity();
-        transform.setOrigin(new Ammo.btVector3(0, 80, 0)); //set to middle of map
+        transform.setOrigin(new Ammo.btVector3(0, 80, -1120)); //set to middle of map
         transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
         let motionState = new Ammo.btDefaultMotionState(transform);
-        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(300 * 0.5 + 0.8, 1  * 0.5 + 0.5, 1000  * 0.5 + 0.8));
+        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(200, 0.5, 1150));
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
