@@ -1,7 +1,7 @@
 let animationNum = 0,secondLoopBool = false, anims;
 
 function createLevel1() {
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 10000 );
     //scene.fog = new THREE.Fog(0x6c7578, 150, 750);
 
     // add hemisphere light
@@ -1287,14 +1287,7 @@ function createLevel1() {
     }
 
     function flag_Loader(loadBar){
-        let listener = new THREE.AudioListener();
-        camera.add( listener );
-
-        // create a global audio source
-        sound = new THREE.Audio( listener );
-
-
-        // load a sound and set it as the Audio object's buffer
+        // load a flag
         let loader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
         loader.load(
             "objects/flag/objFlag.obj",
@@ -1360,13 +1353,43 @@ function createLevel1() {
                 loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     document.getElementById("blocker").style.display = "block";
+                    gun_Loader(loadBar);
+                }
+            },
+            function(err){//onError
+                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                console.log("error in loading flag");
+            }
+        );
+    }
+
+    function gun_Loader(loadBar){
+        // load a gun
+        let loader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
+        loader.load(
+            "objects//gun/gun.obj",
+            function(obj) {//onLoad, obj is an Object3D provided by load()
+                obj.name = "Gun";
+                obj.scale.set( .1, .1, .1 );
+                obj.rotation.y = Math.PI;
+                obj.position.x = 3;
+                obj.position.y = -2;
+                obj.position.z = -3;
+                camera.add(obj);
+
+                loadBar.innerHTML = "";
+            },
+            function(xhr){//onProgress
+                loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                    document.getElementById("blocker").style.display = "block";
                     sound_Loader(loadBar);
                     b = true;
                 }
             },
             function(err){//onError
                 loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-                console.log("error in loading sound");
+                console.log("error in loading flag");
             }
         );
     }
@@ -1421,6 +1444,7 @@ function createLevel1() {
         player.castShadow = true;
         player.receiveShadow = true;
 
+
         scene.add(player);
 
         let transform = new Ammo.btTransform();
@@ -1451,6 +1475,8 @@ function createLevel1() {
         rigidBodies.push(player);
         a = true;
 
+
+
     }
 
     function catAnimations(e){//e contains the type action and loopDelta
@@ -1471,7 +1497,7 @@ function createLevel1() {
         //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
 
     }
-    
+
     function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
         addSprite(spriteMap, 50, 50);
@@ -1480,56 +1506,49 @@ function createLevel1() {
     function createReset(){
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Reset box
-        /*
+        let noiseTexture = new THREE.ImageUtils.loadTexture( 'texture/lava/cloud.png' );
+        noiseTexture.wrapS = noiseTexture.wrapT = THREE.RepeatWrapping;
+
+        let lavaTexture = new THREE.ImageUtils.loadTexture( 'texture/lava/lavatile.jpg' );
+        lavaTexture.wrapS = lavaTexture.wrapT = THREE.RepeatWrapping;
 
 
-        var uniforms, mesh;
-        var textureLoader = new THREE.TextureLoader();
+        customUniforms = {
+            baseTexture: 	{ type: "t", value: lavaTexture },
+            baseSpeed: 		{ type: "f", value: 0.05 },
+            noiseTexture: 	{ type: "t", value: noiseTexture },
+            noiseScale:		{ type: "f", value: 0.5337 },
+            alpha: 			{ type: "f", value: 1.0 },
+            time: 			{ type: "f", value: 1.0 }
+        };
 
-				uniforms = {
+        // create custom material from the shader code above
+        //   that is within specially labeled script tags
+        let customMaterial = new THREE.ShaderMaterial(
+            {
+                uniforms: customUniforms,
+                vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+                fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+            }   );
 
-					"fogDensity": { value: 0.45 },
-					"fogColor": { value: new THREE.Vector3( 0, 0, 0 ) },
-					"time": { value: 1.0 },
-					"uvScale": { value: new THREE.Vector2( 3.0, 1.0 ) },
-					"texture1": { value: textureLoader.load( 'texture/lava/cloud.png' ) },
-					"texture2": { value: textureLoader.load( 'texture/lava/lavatile.jpg' ) }
+        lava = new THREE.Mesh( new THREE.BoxBufferGeometry(), customMaterial );
+        lava.scale.set(400, 0.5, 2300);
+        lava.position.set(0, 80, -1120);
+        scene.add( lava );
 
-				};
-
-				uniforms[ "texture1" ].value.wrapS = uniforms[ "texture1" ].value.wrapT = THREE.RepeatWrapping;
-				uniforms[ "texture2" ].value.wrapS = uniforms[ "texture2" ].value.wrapT = THREE.RepeatWrapping;
-                var vertexShader = createShaderFromScriptElement(gl, "vertexShader");
-                var fragmentShader = createShaderFromScriptElement(gl, "fragmentShader");
-				var material = new THREE.ShaderMaterial( {
-
-					uniforms: uniforms,
-					vertexShader: vertexShader,
-					fragmentShader: fragmentShader
-
-				} );
-
-				mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(), material );
-                mesh.scale.set(200, 1, 200);
-                mesh.position.set(0, 80, 0);
-				scene.add( mesh );
-
-
-
-        */
         texture = new THREE.MeshLambertMaterial({visible: false});
         let resetBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
-        resetBox.scale.set(200, 1, 200);
-        resetBox.position.set(0, 80, 0);
+        resetBox.scale.set(200, 0.5, 1150);
+        resetBox.position.set(0, 80, -1120);
         resetBox.name ="Reset_Box";
         scene.add(resetBox);
 
         let transform = new Ammo.btTransform();
         transform.setIdentity();
-        transform.setOrigin(new Ammo.btVector3(0, 80, 0)); //set to middle of map
+        transform.setOrigin(new Ammo.btVector3(0, 80, -1120)); //set to middle of map
         transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
         let motionState = new Ammo.btDefaultMotionState(transform);
-        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(300 * 0.5 + 0.8, 1  * 0.5 + 0.5, 1000  * 0.5 + 0.8));
+        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(200, 0.5, 1150));
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
