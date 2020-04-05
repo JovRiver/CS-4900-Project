@@ -1219,7 +1219,7 @@ function createLevel1() {
                 obj.name = "Enemy";
 
                 //let pos ={ x: -5, y: 103, z: -5};
-                let pos ={x: 5, y: 105, z: -1335};
+                let pos ={x: 5, y: 105, z: 0;
 
                 obj.scene.position.x = pos.x;
                 obj.scene.position.y = pos.y;
