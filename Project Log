@@ -468,3 +468,109 @@ Semira Pinder
 Commit #4 of week 7
 
 Added crossfading to each animation transition in the loop for catGun
+
+3/25/2020
+Ryan Slaybaugh:
+Commit 26:
+
+  Continued work on level design. 4 pages complete and I will probably finish at 6 pages for the entirety of level 1.
+
+3/29/2020
+Ryan Slaybaugh:
+Commit 27:
+
+  Finished work on level 1 designs (on paper) and will begin coding them into the game. The level came out to 5 pages
+instead of 6.
+
+3/30/2020
+Ryan Slaybaugh:
+Commit 28:
+
+  Began coding in level 1. Currently have first section coded in and added new textures for the platforms. I am switching from a city level
+to a more greek setting. I also remove the base floor plane and am considering different options for settings outside the main course.
+
+3/30/2020
+Ryan Slaybaugh:
+Commit 29:
+
+  Added more platforms to level 1 and continuing coding in the level.
+  
+3/30/2020
+Ryan Slaybaugh:
+Commit 30:
+
+  Completed coding in page 1 of level 1. I have 4 more pages before it will be complete.
+  
+  
+3/31/2020
+Ryan Slaybaugh:
+Commit 31:
+
+  Completed coding in page 2 of level 1. 3 more pages to go.
+  
+3/31/2020
+Ryan Slaybaugh:
+Commit 32:
+
+  Completed coding in page 3 of level 1. 2 more pages to go.
+
+4/1/2020
+Ryan Slaybaugh:
+Commit 33:
+
+  Completed coding in page 4 of level 1 with a few additions not originally planned. 1 more page to go.
+
+4/1/2020
+Ryan Slaybaugh:
+Commit 34:
+
+  Completed outline of page 5 of level 1 with a few platforms still needed, otherwise the rest is cosmetic needs that can be filled
+in at a later time.
+
+4/2/2020
+Ryan Slaybaugh:
+Commit 35:
+
+  Continued working on page 5, completing all necessary platforms, all that remains is cosmetic changes and maybe some additional platforms
+to fill out the level. There is a noticeable lag when first viewing the entire level so I will look into that next week for the code
+optimization work.
+
+4/3/2020
+Ryan Slaybaugh:
+Commit 36:
+
+  Finished with level designing and working on improving code readability and cosmetic changes.
+
+4/3/2020
+Ryan Slaybaugh:
+Commit 37:
+
+  Continued optimizations to code for the objects and I changed around one stretch of platforms on page 2 of the level design.
+  
+4/3/2020
+Ryan Slaybaugh:
+Commit 38:
+
+  Finished optimizing level objects code and basic cosmetics. I still need to add reset boxes for each "checkpoint" in case the player
+falls off. Otherwise level is basically done with room for cosmetics and texture work.
+
+4/4/2020
+Ryan Slaybaugh:
+Commit 39:
+
+  Added some additional walls to page 2 garden area.
+
+Semira Pinder
+4/4/2020 4:30pm-6:51pm
+Commit #1 of week March 29th- April 5th
+Made a "bullet" sphere that spawns in front of the cat enemy whenever the shoot animation is played.
+
+Semira Pinder
+4/4/2020  6:12pm - 1:11am, 4/5/2020 11:58am-1:49pm
+Commit #2 of week March 29th- April 5th
+Made the "bullet" sphere shoot out of the cat enemy starting in front of the cat . The bulet seems to fire sideways, though.
+
+Semira Pinder
+4/5/2020 1:52pm-4:52pm
+Commit #3 of week March 29th- April 5th
+Fixed the direction of the bullet when it shoots (while the cat is standing up), and edited a few variables so that it looks slightly neater. 
