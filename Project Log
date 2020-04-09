@@ -587,5 +587,10 @@ Commit 41:
 
   Removed unnecessary loading of font in main menu and currently working on doing the same for the in game menu.
   
-  
+4/9/2020
+Ryan Slaybaugh:
+Commit 42:
 
+  Applied font loader changes to in game menu.
+  
+  
