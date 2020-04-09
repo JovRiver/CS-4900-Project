@@ -322,6 +322,8 @@ function addSprite(spriteMap, xPercent, yPercent){
     sprite.position.z = -1.5;
     sprite.scale.set(.1, .1, .1)
 
+    sprite.name = "crosshair";
+
     scene.add(sprite);
     camera.add( sprite );
 }

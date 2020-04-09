@@ -41,6 +41,7 @@ function create_Start_Menu() {
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//	Grappling_Game
+
 		textGeo = new THREE.TextBufferGeometry( "Kitty Kill", {
 
 			font: font,
@@ -318,151 +319,163 @@ function create_Start_Menu() {
 function after_Game_Menu() {
 	let loader = new THREE.FontLoader();
 
-	loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+	function load_In_Game_Menu() {
 
-		let textGeo = new THREE.TextBufferGeometry( "Congratulations", {
+		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+			menu_Elements(font);
+		}, 
+			function(xhr){//onProgress
+				loadBar.innerHTML = "<h2>Loading Fonts " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+				if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+					document.getElementById("load").style.display = "none";
+					document.getElementById("blocker").style.display = "none";
+				}
+			},
+			function(err){//onError
+				loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+				console.log("error in loading fonts");
+			}
+		);
+	}
+
+	function menu_Elements(font) {
+		let textGeo, centerOffset, textMaterial, mesh;
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Congratulations
+
+		textGeo = new THREE.TextBufferGeometry( "Congratulations", {
 
 			font: font,
-
 			size: 5,
 			height: 1,
 			curveSegments: 12,
-
 			bevelThickness: .5,
 			bevelSize: .3,
 			bevelEnabled: true
-
-		} );
+		});
 
 		textGeo.computeBoundingBox();
-		let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 
-		let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-		let mesh = new THREE.Mesh( textGeo, textMaterial );
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
 		mesh.position.x = centerOffset;
 		mesh.position.y = 220;
 		mesh.position.z = -50;
 
 		mesh.name = "Congratulations";
 		in_Game_Menu_Group.add(mesh);
-	});
 
-	loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Time
 
-		let textGeo = new THREE.TextBufferGeometry( "Time ", {
+		textGeo = new THREE.TextBufferGeometry( "Time ", {
 
 			font: font,
-
 			size: 5,
 			height: 1,
 			curveSegments: 12,
-
 			bevelThickness: .5,
 			bevelSize: .3,
 			bevelEnabled: true
-
-		} );
+		});
 
 		textGeo.computeBoundingBox();
-		let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 
-		let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-		let mesh = new THREE.Mesh( textGeo, textMaterial );
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
 		mesh.position.x = centerOffset - 10;
 		mesh.position.y = 210;
 		mesh.position.z = -50;
 
 		mesh.name = "Time";
 		in_Game_Menu_Group.add(mesh);
-	});
 
-	loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Main_Menu
 
-		let textGeo = new THREE.TextBufferGeometry( "Main Menu", {
+		textGeo = new THREE.TextBufferGeometry( "Main Menu", {
 
 			font: font,
-
 			size: 5,
 			height: 1,
 			curveSegments: 12,
-
 			bevelThickness: .5,
 			bevelSize: .3,
 			bevelEnabled: true
-
-		} );
+		});
 
 		textGeo.computeBoundingBox();
-		let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 
-		let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-		let mesh = new THREE.Mesh( textGeo, textMaterial );
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
 		mesh.position.x = centerOffset;
 		mesh.position.y = 200;
 		mesh.position.z = -50;
 
 		mesh.name = "Main_Menu";
-		in_Game_Menu_Group.add(mesh);	
-	});
+		in_Game_Menu_Group.add(mesh);
 
-	loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Continue
 
-		let textGeo = new THREE.TextBufferGeometry( "Continue", {
+		textGeo = new THREE.TextBufferGeometry( "Continue", {
 
 			font: font,
-
 			size: 5,
 			height: 1,
 			curveSegments: 12,
-
 			bevelThickness: .5,
 			bevelSize: .3,
 			bevelEnabled: true
-
-		} );
+		});
 
 		textGeo.computeBoundingBox();
-		let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 
-		let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-		let mesh = new THREE.Mesh( textGeo, textMaterial );
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
 		mesh.position.x = centerOffset;
 		mesh.position.y = 190;
 		mesh.position.z = -50;
 
 		mesh.name = "Continue";
-		in_Game_Menu_Group.add(mesh);	
-	});
+		in_Game_Menu_Group.add(mesh);
 
-	let bMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
-	bMaterial.transparent = true;
-	bMaterial.opacity = 0.25;
-	let background = new THREE.Mesh(new THREE.BoxBufferGeometry(), bMaterial);
-	background.scale.set(180, 120, 1);
-	background.position.set(0, 205, -52);
-	background.name = "background";
-	background.receiveShadow = true;
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Background / Spotlight
 
-	scene.add(background);
-	scene.add(in_Game_Menu_Group);
+		let bMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
+		bMaterial.transparent = true;
+		bMaterial.opacity = 0.25;
+		let background = new THREE.Mesh(new THREE.BoxBufferGeometry(), bMaterial);
+		background.scale.set(180, 120, 1);
+		background.position.set(0, 205, -52);
+		background.name = "background";
+		background.receiveShadow = true;
 
-	let spotLight = new THREE.SpotLight( 0xffffff, 1.5, 110);
-	spotLight.position.set(0, 210, 0);
-	spotLight.target.position.x = 0;
-	spotLight.target.position.y = 200;
-	spotLight.target.position.z = -50
-	spotLight.name = "spotlight";
+		scene.add(background);
+		scene.add(in_Game_Menu_Group);
+
+		let spotLight = new THREE.SpotLight( 0xffffff, 1.5, 110);
+		spotLight.position.set(0, 210, 0);
+		spotLight.target.position.x = 0;
+		spotLight.target.position.y = 200;
+		spotLight.target.position.z = -50
+		spotLight.name = "spotlight";
 	
-	spotLight.color.setHSL(.2, 1, 0.5);
+		spotLight.color.setHSL(.2, 1, 0.5);
 
-	scene.add(spotLight.target);
-	scene.add(spotLight);
+		scene.add(spotLight.target);
+		scene.add(spotLight);
 
-	background.visible = false;
-	in_Game_Menu_Group.visible = false;
-	spotLight.visible = false;
+		background.visible = false;
+		in_Game_Menu_Group.visible = false;
+		spotLight.visible = false;
+	}
+
+	load_In_Game_Menu();
 }
