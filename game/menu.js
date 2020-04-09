@@ -16,38 +16,12 @@ function create_Start_Menu() {
 
 	scene.add(pointLight);
 
-    function main_Menu() {
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//	Grappling_Game
+	function load_Menu() {
 		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
-
-			let textGeo = new THREE.TextBufferGeometry( "Kitty Kill", {
-
-				font: font,
-
-				size: 10,
-				height: 1,
-				curveSegments: 12,
-
-				bevelThickness: 1,
-				bevelSize: .5,
-				bevelEnabled: true
-
-			} );
-
-				textGeo.computeBoundingBox();
-			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.y = 10;
-
-				mesh.rotation.x = THREE.Math.degToRad(10);
-
-				scene.add(mesh);
-        	}, 
+			main_Menu(font);
+			level_Select_Menu(font);
+			options_Menu(font);
+        }, 
         	function(xhr){//onProgress
 				loadBar.innerHTML = "<h2>Loading Fonts " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 				if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
@@ -60,179 +34,187 @@ function create_Start_Menu() {
 				console.log("error in loading fonts");
 			}
 		);
+	}
+
+    function main_Menu(font) {
+		let textGeo, centerOffset, textMaterial, mesh;
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Grappling_Game
+		textGeo = new THREE.TextBufferGeometry( "Kitty Kill", {
+
+			font: font,
+			size: 10,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+			mesh.position.x = centerOffset;
+			mesh.position.y = 10;
+
+			mesh.rotation.x = THREE.Math.degToRad(10);
+
+		scene.add(mesh);
 
 	    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//	Select_Level
-		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
 
-			let textGeo = new THREE.TextBufferGeometry( "Select Level", {
+		textGeo = new THREE.TextBufferGeometry( "Select Level", {
 
-				font: font,
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: .5,
+			bevelSize: .3,
+			bevelEnabled: true
+		});
 
-				size: 5,
-				height: 1,
-				curveSegments: 12,
+		textGeo.computeBoundingBox();
 
-				bevelThickness: .5,
-				bevelSize: .3,
-				bevelEnabled: true
+        centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+			mesh.position.x = centerOffset;
+			mesh.position.y = -5;
+			mesh.rotation.x = THREE.Math.degToRad(-5);
 
-			} );
+			mesh.name = "Select_Level";
 
-				textGeo.computeBoundingBox();
-            let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.y = -5;
-				mesh.rotation.x = THREE.Math.degToRad(-5);
-
-				mesh.name = "Select_Level";
-
-				menu_Group.add(mesh);
-        });
+		menu_Group.add(mesh);
 
 	    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Options
-		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
 
-			let textGeo = new THREE.TextBufferGeometry( "Options", {
+		textGeo = new THREE.TextBufferGeometry( "Options", {
 
-				font: font,
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: .5,
+			bevelSize: .3,
+			bevelEnabled: true
+		});
 
-				size: 5,
-				height: 1,
-				curveSegments: 12,
+		textGeo.computeBoundingBox();
 
-				bevelThickness: .5,
-				bevelSize: .3,
-				bevelEnabled: true
+        centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+			mesh.position.x = centerOffset;
+			mesh.position.y = -15;
+			mesh.rotation.x = THREE.Math.degToRad(-10);
 
-			} );
+			mesh.name = "Options";
 
-				textGeo.computeBoundingBox();
-            let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.y = -15;
-				mesh.rotation.x = THREE.Math.degToRad(-10);
-
-				mesh.name = "Options";
-
-				menu_Group.add(mesh);
-        });
+		menu_Group.add(mesh);
 
 	    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//	Exit_Game
-		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
 
-			let textGeo = new THREE.TextBufferGeometry( "Exit Game", {
+		textGeo = new THREE.TextBufferGeometry( "Exit Game", {
 
-				font: font,
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: .5,
+			bevelSize: .3,
+			bevelEnabled: true
+		});
 
-				size: 5,
-				height: 1,
-				curveSegments: 12,
+		textGeo.computeBoundingBox();
 
-				bevelThickness: .5,
-				bevelSize: .3,
-				bevelEnabled: true
+        centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+			mesh.position.x = centerOffset;
+			mesh.position.y = -25;
+			mesh.rotation.x = THREE.Math.degToRad(-15);
 
-			} );
+			mesh.name = "Exit_Game";
 
-				textGeo.computeBoundingBox();
-            let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.y = -25;
-				mesh.rotation.x = THREE.Math.degToRad(-15);
-
-				mesh.name = "Exit_Game";
-
-				menu_Group.add(mesh);
-        });
+		menu_Group.add(mesh);
 
 		scene.add(menu_Group);
 	    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
-    function level_Select_Menu() {
-		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+    function level_Select_Menu(font) {
+		let textGeo, centerOffset, textMaterial, mesh;
 
-			let textGeo = new THREE.TextBufferGeometry( "Back", {
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Back_Level
 
-				font: font,
+		textGeo = new THREE.TextBufferGeometry( "Back", {
 
-				size: 5,
-				height: 1,
-				curveSegments: 12,
-
-				bevelThickness: 1,
-				bevelSize: .5,
-				bevelEnabled: true
-
-			} );
-
-				textGeo.computeBoundingBox();
-			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.x = -50;
-				mesh.position.y += 110;
-
-				mesh.rotation.x = THREE.Math.degToRad(30);
-				mesh.rotation.y = THREE.Math.degToRad(20);
-
-				mesh.name = "Back_Level";
-
-				menu_Group.add(mesh);
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
 		});
 
-		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+		textGeo.computeBoundingBox();
 
-			let textGeo = new THREE.TextBufferGeometry( "Level 1", {
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+			mesh.position.x = centerOffset;
+			mesh.position.x = -50;
+			mesh.position.y += 110;
 
-				font: font,
+			mesh.rotation.x = THREE.Math.degToRad(30);
+			mesh.rotation.y = THREE.Math.degToRad(20);
 
-				size: 5,
-				height: 1,
-				curveSegments: 12,
+			mesh.name = "Back_Level";
 
-				bevelThickness: 1,
-				bevelSize: .5,
-				bevelEnabled: true
+		menu_Group.add(mesh);
 
-			} );
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Level_1
 
-				textGeo.computeBoundingBox();
-			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textGeo = new THREE.TextBufferGeometry( "Level 1", {
 
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.x = -45;
-				mesh.position.y += 80;
-
-				mesh.rotation.x = THREE.Math.degToRad(30);
-				mesh.rotation.y = THREE.Math.degToRad(20);
-				mesh.rotation.z = THREE.Math.degToRad(-8);
-
-				mesh.name = "Level_1";
-
-				menu_Group.add(mesh);
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
 		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+			mesh.position.x = centerOffset;
+			mesh.position.x = -45;
+			mesh.position.y += 80;
+
+			mesh.rotation.x = THREE.Math.degToRad(30);
+			mesh.rotation.y = THREE.Math.degToRad(20);
+			mesh.rotation.z = THREE.Math.degToRad(-8);
+
+			mesh.name = "Level_1";
+
+		menu_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Level_1_Cube
 
 		let Level_1_Cube_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')});
 		Level_1_Cube_Texture.map.wrapS = Level_1_Cube_Texture.map.wrapT = THREE.RepeatWrapping;
@@ -246,37 +228,35 @@ function create_Start_Menu() {
 
 		menu_Group.add(Level_1_Cube);
 
-		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Level_2
 
-			let textGeo = new THREE.TextBufferGeometry( "Level 2", {
+		textGeo = new THREE.TextBufferGeometry( "Level 2", {
 	
-				font: font,
-	
-				size: 5,
-				height: 1,
-				curveSegments: 12,
-	
-				bevelThickness: 1,
-				bevelSize: .5,
-				bevelEnabled: true
-	
-			} );
-	
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-	
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-					mesh.position.x = -12;
-					mesh.position.z = -5;
-					mesh.position.y += 80.3;
-	
-					mesh.rotation.x = THREE.Math.degToRad(20);
-					//mesh.rotation.y = THREE.Math.degToRad(0);
-					//mesh.rotation.z = THREE.Math.degToRad(0);
-	
-					mesh.name = "Level_2";
-	
-					menu_Group.add(mesh);
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
 		});
+	
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+	
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+			mesh.position.x = -12;
+			mesh.position.z = -5;
+			mesh.position.y += 80.3;
+	
+			mesh.rotation.x = THREE.Math.degToRad(20);
+	
+			mesh.name = "Level_2";
+	
+		menu_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Level_2_Cube
 
 		let Level_2_Cube_Texture = new THREE.MeshLambertMaterial({ map: new THREE.TextureLoader().load('texture/buildings/building_Type_5.jpg')});
 		Level_2_Cube_Texture.map.wrapS = Level_1_Cube_Texture.map.wrapT = THREE.RepeatWrapping;
@@ -294,46 +274,43 @@ function create_Start_Menu() {
 		scene.add(menu_Group);
 	}
 
-    function options_Menu() {
-		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+    function options_Menu(font) {
+		let textGeo, centerOffset, textMaterial, mesh;
 
-			let textGeo = new THREE.TextBufferGeometry( "Back", {
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Back_Options
 
-				font: font,
+		textGeo = new THREE.TextBufferGeometry( "Back", {
 
-				size: 5,
-				height: 1,
-				curveSegments: 12,
-
-				bevelThickness: 1,
-				bevelSize: .5,
-				bevelEnabled: true
-
-			} );
-
-				textGeo.computeBoundingBox();
-			let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-
-			let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-
-			let mesh = new THREE.Mesh( textGeo, textMaterial );
-				mesh.position.x = centerOffset;
-				mesh.position.x = -50;
-				mesh.position.y -= 50;
-
-				mesh.rotation.x = THREE.Math.degToRad(30);
-				mesh.rotation.y = THREE.Math.degToRad(20);
-
-				mesh.name = "Back_Options";
-
-				menu_Group.add(mesh);
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
 		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+			mesh.position.x = centerOffset;
+			mesh.position.x = -50;
+			mesh.position.y -= 50;
+
+			mesh.rotation.x = THREE.Math.degToRad(30);
+			mesh.rotation.y = THREE.Math.degToRad(20);
+
+			mesh.name = "Back_Options";
+
+		menu_Group.add(mesh);
+
 		scene.add(menu_Group);
 	}
 	
-    main_Menu();
-    level_Select_Menu();
-	options_Menu();
+	load_Menu();
 	cancelAnimationFrame(renderFrameId);
 	renderFrame();
 }
