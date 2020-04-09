@@ -49,15 +49,15 @@ function create_Start_Menu() {
 				scene.add(mesh);
         	}, 
         	function(xhr){//onProgress
-			loadBar.innerHTML = "<h2>Loading Fonts " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-			if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-				document.getElementById("load").style.display = "none";
-				document.getElementById("blocker").style.display = "none";
-			}
+				loadBar.innerHTML = "<h2>Loading Fonts " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+				if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+					document.getElementById("load").style.display = "none";
+					document.getElementById("blocker").style.display = "none";
+				}
 			},
 			function(err){//onError
-			loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-			console.log("error in loading fonts");
+				loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+				console.log("error in loading fonts");
 			}
 		);
 

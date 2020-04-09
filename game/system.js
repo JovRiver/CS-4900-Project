@@ -49,7 +49,6 @@ function showStats(){
 }
 
 function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
-
     let base_Texture = new THREE.MeshLambertMaterial(texture);
     base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
     base_Texture.map.repeat.set(5, 2);
@@ -181,7 +180,6 @@ function createGrapplingHook(vect){
     // Disable deactivation
     ropeSoftBody.setActivationState( STATE.DISABLE_DEACTIVATION );
 
-
     //Create temp physics object at raycast position
     let texture = new THREE.MeshLambertMaterial();
     let hookBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
@@ -205,9 +203,6 @@ function createGrapplingHook(vect){
     hookBox.userData.physicsBody = hookBoxBody;
     physicsWorld.addRigidBody(hookBoxBody, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
 
-
-
-
     // Glue the rope extremes to the ball and the arm
     let influence = 1;
     ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
@@ -224,7 +219,6 @@ function createGrapplingHook(vect){
     let physicsBody = player.userData.physicsBody;
     physicsBody.setLinearVelocity ( resultantImpulse );
     //todo Make player move towards the direction of grappling hook.
-
 }
 
 function random_Texture() {
@@ -312,12 +306,11 @@ function test(){
                 { x: vertices[face.c].x, y: vertices[face.c].y, z: vertices[face.c].z },
                 { x: vertices[face.d].x, y: vertices[face.d].y, z: vertices[face.d].z }
             ]);
-
         }
     }
 }
 
-function addSprite(spriteMap, xPercent,yPercent){
+function addSprite(spriteMap, xPercent, yPercent){
     let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xff0000 } );
     let sprite = new THREE.Sprite( spriteMaterial );
     let crosshairPercentX = xPercent; //middle horizontally
@@ -328,7 +321,6 @@ function addSprite(spriteMap, xPercent,yPercent){
     sprite.position.y = crosshairPositionY;
     sprite.position.z = -1.5;
     sprite.scale.set(.1, .1, .1)
-
 
     scene.add(sprite);
     camera.add( sprite );

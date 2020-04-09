@@ -5,7 +5,6 @@ let x, y, z;
 
 function createLevel1() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 10000 );
-    //scene.fog = new THREE.Fog(0x6c7578, 150, 750);
 
     // add hemisphere light
     let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
@@ -42,7 +41,6 @@ function createLevel1() {
     scene.add( dirLight );
     //scene.add( helper );
 
-
     function createSkyBox() {
         let base_Texture = [
             new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/skybox/bluecloud_right.jpg'), side: THREE.BackSide }),  //Right
@@ -65,8 +63,6 @@ function createLevel1() {
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundary = true;
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
-
-        //PLATFORMS DENOTED BY P#
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 1 BEGIN
@@ -336,7 +332,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // P48-52 // GRAPPLE BOXES // TEXTURE CHANGED TO GREEN
+        // G9-13 // GRAPPLE BOXES // TEXTURE CHANGED TO GREEN
 
         texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
         scale = {x: 2, y: 2, z: 2};
@@ -401,7 +397,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P82-88
+        // P83-89
 
         scale = {x: 10, y: 1, z: 30};
 
@@ -420,7 +416,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P89-90
+        // P90-91
 
         scale = {x: 10, y: 1, z: 10};
         pos = {x: 5, y: 103.5, z: -1285};
@@ -439,7 +435,7 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////
-        // P91-92
+        // P93-94
 
         scale = {x: 10, y: 1, z: 20};
         pos = {x: 5, y: 103.5, z: -1380};
@@ -450,7 +446,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // P93-100
+        // P95-102
 
         scale = {x: 10, y: 1, z: 2.5};
 
@@ -460,7 +456,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P101-102
+        // P102-103
 
         scale = {x: 110, y: 1, z: 10};
 
@@ -471,7 +467,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // P103-108
+        // P104-109
 
         scale = {x: 40, y: 1, z: 10};
 
@@ -484,7 +480,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P109-110
+        // P110-111
 
         scale = {x: 10, y: 1, z: 40};
 
@@ -495,7 +491,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // P111-112
+        // P112-113
 
         scale = {x: 50, y: 1, z: 10};
         pos = {x: -15, y: 99.5, z: -1755};
@@ -506,7 +502,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // P113-114
+        // P114-115
 
         scale = {x: 30, y: 1, z: 10};
 
@@ -517,7 +513,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // P115-118
+        // P116-119
 
         scale = {x: 10, y: 1, z: 30};
 
@@ -530,7 +526,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P119-122 // GRAPPLE BOXES // TEXTURE SET TO GREEN
+        // G14-17 // GRAPPLE BOXES // TEXTURE SET TO GREEN
 
         texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
         scale = {x: 2, y: 1, z: 2};
@@ -552,7 +548,7 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////
-        // P123-125 // TEXTURE RETURNED TO STONE
+        // P120-122 // TEXTURE RETURNED TO STONE
 
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
         scale = {x: 50, y: 1, z: 10};
@@ -568,7 +564,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // P126-173
+        // P123-170
 
         scale = {x: 60, y: 1, z: 2.5};
 
@@ -578,7 +574,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P174-175
+        // P171-172
 
         scale = {x: 150, y: 1, z: 20};
 
@@ -589,7 +585,7 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // P176-178
+        // P173-174
 
         scale = {x: 20, y: 1, z: 200};
 
@@ -600,14 +596,14 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // P179 // FLAG BASE
+        // P175 // FLAG BASE
 
         scale = {x: 30, y: 20, z: 20};
         pos = {x: 5, y: 121.5, z: -2170};
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
         /////////////////////////////////////////////////////////////////////
-        // P180-198 // FLAG AREA PLATFORMS OUTER
+        // P176-194 // FLAG AREA PLATFORMS OUTER
 
         scale = {x: 2.5, y: 40, z: 20};
 
@@ -641,7 +637,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P199-207 // FLAG AREA PLATORMS INNER
+        // P195-203 // FLAG AREA PLATORMS INNER
 
         scale = {x: 30, y: 1, z: 10};
 
@@ -665,7 +661,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P208-209 // TEMPLE ROOF
+        // P204-205 // TEMPLE ROOF
 
         scale = {x: 110, y: 5, z: 300};
         pos = {x: -47.5, y: 168, z: -2120};
@@ -686,7 +682,7 @@ function createLevel1() {
         scene.add(roofR);
 
         /////////////////////////////////////////////////////////////////////
-        // P210-211 // has_Boundary SET TO FALSE
+        // P206-207 // has_Boundary SET TO FALSE
 
         has_Boundary = false;
         scale = {x: 200, y: 5, z: 7.5};
@@ -707,8 +703,6 @@ function createLevel1() {
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundary = true;
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
-
-        // WALLS DENOTED BY W#
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 1 BEGIN
@@ -938,8 +932,6 @@ function createLevel1() {
         quat = {x: 0, y: 0, z: 0, w: 1};
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
 
-        // COLUMNS DENOTED BY C#
-
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 1 BEGIN
 /////////////////////////////////////////////////////////////////////////////
@@ -1081,7 +1073,7 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////
-        // C35-42
+        // C35-44
 
         height = 20;
 
@@ -1137,7 +1129,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // C49-46
+        // C49-56
 
         radius = 3;
         height = 40;
@@ -1159,7 +1151,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // C47-72
+        // C57-82
 
         for (let i = 0; i < 13; i++) {
             pos = {x: -90, y: 131.5, z: -2000 - (i * 20)};
@@ -1184,7 +1176,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // C73-82
+        // C83-92
 
         for (let i = 0; i < 10; i++) {
             if (i < 5) {
@@ -1218,14 +1210,12 @@ function createLevel1() {
                 theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
                 obj.name = "Enemy";
 
-                //let pos ={ x: -5, y: 103, z: -5};
                 let pos ={x: 5, y: 105, z: 0};
 
                 obj.scene.position.x = pos.x;
                 obj.scene.position.y = pos.y;
                 obj.scene.position.z = pos.z;
                 obj.scene.rotation.y = -1.2;
-                
                 
                 kitty = obj;
                 obj.matrixAutoUpdate = true;//changed from false
@@ -1241,9 +1231,6 @@ function createLevel1() {
                 catAimer.position.x += 1;//in local
                 //catAimer.position.y += 2;//in local
                 //catAimer.position.z += 1;//in local
-
-
-
 
                 let vect3 = new THREE.Vector3();
                 let box = new THREE.Box3().setFromObject(obj.scene).getSize(vect3);
@@ -1269,7 +1256,6 @@ function createLevel1() {
                 physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
 
                 obj.scene.userData.physicsBody = objBody;
-
 
                 rigidBodies.push(obj.scene);
 
@@ -1344,9 +1330,6 @@ function createLevel1() {
                 scene.add( flag );
                 //flag.add(obj);
 
-
-
-
                 //scene.add(obj);
 
                 let transform = new Ammo.btTransform();
@@ -1371,10 +1354,7 @@ function createLevel1() {
 
                 flag.userData.physicsBody = flagBody;
 
-
                 rigidBodies.push(flag);
-
-
 
                 loadBar.innerHTML = "";
             },
@@ -1430,7 +1410,6 @@ function createLevel1() {
         // create a global audio source
         sound = new THREE.Audio( listener );
 
-
         // load a sound and set it as the Audio object's buffer
         let audioLoader = new THREE.AudioLoader();
         audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
@@ -1472,7 +1451,6 @@ function createLevel1() {
         player.castShadow = true;
         player.receiveShadow = true;
 
-
         scene.add(player);
 
         let transform = new Ammo.btTransform();
@@ -1502,9 +1480,6 @@ function createLevel1() {
 
         rigidBodies.push(player);
         a = true;
-
-
-
     }
 
     function catAnimations(e){//e contains the type action and loopDelta
@@ -1529,14 +1504,12 @@ function createLevel1() {
                 bulletInScene = false;
             }
             e.action.crossFadeTo(theMixer.clipAction(anims[animationNum]), .4, false);
-
         }
         if(animationNum == shooterAnim)//matches returns an array with matches or null if nothing's found.
             shootBullet();
 
         secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
         //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
-
     }
 
     function shootBullet(){
@@ -1580,9 +1553,9 @@ function createLevel1() {
         bulletInScene = true;
     }
 
-
     function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
+        spriteMap.name = "crosshair";
         addSprite(spriteMap, 50, 50);
     }
 
@@ -1594,7 +1567,6 @@ function createLevel1() {
 
         let lavaTexture = new THREE.ImageUtils.loadTexture( 'texture/lava/lavatile.jpg' );
         lavaTexture.wrapS = lavaTexture.wrapT = THREE.RepeatWrapping;
-
 
         customUniforms = {
             baseTexture: 	{ type: "t", value: lavaTexture },
@@ -1641,7 +1613,6 @@ function createLevel1() {
         resetBox.userData.physicsBody = body;
         physicsWorld.addRigidBody(body, ghostGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
         resetPlatform.push(resetBox);
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     setupPhysicsWorld();
@@ -1655,7 +1626,7 @@ function createLevel1() {
     create_Course();
     create_Walls();
     create_Columns();
-    after_Game_Menu();
 
+    after_Game_Menu();
     object_Loader();
 }
