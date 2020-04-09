@@ -581,3 +581,11 @@ Commit 40:
 
   Some basic code cleanup and optimization, I will continue to look through and fix up more of the code.
 
+4/9/2020
+Ryan Slaybaugh:
+Commit 41:
+
+  Removed unnecessary loading of font in main menu and currently working on doing the same for the in game menu.
+  
+  
+
