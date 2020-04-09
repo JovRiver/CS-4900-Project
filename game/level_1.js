@@ -1439,7 +1439,7 @@ function createLevel1() {
 
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
-        pos = {x: 0, y: 115, z: -2010}; // end of level
+        // pos = {x: 0, y: 115, z: -2010}; // end of level
 
         resetPos = {x: 0, y: 101, z: 0};
         let radius = 1;
