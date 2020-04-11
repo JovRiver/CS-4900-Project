@@ -1422,12 +1422,7 @@ function createLevel1() {
                 loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     document.getElementById("blocker").style.display = "block";
-                    document.getElementById("instructions").style.display = "";
-                    document.getElementById("load").style.display = "none";
-
-                    setupControls();//game can start with a click after external files are loaded in
-                    cancelAnimationFrame(renderFrameId);
-                    renderFrame();//starts the loop once the models are loaded
+                    after_Game_Menu(loadBar);
                 }
             },
             function(err){//onError
@@ -1439,7 +1434,7 @@ function createLevel1() {
 
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
-        // pos = {x: 0, y: 115, z: -2010}; // end of level
+        //pos = {x: 0, y: 115, z: -2010}; // end of level
 
         resetPos = {x: 0, y: 101, z: 0};
         let radius = 1;
@@ -1627,6 +1622,6 @@ function createLevel1() {
     create_Walls();
     create_Columns();
 
-    after_Game_Menu();
+    //after_Game_Menu();
     object_Loader();
 }

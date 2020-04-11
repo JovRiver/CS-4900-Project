@@ -316,10 +316,10 @@ function create_Start_Menu() {
 	renderFrame();
 }
 
-function after_Game_Menu() {
+function after_Game_Menu(loadBar) {
 	let loader = new THREE.FontLoader();
 
-	function load_In_Game_Menu() {
+	function load_In_Game_Menu(loadBar) {
 
 		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
 			menu_Elements(font);
@@ -327,8 +327,13 @@ function after_Game_Menu() {
 			function(xhr){//onProgress
 				loadBar.innerHTML = "<h2>Loading Fonts " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
 				if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+					document.getElementById("blocker").style.display = "block";
+					document.getElementById("instructions").style.display = "";
 					document.getElementById("load").style.display = "none";
-					document.getElementById("blocker").style.display = "none";
+					
+					setupControls();//game can start with a click after external files are loaded in
+                    cancelAnimationFrame(renderFrameId);
+                    renderFrame();//starts the loop once the models are loaded
 				}
 			},
 			function(err){//onError
@@ -477,5 +482,5 @@ function after_Game_Menu() {
 		spotLight.visible = false;
 	}
 
-	load_In_Game_Menu();
+	load_In_Game_Menu(loadBar);
 }
