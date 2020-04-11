@@ -86,7 +86,7 @@ function start (){
 
 function load_Manager() {
 	document.getElementById("blocker").style.display = "block";
-	document.getElementById("load").style.display = "none";
+	document.getElementById("load").style.display = "";
 	document.getElementById("instructions").style.display = "none";
 
 	scene = new THREE.Scene();
@@ -97,15 +97,12 @@ function load_Manager() {
 
 	switch (level){
 		case 0:
-			document.getElementById("load").style.display = "";
 			create_Start_Menu();
 			break;
 		case 1:
-			document.getElementById("load").style.display = "";
 			createLevel1();
 			break;
 		case 2:
-			document.getElementById("instructions").style.display = "";
 			createLevel2();
 			break;
 	}

@@ -1622,6 +1622,5 @@ function createLevel1() {
     create_Walls();
     create_Columns();
 
-    //after_Game_Menu();
     object_Loader();
 }
