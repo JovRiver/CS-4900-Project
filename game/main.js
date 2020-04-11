@@ -208,6 +208,7 @@ flagCallBack.addSingleResult = function () {
 		scene.getObjectByName("background").visible = true;
 		scene.getObjectByName("spotlight").visible = true;
 		scene.getObjectByName("crosshair").visible = false;
+		scene.getObjectByName("Gun").visible = false;
 		in_Game_Menu_Group.visible = true;
 	}
 };

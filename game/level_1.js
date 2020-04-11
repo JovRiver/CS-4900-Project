@@ -742,12 +742,12 @@ function createLevel1() {
         /////////////////////////////////////////////////////////////////////
         // W7-8 // WALL JUMP
 
-        scale = {x: 1, y: 11, z: 60};
+        scale = {x: 1, y: 14, z: 60};
 
-        pos = {x: -10.5, y: 100, z: -240};
+        pos = {x: -7.5, y: 101.5, z: -240};
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
-        pos = {x: 10.5, y: 100, z: -290};
+        pos = {x: 7.5, y: 101.5, z: -290};
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
 
 /////////////////////////////////////////////////////////////////////////////
