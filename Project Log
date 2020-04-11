@@ -600,5 +600,12 @@ Commit 43:
   Moved the after game menu into the load order queue along with flag, cat, and sound loader to try to make the game loading more consistent.
 I placed the after game menu at the back so that it is the last thing loaded so the setupControls method and renderframe call are now there.
 
+4/11/2020
+Ryan Slaybaugh:
+Commit 44:
+
+  Removed unnecessary load blocker calls, hid the gun when the level has been completed, and moved the first two wall run walls closer together
+to make it easier to jump from left to right on them.
+
 
 
