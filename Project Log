@@ -608,4 +608,8 @@ Commit 44:
 to make it easier to jump from left to right on them.
 
 
+Semira Pinder
+Commit #1 of the time period: April 5-12
+4/11 12:30pm - 2:12pm, 2:54pm - 10:06pm
+Added and tested a path with waypoints using yuka.js to control a test object. Made using the makePathAndWaypoints function in level 1, and the sync function below that.
 
