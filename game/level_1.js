@@ -2,6 +2,8 @@
 let animationNum = 0, secondLoopBool = false, anims, shooterAnim, bullet, bulletInScene = false, kitty, bulletChange, bulletSpeed = 1, catAimer, aimerVisible = false;
 let x, y, z;
 //reduce amount of global variables later
+//variables for YUKA ai movements
+let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null, lastVehiclePosition;
 
 function createLevel1() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 10000 );
@@ -1320,6 +1322,15 @@ function createLevel1() {
                 scene.add(obj.scene);
 
                 loadBar.innerHTML = "";
+
+
+                //testing the path and moving a mesh with a sphere.
+                /*testYuka = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), new THREE.MeshBasicMaterial({color:0xfffff0}));
+                testYuka.position.copy(new THREE.Vector3(-3, 100, 0));
+                scene.add(testYuka);
+                testYuka.matrixautoUpdate = false;*/
+                kitty.matrixAutoUpdate = false;
+                makePathAndWaypoints(kitty.scene);//push the box of the catEnemy to the function
             },
             function(xhr){//onProgress
                 loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
@@ -1573,20 +1584,55 @@ function createLevel1() {
         );//the cat was aligned weird in blender i think
         
         bulletChange.multiplyScalar(bulletSpeed);
-
-        //set movement of the bullet, was going to edit with this
-        /*bulletChange = new THREE.Matrix4();
-        bulletChange.set(1, 0, 0, (catAimer.position.x/kitty.scene.position.x)*100,
-            0, 1, 0, (catAimer.position.y/kitty.scene.position.y)*10,
-            0, 0, 1, (catAimer.position.z/kitty.scene.position.z)*10, 
-            0, 0, 0, 1);
-        bulletChange.matrixAutoUpdate = true;//edited
-        bullet.matrix.set(bulletChange);*/
         
         //tell the main loop that there's a bullet active
         bulletInScene = true;
     }
 
+//https://github.com/Mugen87/yuka/blob/master/examples/ for yuka implementations
+    function makePathAndWaypoints(enemy){//start point for cat is : {x: 5, y: 105, z: 0}
+        //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html
+        yukaVehicle = new YUKA.Vehicle();
+		yukaVehicle.updateWorldMatrix();
+
+        let path = new YUKA.Path();
+        path.add(new YUKA.Vector3(-6, 102.5, 6));
+        path.add(new YUKA.Vector3(6, 102.5, 6));
+        path.add(new YUKA.Vector3(6, 102.5, -6));
+        path.add(new YUKA.Vector3(-6, 102.5, -6));
+        path.loop = true;
+
+        yukaVehicle.position.copy(path.current());
+        //test.position.copy(path.current());
+        //set enemy to vehicle position
+        yukaVehicle.setRenderComponent(enemy, sync);
+        //yukaVehicle.add(enemy);
+        enemy.position.copy(yukaVehicle.position);//local position since it's a child to that object
+        followPath = new YUKA.FollowPathBehavior(path, 1);//number is not the speed.
+        onPath = new YUKA.OnPathBehavior(path, .1, 1);//1st number is the radius of the mesh, 2nd is the prediction
+        //onPath and followPathBehavior for strict paths
+        yukaVehicle.steering.add(followPath);
+        yukaVehicle.steering.add(onPath);
+        yukaVehicle.weight = 10;//amount of weight for the object, doesn't seem to change speed
+        
+        
+        //update rotation and location for the entity so it moves the cat in the same way
+        //with the entity manager for YUKA  
+        engine = new YUKA.EntityManager();
+        //engine.add(enemy);
+        engine.add(yukaVehicle);
+        //scene.add(yukaVehicle);
+        yukaDelta = new YUKA.Time();
+        /*path.advance();
+        path.advance();
+        path.advance();*/
+    }
+//https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html#L113
+//line 52, these next 3 lines:
+    function sync( entity, renderComponent ) {
+        renderComponent.matrix.copy( entity.worldMatrix );
+    }
+   
     function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
         addSprite(spriteMap, 50, 50);
@@ -1661,4 +1707,28 @@ function createLevel1() {
     create_Columns();
 
     object_Loader();
+}
+let bump = true;
+function moveACat(enemy, vehicle, delta){
+    //set values to set velocity
+    let scalingFactor = 5;
+    let vertex = new THREE.Vector3().copy(vehicle.steering.calculate(vehicle, vehicle.steering._steeringForce, delta));
+    vertex.applyQuaternion(enemy.scene.quaternion);
+
+    if(vertex.x == 0 && vertex.y == 0 && vertex.z == 0) return;
+    let resultantImpulse;
+    //set velocity and rotation to userdata
+    if (bump == true){
+        resultantImpulse = new Ammo.btVector3( vertex.x, vertex.y+0.2, vertex.z );
+        bump = false;
+    }
+    else{
+        resultantImpulse = new Ammo.btVector3( vertex.x, vertex.y, vertex.z );
+        bump = true;
+    }
+
+        resultantImpulse.op_mul(scalingFactor);
+
+    let physicsBody = enemy.scene.userData.physicsBody;
+    physicsBody.setLinearVelocity( resultantImpulse);
 }
