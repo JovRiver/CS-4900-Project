@@ -16,7 +16,7 @@ function setupControls(){
     let blocker = document.getElementById( 'blocker' );
     let instructions = document.getElementById( 'instructions' );
     instructions.addEventListener( 'click', function () {controls.lock();}, false );
-    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();
+    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; soundManager[0].play();
         if(startClock){
             gameClock.start();
             startClock = false;
@@ -25,7 +25,7 @@ function setupControls(){
         if(gamePlay){
             blocker.style.display = 'block';
         }
-        instructions.style.display = ''; sound.pause();} );
+        instructions.style.display = ''; soundManager[0].pause();} );
 
     scene.add( controls.getObject() );
 }
@@ -48,8 +48,7 @@ function showStats(){
     document.body.appendChild( stats.dom );
 }
 
-function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
-
+function create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform) {
     let base_Texture = new THREE.MeshLambertMaterial(texture);
     base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
     base_Texture.map.repeat.set(5, 2);
@@ -82,7 +81,9 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         body.setRollingFriction(10);
         box.userData.physicsBody = body;
         physicsWorld.addRigidBody(body, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
-        platforms.push(box);
+        if (isPlatform) {
+            platforms.push(box);
+        }
     }
 }
 
@@ -181,7 +182,6 @@ function createGrapplingHook(vect){
     // Disable deactivation
     ropeSoftBody.setActivationState( STATE.DISABLE_DEACTIVATION );
 
-
     //Create temp physics object at raycast position
     let texture = new THREE.MeshLambertMaterial();
     let hookBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
@@ -205,9 +205,6 @@ function createGrapplingHook(vect){
     hookBox.userData.physicsBody = hookBoxBody;
     physicsWorld.addRigidBody(hookBoxBody, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
 
-
-
-
     // Glue the rope extremes to the ball and the arm
     let influence = 1;
     ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
@@ -219,48 +216,11 @@ function createGrapplingHook(vect){
     vertex.applyQuaternion(camera.quaternion);
 
     let resultantImpulse = new Ammo.btVector3( vertex.x, 0, vertex.z );
-    resultantImpulse.op_mul(20);
+    resultantImpulse.op_mul(100);
 
     let physicsBody = player.userData.physicsBody;
     physicsBody.setLinearVelocity ( resultantImpulse );
     //todo Make player move towards the direction of grappling hook.
-
-}
-
-function random_Texture() {
-    let picker = Math.floor(Math.random() * 9);
-
-    if (picker === 1) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_2.jpg')};
-    }
-
-    else if (picker === 2) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')};
-    }
-
-    else if (picker === 3) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_5.jpg')};
-    }
-
-    else if (picker === 4) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_6.jpg')};
-    }
-
-    else if (picker === 5) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_7.jpg')};
-    }
-
-    else if (picker === 6) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_8.jpg')};
-    }
-
-    else if (picker === 7) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_9.jpg')};
-    }
-
-    else {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_10.jpg')};
-    }
 }
 
 function level_1_Textures(text) {
@@ -312,12 +272,11 @@ function test(){
                 { x: vertices[face.c].x, y: vertices[face.c].y, z: vertices[face.c].z },
                 { x: vertices[face.d].x, y: vertices[face.d].y, z: vertices[face.d].z }
             ]);
-
         }
     }
 }
 
-function addSprite(spriteMap, xPercent,yPercent){
+function addSprite(spriteMap, xPercent, yPercent){
     let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xff0000 } );
     let sprite = new THREE.Sprite( spriteMaterial );
     let crosshairPercentX = xPercent; //middle horizontally
@@ -329,7 +288,70 @@ function addSprite(spriteMap, xPercent,yPercent){
     sprite.position.z = -1.5;
     sprite.scale.set(.1, .1, .1)
 
+    sprite.name = "crosshair";
 
     scene.add(sprite);
     camera.add( sprite );
+}
+
+function grappleSoundLoader(){
+    let listener = new THREE.AudioListener();
+
+    let loadBar = document.getElementById('load');
+
+    // create a global audio source
+    soundManager[1] = new THREE.PositionalAudio( listener );
+
+    // load a sound and set it as the Audio object's buffer
+    let audioLoader = new THREE.AudioLoader();
+    audioLoader.load( './sound/hook.wav',
+        function( buffer ) {
+            soundManager[1].setBuffer( buffer );
+            soundManager[1].setLoop( false );
+            soundManager[1].setVolume( 0.85 );
+        },
+        function(xhr){//onProgress
+            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                document.getElementById("blocker").style.display = "block";
+                jumpSoundLoader();
+            }
+        },
+        function(err){//onError
+            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            console.log("error in loading sound");
+        }
+    );
+    player.add( soundManager[1] );
+}
+
+function jumpSoundLoader(){
+    let listener = new THREE.AudioListener();
+
+    let loadBar = document.getElementById('load');
+
+    // create a global audio source
+    soundManager[2] = new THREE.PositionalAudio( listener );
+
+    // load a sound and set it as the Audio object's buffer
+    let audioLoader = new THREE.AudioLoader();
+    audioLoader.load( './sound/jump.wav',
+        function( buffer ) {
+            soundManager[2].setBuffer( buffer );
+            soundManager[2].setLoop( false );
+            soundManager[2].setVolume( 0.85 );
+        },
+        function(xhr){//onProgress
+            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                document.getElementById("blocker").style.display = "block";
+                after_Game_Menu(loadBar);
+            }
+        },
+        function(err){//onError
+            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            console.log("error in loading sound");
+        }
+    );
+    player.add( soundManager[2] );
 }

@@ -1,8 +1,8 @@
 //variable declaration section
-let physicsWorld, renderer, stats, sound, controls, rigidBodies = [], platforms = [], resetPlatform = [], tmpTrans = null;
+let physicsWorld, renderer, stats, down, controls, rigidBodies = [], platforms = [], resetPlatform = [], tmpTrans = null;
 let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
-
+let soundManager = [];
 // collision group and detection variables
 let playerGroup = 1, flagGroup = 2, buildingGroup = 3, ghostGroup = 4;
 let a = false;
@@ -45,7 +45,7 @@ const STATE = {
 	DISABLE_SIMULATION : 5
 }
 
-let level = 1;	//set to 0 for main menu, 1 or higher for levels
+let level = 0;	//set to 0 for main menu, 1 or higher for levels
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let in_Game_Menu_Group; // in_Game_Menu_Group to hold menu items for raycaster detection
@@ -86,7 +86,7 @@ function start (){
 
 function load_Manager() {
 	document.getElementById("blocker").style.display = "block";
-	document.getElementById("load").style.display = "none";
+	document.getElementById("load").style.display = "";
 	document.getElementById("instructions").style.display = "none";
 
 	scene = new THREE.Scene();
@@ -97,25 +97,13 @@ function load_Manager() {
 
 	switch (level){
 		case 0:
-			document.getElementById("load").style.display = "";
 			create_Start_Menu();
 			break;
 		case 1:
-			document.getElementById("load").style.display = "";
 			createLevel1();
 			break;
 		case 2:
-			document.getElementById("instructions").style.display = "";
 			createLevel2();
-			break;
-		case 3:
-			createLevel1();
-			break;
-		case 4:
-			createLevel1();
-			break;
-		case 5:
-			createLevel1();
 			break;
 	}
 }
@@ -147,7 +135,6 @@ function updatePhysics( deltaTime ){
 		if(!canJump || !canMove){
 			physicsWorld.contactTest(player.userData.physicsBody, movementCallBack);
 		}
-
 	}
 
 	// Update rope
@@ -169,7 +156,6 @@ function updatePhysics( deltaTime ){
 		rope.geometry.attributes.position.needsUpdate = true;
 	}
 
-
 	// Update rigid bodies
 	for ( let i = 0; i < rigidBodies.length; i++ ) {
 		let objThree = rigidBodies[i];
@@ -189,14 +175,13 @@ movementCallBack.addSingleResult = function () {
 	//todo Fix sliding off platform flying movement
 	if(gamePlay){
 
-			canMove = true;
-			canJump = true;
+		canMove = true;
+		canJump = true;
 
 		if(landing){
 			playerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 			landing = false;
 		}
-
 	}
 }
 
@@ -211,11 +196,8 @@ resetCallBack.addSingleResult = function () {
 		transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
 		let motionState = new Ammo.btDefaultMotionState( transform );
 		player.userData.physicsBody.setMotionState(motionState);
-
 	}
 }
-
-
 
 flagCallBack.addSingleResult = function () {
 	if(gamePlay){
@@ -225,38 +207,9 @@ flagCallBack.addSingleResult = function () {
 
 		scene.getObjectByName("background").visible = true;
 		scene.getObjectByName("spotlight").visible = true;
+		scene.getObjectByName("crosshair").visible = false;
+		scene.getObjectByName("Gun").visible = false;
 		in_Game_Menu_Group.visible = true;
-
-
-		//	ATTEMPT AT USING SPRITES
-
-		/*
-            let spriteMap = new THREE.TextureLoader().load( "texture/sprites/sprite.png" );
-            let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
-            sprite = new THREE.Sprite( spriteMaterial );
-
-            sprite.position.set(camera.position.x, camera.position.y + 40, camera.position.z);
-            sprite.center.set(0.5, 0.25);
-            sprite.scale.set(50, 50, 1);
-            sprite.name = "Continue";
-
-            in_Game_Menu_Group.add(sprite);
-
-            let spriteBackground = new THREE.TextureLoader().load("texture/sprites/background.png");
-            let backgroundMaterial = new THREE.SpriteMaterial({map: spriteBackground, color: 0x000000});
-            spriteB = new THREE.Sprite(backgroundMaterial);
-
-            spriteB.position.set(camera.position.x, camera.position.y + 50, camera.position.z);
-            spriteB.center.set(0.5, 0.5);
-            spriteB.scale.set(150, 150, 1);
-
-            camera.rotation.x = THREE.Math.degToRad(90);
-            camera.position.y += 10;
-
-            scene.add(in_Game_Menu_Group);
-            scene.add(spriteB);
-        */
-
 	}
 };
 
@@ -329,9 +282,6 @@ function renderFrame(){
 			case 2:
 				menu_Group.getObjectByName("Level_2_Cube").rotation.y += 0.01;
 				break;
-			//case 3:
-			//menu_Group.getObjectByName("Level_1_Cube").rotation.y += 0.01;
-			//break;
 		}
 	}
 
@@ -342,6 +292,7 @@ function renderFrame(){
 		//multiple cats
 		theMixer.update(deltaTime);//updates the time for the animations with the THREE.Clock object
 
+
 		//update movements for the cat(s) with yuka's AI
 		let delt = yukaDelta.update().getDelta();
 		yukaVehicle.updateWorldMatrix(false, false);
@@ -351,15 +302,14 @@ function renderFrame(){
 		moveACat(kitty, yukaVehicle, delt);
 		engine.update(delt);
 		//lastVehiclePosition = yukaVehicle.position;
+
 	}
 
 	if(bulletInScene)//animate a bullet, change to different bullets over time
 		bullet.position.add(bulletChange);
 
 	renderFrameId = requestAnimationFrame( renderFrame );
-
 	renderer.render(scene, camera);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -389,11 +339,13 @@ function onMouseDown(event){
 		controls.getDirection( direction );
 		raycasterRope.set( controls.getObject().position, direction );
 		raycasterRope.near = 1;
-		raycasterRope.far = 12;
+		raycasterRope.far = 15;
 		let intersects = raycasterRope.intersectObjects( platforms );
 		for ( let i = 0; i < intersects.length; i++ ) {
 			if(intersects.length === 1){
 				createGrapplingHook(intersects[i].point);
+				physicsWorld.setGravity(new Ammo.btVector3(0, -30, 0));
+				soundManager[1].play();
 			}
 		}
 	}
@@ -402,8 +354,10 @@ function onMouseDown(event){
 function onMouseUp(event){
 	if(event.which === 3){
 		if(rope != null){
+			physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
 			physicsWorld.removeCollisionObject(rope.userData.physicsBody);
 			scene.remove(rope);
+			soundManager[1].stop();
 		}
 		if(scene.getObjectByName( "Hook_Box" ) != null){
 			physicsWorld.removeCollisionObject(scene.getObjectByName( "Hook_Box" ).userData.physicsBody);
@@ -459,6 +413,7 @@ function onKeyDown (event ) {
 					resultantImpulse.op_mul(2);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
+					soundManager[2].play();
 				}
 				break;
 
@@ -487,6 +442,7 @@ function onKeyDown (event ) {
 					resultantImpulse.op_mul(2);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
+					soundManager[2].play();
 				}
 				break;
 
@@ -511,6 +467,7 @@ function onKeyDown (event ) {
 					resultantImpulse.op_mul(2);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
+					soundManager[2].play();
 				}
 				break;
 		}
@@ -542,7 +499,6 @@ function onKeyUp( event ) {
 		case 16: // shift
 			player.scale.set(2, 2, 2);
 			break;
-
 	}
 }
 
@@ -621,11 +577,9 @@ function on_Mouse_Move(event) {
 			if (intersects[0].object.name === "Level_1_Cube") {
 				onBox = 1;
 			}
-
 			else if (intersects[0].object.name === "Level_2_Cube") {
 				onBox = 2;
 			}
-
 			else if (intersected_Object != intersects[0].object) {
 				if (intersected_Object){
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
@@ -640,7 +594,6 @@ function on_Mouse_Move(event) {
 				intersected_Object = intersects[0].object;
 				intersected_Object.currentHex = intersected_Object.material.emissive.getHex();
 				intersected_Object.material.emissive.setHex(0xdde014);
-
 			}
 		}
 		else {
@@ -667,7 +620,6 @@ function on_Mouse_Move(event) {
 				}
 				intersected_Object = null;
 			}
-
 			else if (intersected_Object != intersects[0].object) {
 				if (intersected_Object){
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);

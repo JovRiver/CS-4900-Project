@@ -7,7 +7,6 @@ let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null, 
 
 function createLevel1() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 10000 );
-    //scene.fog = new THREE.Fog(0x6c7578, 150, 750);
 
     // add hemisphere light
     let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
@@ -44,7 +43,6 @@ function createLevel1() {
     scene.add( dirLight );
     //scene.add( helper );
 
-
     function createSkyBox() {
         let base_Texture = [
             new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('texture/skybox/bluecloud_right.jpg'), side: THREE.BackSide }),  //Right
@@ -63,12 +61,11 @@ function createLevel1() {
     }
 
     function create_Course() {
-        let scale, pos, quat, texture, has_Boundary;
+        let scale, pos, quat, texture, has_Boundary, isPlatform;
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundary = true;
+        isPlatform = true;
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
-
-        //PLATFORMS DENOTED BY P#
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 1 BEGIN
@@ -79,18 +76,18 @@ function createLevel1() {
 
         scale = {x: 20, y: 1, z: 20};
         pos = {x: 0, y: 99.5, z: 0};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P1-2
 
         scale = {x: 10, y: 1, z: 40};
         pos = {x: -5, y: 99.5, z: -60};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 5, y: 1, z: 20};
         pos = {x: -2.5, y: 103.5, z: -70};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P3-14
@@ -98,14 +95,14 @@ function createLevel1() {
         for (let i = 0; i < 4; i++) {
             scale = {x: 20, y: 1, z: 5};
             pos = {x: 0, y: 103.5 - (i * 2), z: -112.5 - (i * 5)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             scale = {x: 5, y: 1, z: 20};
             pos = {x: -47.5 + (i * 5), y: 103.5 - (i * 2), z: -160};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: 47.5 - (i * 5), y: 103.5 - (i * 2), z: -160};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
@@ -114,10 +111,10 @@ function createLevel1() {
         scale = {x: 60, y: 1, z: 60};
 
         pos = {x: 0, y: 95.5, z: -160};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 0, y: 120.5, z: -160};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P17-18
@@ -125,34 +122,46 @@ function createLevel1() {
         scale = {x: 20, y: 1, z: 20};
 
         pos = {x: 60, y: 103.5, z: -160};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: -60, y: 103.5, z: -160};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P19
 
         scale = {x: 20, y: 1, z: 10};
         pos = {x: 0, y: 95.5, z: -345};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P20-29 (A,B)
 
         scale = {x: 20, y: 1, z: 2.5};
+        has_Boundary = false;
 
         for (let i = 0; i < 20; i++) {
             pos = {x: 0, y: 95.7 + (i * 0.2), z: -351.15 - (i * 2.5)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P30
+        // Stairs single bounding box
 
+        scale = {x: 20, y: 1, z: 50};
+        pos = {x: 0, y: 97.6, z: -375};
+        quat = {x: 0.038, y: 0, z: 0, w: 1};
+        createBoundingBox(pos, scale, quat);
+
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        /////////////////////////////////////////////////////////////////////
+        // P30
+        
         scale = {x: 20, y: 1, z: 40.25};
+        has_Boundary = true;
         pos = {x: 0, y: 99.5, z: -420};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
     
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 1 END
@@ -167,15 +176,15 @@ function createLevel1() {
 
         scale = {x: 25, y: 2.5, z: 5.5};
         pos = {x: 0, y: 107.5, z: -420};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 20, y: 11, z: 4.5};
         pos = {x: 0, y: 93.5, z: -420};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 20, y: 11, z: 10};
         pos = {x: 0, y: 93.5, z: -435};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P34-35 // has_Boundary SET TO FALSE
@@ -184,10 +193,10 @@ function createLevel1() {
         scale = {x: 120, y: 1, z: 30};
 
         pos = {x: 0, y: 91.5, z: -435};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 0, y: 91.5, z: -625};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P36-37 (A,B)
@@ -196,10 +205,10 @@ function createLevel1() {
 
         for (let i = 0; i < 2; i++) {
             pos = {x: -45 + (i * 90), y: 91.5, z: -490};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: -45 + (i * 90), y: 91.5, z: -570};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
@@ -214,7 +223,7 @@ function createLevel1() {
             else {
                 pos = {x: 0, y: 91.5, z: -465 - (i * 40) - 10};
             }
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
@@ -223,10 +232,10 @@ function createLevel1() {
         scale = {x: 60, y: 1, z: 10};
 
         pos = {x: 0, y: 91.5, z: -485};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 0, y: 91.5, z: -575};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P44-45
@@ -234,10 +243,10 @@ function createLevel1() {
         scale = {x: 20, y: 1, z: 10};
 
         pos = {x: -20, y: 91.5, z: -530};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 20, y: 91.5, z: -530};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // G1-4 // TEXTURE CHANGED TO GRASS FOR NEXT TWO SECTIONS
@@ -247,10 +256,10 @@ function createLevel1() {
 
         for (let i = 0; i < 2; i++) {
             pos = {x: -15, y: 91.5, z: -465 - (i * 130)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: 15, y: 91.5, z: -465 - (i * 130)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
@@ -260,10 +269,10 @@ function createLevel1() {
 
         for (let i = 0; i < 2; i++) {
             pos = {x: -15, y: 91.5, z: -510 - (i * 40)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: 15, y: 91.5, z: -510 - (i * 40)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
@@ -274,10 +283,10 @@ function createLevel1() {
         scale = {x: 20, y: 1, z: 10};
 
         pos = {x: 0, y: 96.5, z: -465};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 0, y: 96.5, z: -595};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P48-52
@@ -286,24 +295,24 @@ function createLevel1() {
 
         for (let i = 0; i < 2; i++) {
             pos = {x: -20 + (i * 40), y: 96.6, z: -510};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         
             pos = {x: -20 + (i * 40), y: 96.6, z: -560};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
         pos = {x: 0, y: 100.5, z: -530};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P53-54 // BALCONY
 
         scale = {x: 30, y: 1, z: 20};
         pos = {x: 25, y: 99.6, z: -640};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 20, y: 2, z: 20};
         pos = {x: 25, y: 107.5, z: -640};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P55-64
@@ -316,11 +325,11 @@ function createLevel1() {
             else {
                 pos = {x: -15, y: 91.5 + (i * 2), z: -680 - (i * 50)};
             }
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             scale = {x: 20, y: 2, z: 10};
             pos = {x: -20, y: 87.5 + (i * 2), z: -655 - (i * 50)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
@@ -328,25 +337,28 @@ function createLevel1() {
 
         scale = {x: 20, y: 1, z: 20};
         pos = {x: -20, y: 103.5, z: -900};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         
         /////////////////////////////////////////////////////////////////////
         // P66
 
         scale = {x: 10, y: 1, z: 170};
         pos = {x: 55, y: 95.5, z: -765};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
-        // P48-52 // GRAPPLE BOXES // TEXTURE CHANGED TO GREEN
+        // G9-13 // GRAPPLE BOXES // TEXTURE CHANGED TO GREEN
 
         texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
-        scale = {x: 2, y: 2, z: 2};
+        scale = {x: 2, y: 3, z: 2};
 
-        for (let i = 0; i < 5; i++) {
-            pos = {x: 25, y: 111.5, z: -685 - (i * 40)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        for (let i = 0; i < 4; i++) {
+            pos = {x: 25, y: 110.5, z: -685 - (i * 40)};
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
+
+        pos = {x: 15, y: 110.5, z: -845};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // 67-71 // TEXTURE RETURNED TO STONE
@@ -354,17 +366,21 @@ function createLevel1() {
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
         scale = {x: 35, y: 1, z: 2.5};
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 4; i++) {
             pos = {x: 40, y: 112, z: -685 - (i * 40)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
+
+        scale = {x: 45, y: 1, z: 2.5};
+        pos = {x: 35, y: 112, z: -845};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P72
 
         scale = {x: 10, y: 1, z: 60};
         pos = {x: 5, y: 99.5, z: -900};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // BOUNDING BOX FOR AREA 2 GARDEN
@@ -387,10 +403,10 @@ function createLevel1() {
         scale = {x: 10, y: 1, z: 10};
 
         pos = {x: -15, y: 103.5, z: -945};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 25, y: 103.5, z: -945};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P75-82
@@ -399,38 +415,38 @@ function createLevel1() {
 
         for (let i = 0; i < 8; i++) {
             pos = {x: 5, y: 107.5, z: -965 - (i * 40)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P82-88
+        // P83-89
 
         scale = {x: 10, y: 1, z: 30};
 
         for (let i = 0; i < 7; i++) {
             if (i % 2 == 0) {
                 pos = {x: -25, y: 107.5, z: -985 - (i * 40)};
-                create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+                create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
                 pos = {x: 35, y: 107.5, z: -985 - (i * 40)};
-                create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+                create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
             }
             else {
                 pos = {x: 5, y: 111.5, z: -985 - (i * 40)};
-                create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+                create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
             }
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P89-90
+        // P90-91
 
         scale = {x: 10, y: 1, z: 10};
         pos = {x: 5, y: 103.5, z: -1285};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 20, y: 1, z: 20};
         pos = {x: 5, y: 103.5, z: -1330};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 3 END
@@ -441,108 +457,108 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////
-        // P91-92
+        // P93-94
 
         scale = {x: 10, y: 1, z: 20};
         pos = {x: 5, y: 103.5, z: -1380};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 10, y: 1, z: 40};
         pos = {x: 5, y: 99.5, z: -1430};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
-        // P93-100
+        // P95-102
 
         scale = {x: 10, y: 1, z: 2.5};
 
         for (let i = 0; i < 8; i++) {
             pos = {x: 5, y: 103.5 - (i * 0.5), z: -1391.25 - (i * 2.5)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P101-102
+        // P102-103
 
         scale = {x: 110, y: 1, z: 10};
 
         pos = {x: 5, y: 99.5, z: -1455};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 5, y: 99.5, z: -1695};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
-        // P103-108
+        // P104-109
 
         scale = {x: 40, y: 1, z: 10};
 
         for (let i = 0; i < 3; i++) {
             pos = {x: -30, y: 99.5, z: -1515 - (i * 60)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: 40, y: 99.5, z: -1515 - (i * 60)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P109-110
+        // P110-111
 
         scale = {x: 10, y: 1, z: 40};
 
         pos = {x: -35, y: 99.55, z: -1690};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: -35, y: 99.5, z: -1730};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
-        // P111-112
+        // P112-113
 
         scale = {x: 50, y: 1, z: 10};
         pos = {x: -15, y: 99.5, z: -1755};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 10, y: 1, z: 60};
         pos = {x: 5, y: 99.55, z: -1780};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
-        // P113-114
+        // P114-115
 
         scale = {x: 30, y: 1, z: 10};
 
         pos = {x: 5, y: 103.5, z: -1485};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 5, y: 103.5, z: -1595};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
-        // P115-118
+        // P116-119
 
         scale = {x: 10, y: 1, z: 30};
 
         for (let i = 0; i < 2; i++) {
             pos = {x: -25 + (i * 60), y: 103.5, z: -1485};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: -25 + (i * 60), y: 103.5, z: -1595};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P119-122 // GRAPPLE BOXES // TEXTURE SET TO GREEN
+        // G14-17 // GRAPPLE BOXES // TEXTURE SET TO GREEN
 
         texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
         scale = {x: 2, y: 1, z: 2};
 
         for (let i = 0; i < 2; i++) {
             pos = {x: -30 + (i * 70), y: 107.5, z: -1535};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: -30 + (i * 70), y: 107.5, z: -1555};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -554,81 +570,94 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////
-        // P123-125 // TEXTURE RETURNED TO STONE
+        // P120-122 // TEXTURE RETURNED TO STONE
 
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
         scale = {x: 50, y: 1, z: 10};
         pos = {x: 5, y: 99.5, z: -1815};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 90, y: 1, z: 30};
         pos = {x: 5, y: 99.5, z: -1835};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 210, y: 1, z: 300};
         pos = {x: 5, y: 111.5, z: -2120};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
-        // P126-173
+        // P123-170
 
         scale = {x: 60, y: 1, z: 2.5};
+        has_Boundary = false;
 
         for (let i = 0; i < 48; i++) {
             pos = {x: 5, y: 99.5 + (i * 0.25), z: -1851.25 - (i * 2.5)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P174-175
+        // Stairs single bounding box
 
-        scale = {x: 150, y: 1, z: 20};
+        scale = {x: 60, y: 1, z: 120};
+        pos = {x: 5, y: 105.5, z: -1910};
+        quat = {x: 0.05, y: 0, z: 0, w: 1};
 
-        pos = {x: 5, y: 119.5, z: -2010};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        createBoundingBox(pos, scale, quat);
 
-        pos = {x: 5, y: 119.5, z: -2230};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        quat = {x: 0, y: 0, z: 0, w: 1};
 
         /////////////////////////////////////////////////////////////////////
-        // P176-178
+        // P171-172
+
+        scale = {x: 150, y: 1, z: 20};
+        has_Boundary = true;
+
+        pos = {x: 5, y: 119.5, z: -2010};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
+
+        pos = {x: 5, y: 119.5, z: -2230};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
+
+        /////////////////////////////////////////////////////////////////////
+        // P173-174
 
         scale = {x: 20, y: 1, z: 200};
 
         pos = {x: -60, y: 119.5, z: -2120};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 70, y: 119.5, z: -2120};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
-        // P179 // FLAG BASE
+        // P175 // FLAG BASE
 
         scale = {x: 30, y: 20, z: 20};
         pos = {x: 5, y: 121.5, z: -2170};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
-        // P180-198 // FLAG AREA PLATFORMS OUTER
+        // P176-194 // FLAG AREA PLATFORMS OUTER
 
         scale = {x: 2.5, y: 40, z: 20};
 
         for (let i = 0; i < 5; i++) {
             pos = {x: -51.249, y: 131.5, z: -2040 - (i * 40)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: 61.249, y: 131.5, z: -2040 - (i * 40)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         scale = {x: 20, y: 40, z: 2.5};
 
         for (let i = 0; i < 2; i++) {
             pos = {x: -30 + (i * 70), y: 131.5, z: -2018.751};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: -30 + (i * 70), y: 131.5, z: -2221.249};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         scale = {x: 200, y: 5, z: 7.5};
@@ -643,31 +672,31 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P199-207 // FLAG AREA PLATORMS INNER
+        // P195-203 // FLAG AREA PLATORMS INNER
 
         scale = {x: 30, y: 1, z: 10};
 
         pos = {x: 5, y: 116.5, z: -2055};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 5, y: 116.5, z: -2095};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 5, y: 127.5, z: -2195};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 10, y: 1, z: 20};
 
         for (let i = 0; i < 3; i++) {
             pos = {x: -25, y: 119.5 + (i * 4), z: -2120 - (i * 40)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: 35, y: 119.5 + (i * 4), z: -2120 - (i * 40)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P208-209 // TEMPLE ROOF
+        // P204-205 // TEMPLE ROOF
 
         scale = {x: 110, y: 5, z: 300};
         pos = {x: -47.5, y: 168, z: -2120};
@@ -688,16 +717,16 @@ function createLevel1() {
         scene.add(roofR);
 
         /////////////////////////////////////////////////////////////////////
-        // P210-211 // has_Boundary SET TO FALSE
+        // P206-207 // has_Boundary SET TO FALSE
 
         has_Boundary = false;
         scale = {x: 200, y: 5, z: 7.5};
 
         pos = {x: 5, y: 156, z: -1980};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 5, y: 156, z: -2260};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 5 END
@@ -705,12 +734,11 @@ function createLevel1() {
     }
 
     function create_Walls() {
-        let scale, pos, quat, has_Boundary;
+        let scale, pos, quat, has_Boundary, isPlatform;
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundary = true;
+        isPlatform = false;
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
-
-        // WALLS DENOTED BY W#
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 1 BEGIN
@@ -725,38 +753,39 @@ function createLevel1() {
 
             // LEFT WALLS
             pos = {x: -45, y: 114, z: -119.5 - (i * 81)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: -45, y: 100, z: -119.5 - (i * 81)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             // RIGHT WALLS
             pos = {x: 45, y: 114, z: -119.5 - (i * 81)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: 45, y: 100, z: -119.5 - (i * 81)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             // SIDE FACING WALLS
             scale = {x: 1, y: 11, z: 60};
 
             pos = {x: -89.5 + (i * 179), y: 114, z: -160};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: -89.5 + (i * 179), y: 100, z: -160};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
         // W7-8 // WALL JUMP
 
-        scale = {x: 1, y: 11, z: 60};
+        scale = {x: 1, y: 14, z: 60};
+        isPlatform = true;
 
-        pos = {x: -10.5, y: 100, z: -240};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        pos = {x: -7.5, y: 101.5, z: -240};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
-        pos = {x: 10.5, y: 100, z: -290};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        pos = {x: 7.5, y: 101.5, z: -290};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 1 END
@@ -770,12 +799,13 @@ function createLevel1() {
         // W9-10
         
         scale = {x: 50, y: 17.5, z: 4.5};
+        isPlatform = false;
 
         pos = {x: -35, y: 100, z: -420};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 35, y: 100, z: -420};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // W11-12 (A,B)
@@ -784,10 +814,10 @@ function createLevel1() {
 
         for (let i = 0; i < 2; i++) {
             pos = {x: -57.75 + (i * 115.5), y: 100, z: -475};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: -57.75 + (i * 115.5), y: 100, z: -585};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
@@ -802,7 +832,7 @@ function createLevel1() {
             else {
                 pos = {x: -30.5, y: 100, z: -460 - (i * 50) + 10};
             }
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             if (i < 2) {
                 pos = {x: 30.5, y: 100, z: -460 - (i * 50)};
@@ -810,7 +840,7 @@ function createLevel1() {
             else {
                 pos = {x: 30.5, y: 100, z: -460 - (i * 50) + 10};
             }
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
@@ -819,10 +849,10 @@ function createLevel1() {
         scale = {x: 20, y: 17.5, z: 1};
 
         pos = {x: -20, y: 100, z: -610.5};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 20, y: 100, z: -610.5};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // W23-27 // FAR WALL AREA 2
@@ -830,22 +860,22 @@ function createLevel1() {
         scale = {x: 30, y: 17.5, z: 4.5};
 
         pos = {x: -45, y: 100, z: -640};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 45, y: 100, z: -640};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 10, y: 9, z: 4.5};
         pos = {x: -25, y: 104.25, z: -640};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 40, y: 17.5, z: 4.5};
         pos = {x: 0, y: 100, z: -640};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         scale = {x: 20, y: 9, z: 5};
         pos = {x: 25, y: 95.5, z: -640};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 2 END
@@ -861,10 +891,10 @@ function createLevel1() {
         scale = {x: 60, y: 20, z: 1};
 
         pos = {x: -40, y: 103.5, z: -1370.5};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 50, y: 103.5, z: -1370.5};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // W30-37
@@ -873,10 +903,10 @@ function createLevel1() {
 
         for (let i = 0; i < 4; i++) {
             pos = {x: -79.5, y: 103.5, z: -1410 - (i * 80)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: 89.5, y: 103.5, z: -1400 - (i * 80)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
@@ -884,7 +914,7 @@ function createLevel1() {
         
         scale = {x: 60, y: 20, z: 1};
         pos = {x: 10, y: 103.5, z: -1720};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 4 END
@@ -900,10 +930,10 @@ function createLevel1() {
         scale = {x: 60, y: 40, z: 1};
 
         pos = {x: -40, y: 131.5, z: -2000.4};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 50, y: 131.5, z: -2000.4};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // W41-42 // SIDE WALLS OF TEMPLE
@@ -911,24 +941,24 @@ function createLevel1() {
         scale = {x: 1, y: 40, z: 240};
 
         pos = {x: -69.6, y: 131.5, z: -2120};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         pos = {x: 79.6, y: 131.5, z: -2120};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // W43 // BACK WALL OF TEMPLE
         
         scale = {x: 150, y: 40, z: 1};
         pos = {x: 5, y: 131.5, z: -2239.6};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // W44 // FRONT CENTER WALL OF TEMPLE
         
         scale = {x: 30, y: 32, z: 1};
         pos = {x: 5, y: 135.5, z: -2000.4};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 5 END
@@ -939,8 +969,6 @@ function createLevel1() {
         let radius, height, pos, quat, texture, pillarTop;
         quat = {x: 0, y: 0, z: 0, w: 1};
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
-
-        // COLUMNS DENOTED BY C#
 
 /////////////////////////////////////////////////////////////////////////////
 //  PAGE 1 BEGIN
@@ -1083,7 +1111,7 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////
 
         /////////////////////////////////////////////////////////////////////
-        // C35-42
+        // C35-44
 
         height = 20;
 
@@ -1139,7 +1167,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // C49-46
+        // C49-56
 
         radius = 3;
         height = 40;
@@ -1161,7 +1189,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // C47-72
+        // C57-82
 
         for (let i = 0; i < 13; i++) {
             pos = {x: -90, y: 131.5, z: -2000 - (i * 20)};
@@ -1186,7 +1214,7 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // C73-82
+        // C83-92
 
         for (let i = 0; i < 10; i++) {
             if (i < 5) {
@@ -1220,14 +1248,12 @@ function createLevel1() {
                 theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
                 obj.name = "Enemy";
 
-                //let pos ={ x: -5, y: 103, z: -5};
                 let pos ={x: 5, y: 105, z: 0};
 
                 obj.scene.position.x = pos.x;
                 obj.scene.position.y = pos.y;
                 obj.scene.position.z = pos.z;
                 obj.scene.rotation.y = -1.2;
-                
                 
                 kitty = obj;
                 obj.matrixAutoUpdate = true;//changed from false
@@ -1243,9 +1269,6 @@ function createLevel1() {
                 catAimer.position.x += 1;//in local
                 //catAimer.position.y += 2;//in local
                 //catAimer.position.z += 1;//in local
-
-
-
 
                 let vect3 = new THREE.Vector3();
                 let box = new THREE.Box3().setFromObject(obj.scene).getSize(vect3);
@@ -1271,7 +1294,6 @@ function createLevel1() {
                 physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
 
                 obj.scene.userData.physicsBody = objBody;
-
 
                 rigidBodies.push(obj.scene);
 
@@ -1355,9 +1377,6 @@ function createLevel1() {
                 scene.add( flag );
                 //flag.add(obj);
 
-
-
-
                 //scene.add(obj);
 
                 let transform = new Ammo.btTransform();
@@ -1382,10 +1401,7 @@ function createLevel1() {
 
                 flag.userData.physicsBody = flagBody;
 
-
                 rigidBodies.push(flag);
-
-
 
                 loadBar.innerHTML = "";
             },
@@ -1410,11 +1426,11 @@ function createLevel1() {
             "objects//gun/gun.obj",
             function(obj) {//onLoad, obj is an Object3D provided by load()
                 obj.name = "Gun";
-                obj.scale.set( .1, .1, .1 );
+                obj.scale.set( 1/60, 1/60, 1/60 );
                 obj.rotation.y = Math.PI;
-                obj.position.x = 3;
-                obj.position.y = -2;
-                obj.position.z = -3;
+                obj.position.x = 0.5;
+                obj.position.y = -0.25;
+                obj.position.z = -0.5;
                 camera.add(obj);
 
                 loadBar.innerHTML = "";
@@ -1439,27 +1455,21 @@ function createLevel1() {
         camera.add( listener );
 
         // create a global audio source
-        sound = new THREE.Audio( listener );
-
+        soundManager[0] = new THREE.Audio( listener );
 
         // load a sound and set it as the Audio object's buffer
         let audioLoader = new THREE.AudioLoader();
         audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
             function( buffer ) {
-                sound.setBuffer( buffer );
-                sound.setLoop( true );
-                sound.setVolume( 0.25 );
+                soundManager[0].setBuffer( buffer );
+                soundManager[0].setLoop( true );
+                soundManager[0].setVolume( 0.25 );
             },
             function(xhr){//onProgress
                 loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     document.getElementById("blocker").style.display = "block";
-                    document.getElementById("instructions").style.display = "";
-                    document.getElementById("load").style.display = "none";
-
-                    setupControls();//game can start with a click after external files are loaded in
-                    cancelAnimationFrame(renderFrameId);
-                    renderFrame();//starts the loop once the models are loaded
+                    grappleSoundLoader();
                 }
             },
             function(err){//onError
@@ -1471,8 +1481,11 @@ function createLevel1() {
 
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
+        //pos = {x: 0, y: 115, z: -2010}; // end of level
+        pos = {x: 24, y: 105, z: -647}; // grappling hook spot
 
-        resetPos = {x: 0, y: 101, z: 0};
+        resetPos = {x: 24, y: 105, z: -647}; //beginning of level
+        //resetPos = {x: 0, y: 101, z: 0}; //grappling hook reset
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};
         let mass = 1;
@@ -1482,7 +1495,6 @@ function createLevel1() {
         player.position.set(pos.x, pos.y, pos.z);
         player.castShadow = true;
         player.receiveShadow = true;
-
 
         scene.add(player);
 
@@ -1513,9 +1525,6 @@ function createLevel1() {
 
         rigidBodies.push(player);
         a = true;
-
-
-
     }
 
     function catAnimations(e){//e contains the type action and loopDelta
@@ -1540,14 +1549,12 @@ function createLevel1() {
                 bulletInScene = false;
             }
             e.action.crossFadeTo(theMixer.clipAction(anims[animationNum]), .4, false);
-
         }
         if(animationNum == shooterAnim)//matches returns an array with matches or null if nothing's found.
             shootBullet();
 
         secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
         //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
-
     }
 
     function shootBullet(){
@@ -1581,6 +1588,7 @@ function createLevel1() {
         //tell the main loop that there's a bullet active
         bulletInScene = true;
     }
+
 //https://github.com/Mugen87/yuka/blob/master/examples/ for yuka implementations
     function makePathAndWaypoints(enemy){//start point for cat is : {x: 5, y: 105, z: 0}
         //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html
@@ -1624,7 +1632,7 @@ function createLevel1() {
     function sync( entity, renderComponent ) {
         renderComponent.matrix.copy( entity.worldMatrix );
     }
-    
+   
     function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
         addSprite(spriteMap, 50, 50);
@@ -1638,7 +1646,6 @@ function createLevel1() {
 
         let lavaTexture = new THREE.ImageUtils.loadTexture( 'texture/lava/lavatile.jpg' );
         lavaTexture.wrapS = lavaTexture.wrapT = THREE.RepeatWrapping;
-
 
         customUniforms = {
             baseTexture: 	{ type: "t", value: lavaTexture },
@@ -1685,7 +1692,6 @@ function createLevel1() {
         resetBox.userData.physicsBody = body;
         physicsWorld.addRigidBody(body, ghostGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
         resetPlatform.push(resetBox);
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     setupPhysicsWorld();
@@ -1699,7 +1705,6 @@ function createLevel1() {
     create_Course();
     create_Walls();
     create_Columns();
-    after_Game_Menu();
 
     object_Loader();
 }
