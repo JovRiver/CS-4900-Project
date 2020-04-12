@@ -335,10 +335,10 @@ function createLevel1() {
         // G9-13 // GRAPPLE BOXES // TEXTURE CHANGED TO GREEN
 
         texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
-        scale = {x: 2, y: 2, z: 2};
+        scale = {x: 2, y: 3, z: 2};
 
         for (let i = 0; i < 5; i++) {
-            pos = {x: 25, y: 111.5, z: -685 - (i * 40)};
+            pos = {x: 25, y: 110.5, z: -685 - (i * 40)};
             create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
         }
 
@@ -1379,11 +1379,11 @@ function createLevel1() {
             "objects//gun/gun.obj",
             function(obj) {//onLoad, obj is an Object3D provided by load()
                 obj.name = "Gun";
-                obj.scale.set( .1, .1, .1 );
+                obj.scale.set( 1/60, 1/60, 1/60 );
                 obj.rotation.y = Math.PI;
-                obj.position.x = 3;
-                obj.position.y = -2;
-                obj.position.z = -3;
+                obj.position.x = 0.5;
+                obj.position.y = -0.25;
+                obj.position.z = -0.5;
                 camera.add(obj);
 
                 loadBar.innerHTML = "";
@@ -1408,21 +1408,21 @@ function createLevel1() {
         camera.add( listener );
 
         // create a global audio source
-        sound = new THREE.Audio( listener );
+        soundManager[0] = new THREE.Audio( listener );
 
         // load a sound and set it as the Audio object's buffer
         let audioLoader = new THREE.AudioLoader();
         audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
             function( buffer ) {
-                sound.setBuffer( buffer );
-                sound.setLoop( true );
-                sound.setVolume( 0.25 );
+                soundManager[0].setBuffer( buffer );
+                soundManager[0].setLoop( true );
+                soundManager[0].setVolume( 0.25 );
             },
             function(xhr){//onProgress
                 loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     document.getElementById("blocker").style.display = "block";
-                    after_Game_Menu(loadBar);
+                    grappleSoundLoader();
                 }
             },
             function(err){//onError
@@ -1435,8 +1435,10 @@ function createLevel1() {
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
         //pos = {x: 0, y: 115, z: -2010}; // end of level
+        pos = {x: 24, y: 105, z: -647}; // grappling hook spot
 
-        resetPos = {x: 0, y: 101, z: 0};
+        resetPos = {x: 24, y: 105, z: -647}; //beginning of level
+        //resetPos = {x: 0, y: 101, z: 0}; //grappling hook reset
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};
         let mass = 1;
