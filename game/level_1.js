@@ -135,6 +135,7 @@ function createLevel1() {
         // P20-29 (A,B)
 
         scale = {x: 20, y: 1, z: 2.5};
+        has_Boundary = false;
 
         for (let i = 0; i < 20; i++) {
             pos = {x: 0, y: 95.7 + (i * 0.2), z: -351.15 - (i * 2.5)};
@@ -142,9 +143,20 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
-        // P30
+        // Stairs single bounding box
 
+        scale = {x: 20, y: 1, z: 50};
+        pos = {x: 0, y: 97.6, z: -375};
+        quat = {x: 0.038, y: 0, z: 0, w: 1};
+        createBoundingBox(pos, scale, quat);
+
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        /////////////////////////////////////////////////////////////////////
+        // P30
+        
         scale = {x: 20, y: 1, z: 40.25};
+        has_Boundary = true;
         pos = {x: 0, y: 99.5, z: -420};
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);
     
@@ -567,6 +579,7 @@ function createLevel1() {
         // P123-170
 
         scale = {x: 60, y: 1, z: 2.5};
+        has_Boundary = false;
 
         for (let i = 0; i < 48; i++) {
             pos = {x: 5, y: 99.5 + (i * 0.25), z: -1851.25 - (i * 2.5)};
@@ -574,9 +587,21 @@ function createLevel1() {
         }
 
         /////////////////////////////////////////////////////////////////////
+        // Stairs single bounding box
+
+        scale = {x: 60, y: 1, z: 120};
+        pos = {x: 5, y: 105.5, z: -1910};
+        quat = {x: 0.05, y: 0, z: 0, w: 1};
+
+        createBoundingBox(pos, scale, quat);
+
+        quat = {x: 0, y: 0, z: 0, w: 1};
+
+        /////////////////////////////////////////////////////////////////////
         // P171-172
 
         scale = {x: 150, y: 1, z: 20};
+        has_Boundary = true;
 
         pos = {x: 5, y: 119.5, z: -2010};
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary);

@@ -221,42 +221,6 @@ function createGrapplingHook(vect){
     //todo Make player move towards the direction of grappling hook.
 }
 
-function random_Texture() {
-    let picker = Math.floor(Math.random() * 9);
-
-    if (picker === 1) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_2.jpg')};
-    }
-
-    else if (picker === 2) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')};
-    }
-
-    else if (picker === 3) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_5.jpg')};
-    }
-
-    else if (picker === 4) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_6.jpg')};
-    }
-
-    else if (picker === 5) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_7.jpg')};
-    }
-
-    else if (picker === 6) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_8.jpg')};
-    }
-
-    else if (picker === 7) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_9.jpg')};
-    }
-
-    else {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_10.jpg')};
-    }
-}
-
 function level_1_Textures(text) {
     switch (text) {
         case 1: return {map: new THREE.TextureLoader().load('texture/level1/stone_Walkway.jpg')};
