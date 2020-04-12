@@ -3,7 +3,7 @@ let animationNum = 0, secondLoopBool = false, anims, shooterAnim, bullet, bullet
 let x, y, z;
 //reduce amount of global variables later
 //variables for YUKA ai movements
-let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null;
+let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null, lastVehiclePosition;
 
 function createLevel1() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 10000 );
@@ -1688,9 +1688,6 @@ function createLevel1() {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
-    function moveACat(enemy){
-        
-    }
     setupPhysicsWorld();
     initDebug();
     gamePlay = true;
@@ -1705,4 +1702,20 @@ function createLevel1() {
     after_Game_Menu();
 
     object_Loader();
+}
+
+function moveACat(enemy, vehicle, delta){
+    //set values to set velocity
+    let scalingFactor = 5;
+    let vertex = vehicle.steering.calculate(vehicle, new THREE.Vector3(), delta);
+    vertex.applyQuaternion(enemy.scene.quaternion);
+
+    if(vertex.x == 0 && vertex.y == 0 && vertex.z == 0) return;
+
+    //set velocity and rotation to userdata
+    let resultantImpulse = new Ammo.btVector3( vertex.x, vertex.y, vertex.z );
+    resultantImpulse.op_mul(scalingFactor);
+
+    let physicsBody = enemy.scene.userData.physicsBody;
+    physicsBody.setLinearVelocity( resultantImpulse);
 }

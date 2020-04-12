@@ -345,12 +345,12 @@ function renderFrame(){
 		//update movements for the cat(s) with yuka's AI
 		let delt = yukaDelta.update().getDelta();
 		yukaVehicle.updateWorldMatrix(false, false);
-		//let temp = followPath.calculate(yukaVehicle, new YUKA.Vector3(), delt).add(onPath.calculate(yukaVehicle, new YUKA.Vector3(), delt));
-		//testYuka.position.add(temp);
-		//testYuka.position.add(followPath.calculate(yukaVehicle, new YUKA.Vector3(), delt));
+		
 		//try to get it to update with the entity directly instead
-		kitty.scene.position.copy(yukaVehicle.position);
+		//kitty.scene.position.copy(yukaVehicle.position);
+		moveACat(kitty, yukaVehicle, delt);
 		engine.update(delt);
+		//lastVehiclePosition = yukaVehicle.position;
 	}
 
 	if(bulletInScene)//animate a bullet, change to different bullets over time
