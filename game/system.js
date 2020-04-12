@@ -16,7 +16,7 @@ function setupControls(){
     let blocker = document.getElementById( 'blocker' );
     let instructions = document.getElementById( 'instructions' );
     instructions.addEventListener( 'click', function () {controls.lock();}, false );
-    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; sound.play();
+    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; soundManager[0].play();
         if(startClock){
             gameClock.start();
             startClock = false;
@@ -25,7 +25,7 @@ function setupControls(){
         if(gamePlay){
             blocker.style.display = 'block';
         }
-        instructions.style.display = ''; sound.pause();} );
+        instructions.style.display = ''; soundManager[0].pause();} );
 
     scene.add( controls.getObject() );
 }
@@ -214,7 +214,7 @@ function createGrapplingHook(vect){
     vertex.applyQuaternion(camera.quaternion);
 
     let resultantImpulse = new Ammo.btVector3( vertex.x, 0, vertex.z );
-    resultantImpulse.op_mul(20);
+    resultantImpulse.op_mul(100);
 
     let physicsBody = player.userData.physicsBody;
     physicsBody.setLinearVelocity ( resultantImpulse );
@@ -290,4 +290,66 @@ function addSprite(spriteMap, xPercent, yPercent){
 
     scene.add(sprite);
     camera.add( sprite );
+}
+
+function grappleSoundLoader(){
+    let listener = new THREE.AudioListener();
+
+    let loadBar = document.getElementById('load');
+
+    // create a global audio source
+    soundManager[1] = new THREE.PositionalAudio( listener );
+
+    // load a sound and set it as the Audio object's buffer
+    let audioLoader = new THREE.AudioLoader();
+    audioLoader.load( './sound/hook.wav',
+        function( buffer ) {
+            soundManager[1].setBuffer( buffer );
+            soundManager[1].setLoop( false );
+            soundManager[1].setVolume( 0.85 );
+        },
+        function(xhr){//onProgress
+            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                document.getElementById("blocker").style.display = "block";
+                jumpSoundLoader();
+            }
+        },
+        function(err){//onError
+            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            console.log("error in loading sound");
+        }
+    );
+    player.add( soundManager[1] );
+}
+
+function jumpSoundLoader(){
+    let listener = new THREE.AudioListener();
+
+    let loadBar = document.getElementById('load');
+
+    // create a global audio source
+    soundManager[2] = new THREE.PositionalAudio( listener );
+
+    // load a sound and set it as the Audio object's buffer
+    let audioLoader = new THREE.AudioLoader();
+    audioLoader.load( './sound/jump.wav',
+        function( buffer ) {
+            soundManager[2].setBuffer( buffer );
+            soundManager[2].setLoop( false );
+            soundManager[2].setVolume( 0.85 );
+        },
+        function(xhr){//onProgress
+            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                document.getElementById("blocker").style.display = "block";
+                after_Game_Menu(loadBar);
+            }
+        },
+        function(err){//onError
+            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            console.log("error in loading sound");
+        }
+    );
+    player.add( soundManager[2] );
 }
