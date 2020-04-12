@@ -1,6 +1,5 @@
 function createLevel2() { 
      camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-     scene.fog = new THREE.Fog(0x6c7578, 150, 750);
  
      // add hemisphere light
      let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
@@ -53,7 +52,6 @@ function createLevel2() {
         // create a global audio source
         sound = new THREE.Audio( listener );
 
-
         // load a sound and set it as the Audio object's buffer
         let audioLoader = new THREE.AudioLoader();
         audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
@@ -82,7 +80,6 @@ function createLevel2() {
     }
 
      function createPlayer(){
-        //var pos = {x: 0, y: 2, z: 3};
         let pos = {x: 0, y: 105, z: 0};
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};
@@ -129,7 +126,6 @@ function createLevel2() {
     initDebug();
     gamePlay = true;
 
-    //createLevel1.createSkyBox();
     createPlatform();
     createPlayer();
     sound_Loader();

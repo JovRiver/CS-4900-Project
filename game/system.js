@@ -49,7 +49,6 @@ function showStats(){
 }
 
 function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
-
     let base_Texture = new THREE.MeshLambertMaterial(texture);
     base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
     base_Texture.map.repeat.set(5, 2);
@@ -181,7 +180,6 @@ function createGrapplingHook(vect){
     // Disable deactivation
     ropeSoftBody.setActivationState( STATE.DISABLE_DEACTIVATION );
 
-
     //Create temp physics object at raycast position
     let texture = new THREE.MeshLambertMaterial();
     let hookBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
@@ -205,9 +203,6 @@ function createGrapplingHook(vect){
     hookBox.userData.physicsBody = hookBoxBody;
     physicsWorld.addRigidBody(hookBoxBody, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
 
-
-
-
     // Glue the rope extremes to the ball and the arm
     let influence = 1;
     ropeSoftBody.appendAnchor( 0, player.userData.physicsBody, true, influence );
@@ -224,43 +219,6 @@ function createGrapplingHook(vect){
     let physicsBody = player.userData.physicsBody;
     physicsBody.setLinearVelocity ( resultantImpulse );
     //todo Make player move towards the direction of grappling hook.
-
-}
-
-function random_Texture() {
-    let picker = Math.floor(Math.random() * 9);
-
-    if (picker === 1) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_2.jpg')};
-    }
-
-    else if (picker === 2) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_3.jpg')};
-    }
-
-    else if (picker === 3) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_5.jpg')};
-    }
-
-    else if (picker === 4) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_6.jpg')};
-    }
-
-    else if (picker === 5) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_7.jpg')};
-    }
-
-    else if (picker === 6) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_8.jpg')};
-    }
-
-    else if (picker === 7) {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_9.jpg')};
-    }
-
-    else {
-        return { map: new THREE.TextureLoader().load('texture/buildings/building_Type_10.jpg')};
-    }
 }
 
 function level_1_Textures(text) {
@@ -312,12 +270,11 @@ function test(){
                 { x: vertices[face.c].x, y: vertices[face.c].y, z: vertices[face.c].z },
                 { x: vertices[face.d].x, y: vertices[face.d].y, z: vertices[face.d].z }
             ]);
-
         }
     }
 }
 
-function addSprite(spriteMap, xPercent,yPercent){
+function addSprite(spriteMap, xPercent, yPercent){
     let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xff0000 } );
     let sprite = new THREE.Sprite( spriteMaterial );
     let crosshairPercentX = xPercent; //middle horizontally
@@ -329,6 +286,7 @@ function addSprite(spriteMap, xPercent,yPercent){
     sprite.position.z = -1.5;
     sprite.scale.set(.1, .1, .1)
 
+    sprite.name = "crosshair";
 
     scene.add(sprite);
     camera.add( sprite );
