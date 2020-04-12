@@ -2,6 +2,8 @@
 let animationNum = 0, secondLoopBool = false, anims, shooterAnim, bullet, bulletInScene = false, kitty, bulletChange, bulletSpeed = 1, catAimer, aimerVisible = false;
 let x, y, z;
 //reduce amount of global variables later
+//variables for YUKA ai movements
+let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null;
 
 function createLevel1() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 10000 );
@@ -1298,6 +1300,14 @@ function createLevel1() {
                 scene.add(obj.scene);
 
                 loadBar.innerHTML = "";
+
+
+                //testing the path and moving a mesh with a sphere.
+                testYuka = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), new THREE.MeshBasicMaterial({color:0xfffff0}));
+                testYuka.position.copy(new THREE.Vector3(-3, 100, 0));
+                scene.add(testYuka);
+                testYuka.matrixautoUpdate = false;
+                makePathAndWaypoints(testYuka);
             },
             function(xhr){//onProgress
                 loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
@@ -1566,21 +1576,50 @@ function createLevel1() {
         );//the cat was aligned weird in blender i think
         
         bulletChange.multiplyScalar(bulletSpeed);
-
-        //set movement of the bullet, was going to edit with this
-        /*bulletChange = new THREE.Matrix4();
-        bulletChange.set(1, 0, 0, (catAimer.position.x/kitty.scene.position.x)*100,
-            0, 1, 0, (catAimer.position.y/kitty.scene.position.y)*10,
-            0, 0, 1, (catAimer.position.z/kitty.scene.position.z)*10, 
-            0, 0, 0, 1);
-        bulletChange.matrixAutoUpdate = true;//edited
-        bullet.matrix.set(bulletChange);*/
         
         //tell the main loop that there's a bullet active
         bulletInScene = true;
     }
+//https://github.com/Mugen87/yuka/blob/master/examples/ for yuka implementations
+    function makePathAndWaypoints(enemy){//start point for cat is : {x: 5, y: 105, z: 0}
+        //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html
+        yukaVehicle = new YUKA.Vehicle();
+        
+        let path = new YUKA.Path();
+        path.add(new YUKA.Vector3(-1, 100, 0));
+        path.add(new YUKA.Vector3(1, 100, 0));
+        path.add(new YUKA.Vector3(1, 100, -1));
+        path.add(new YUKA.Vector3(-1, 100, -1));
+        path.loop = true;
 
+        yukaVehicle.position.copy(path.current());
+        //test.position.copy(path.current());
+        //attach cat to vehicle
+        yukaVehicle.setRenderComponent(enemy, sync);
+        followPath = new YUKA.FollowPathBehavior(path, .5);//raising the number too high makes it jittery.
+        //onPath = new YUKA.OnPathBehavior(path, 1, 1);
+        //onPath and followPathBehavior for strict paths
+        yukaVehicle.steering.add(followPath);
+        //yukaVehicle.steering.add(onPath);
 
+        
+        //update rotation and location for the entity so it moves the cat in the same way
+        //with the entity manager for YUKA  
+        engine = new YUKA.EntityManager();
+        //engine.add(enemy);
+        engine.add(yukaVehicle);
+        yukaDelta = new YUKA.Time();
+        yukaVehicle.start();
+        /*path.advance();
+        path.advance();
+        path.advance();*/
+    }
+//https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html#L113
+//line 52, these next 3 lines:
+    function sync( entity, renderComponent ) {
+        renderComponent.matrix.copy( entity.worldMatrix );
+    }
+    
     function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
         addSprite(spriteMap, 50, 50);

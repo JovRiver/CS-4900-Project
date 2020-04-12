@@ -338,18 +338,21 @@ function renderFrame(){
 	if (this.debugDrawer)
 		this.debugDrawer.update();
 
-	if(theMixer){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
+	if(theMixer && engine && testYuka != null){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
 		//multiple cats
 		theMixer.update(deltaTime);//updates the time for the animations with the THREE.Clock object
-	}
-	if(bulletInScene){//if there's a bullet in the scene, takes the slope of the original shot and make it move
-		/*bullet.position.x += x;
-		bullet.position.y += y;
-		bullet.position.z += z;*/
-		//bullet.applyMatrix(new THREE.Matrix4().makeTranslation(x, y, z));
-		bullet.position.add(bulletChange);
+		
 
+		//update movements for the cat(s) with yuka's AI
+		let delt = yukaDelta.update().getDelta();
+		//let temp = followPath.calculate(yukaVehicle, new YUKA.Vector3(), delt).add(onPath.calculate(yukaVehicle, new YUKA.Vector3(), delt));
+		testYuka.position.add(followPath.calculate(yukaVehicle, new YUKA.Vector3(), delt));
+		//try to get it to update with the entity directly instead
+		engine.update(delt);
 	}
+
+	if(bulletInScene)//animate a bullet, change to different bullets over time
+		bullet.position.add(bulletChange);
 
 	renderFrameId = requestAnimationFrame( renderFrame );
 
