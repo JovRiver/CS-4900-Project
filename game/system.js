@@ -48,7 +48,7 @@ function showStats(){
     document.body.appendChild( stats.dom );
 }
 
-function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
+function create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform) {
     let base_Texture = new THREE.MeshLambertMaterial(texture);
     base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
     base_Texture.map.repeat.set(5, 2);
@@ -81,7 +81,9 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary) {
         body.setRollingFriction(10);
         box.userData.physicsBody = body;
         physicsWorld.addRigidBody(body, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
-        platforms.push(box);
+        if (isPlatform) {
+            platforms.push(box);
+        }
     }
 }
 
