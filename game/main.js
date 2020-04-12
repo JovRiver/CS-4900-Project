@@ -1,8 +1,8 @@
 //variable declaration section
-let physicsWorld, renderer, stats, sound, controls, rigidBodies = [], platforms = [], resetPlatform = [], tmpTrans = null;
+let physicsWorld, renderer, stats, down, controls, rigidBodies = [], platforms = [], resetPlatform = [], tmpTrans = null;
 let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
-
+let soundManager = [];
 // collision group and detection variables
 let playerGroup = 1, flagGroup = 2, buildingGroup = 3, ghostGroup = 4;
 let a = false;
@@ -45,7 +45,7 @@ const STATE = {
 	DISABLE_SIMULATION : 5
 }
 
-let level = 0;	//set to 0 for main menu, 1 or higher for levels
+let level = 1;	//set to 0 for main menu, 1 or higher for levels
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let in_Game_Menu_Group; // in_Game_Menu_Group to hold menu items for raycaster detection
@@ -331,11 +331,13 @@ function onMouseDown(event){
 		controls.getDirection( direction );
 		raycasterRope.set( controls.getObject().position, direction );
 		raycasterRope.near = 1;
-		raycasterRope.far = 12;
+		raycasterRope.far = 15;
 		let intersects = raycasterRope.intersectObjects( platforms );
 		for ( let i = 0; i < intersects.length; i++ ) {
 			if(intersects.length === 1){
 				createGrapplingHook(intersects[i].point);
+				physicsWorld.setGravity(new Ammo.btVector3(0, -30, 0));
+				soundManager[1].play();
 			}
 		}
 	}
@@ -344,8 +346,10 @@ function onMouseDown(event){
 function onMouseUp(event){
 	if(event.which === 3){
 		if(rope != null){
+			physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
 			physicsWorld.removeCollisionObject(rope.userData.physicsBody);
 			scene.remove(rope);
+			soundManager[1].stop();
 		}
 		if(scene.getObjectByName( "Hook_Box" ) != null){
 			physicsWorld.removeCollisionObject(scene.getObjectByName( "Hook_Box" ).userData.physicsBody);
@@ -401,6 +405,7 @@ function onKeyDown (event ) {
 					resultantImpulse.op_mul(2);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
+					soundManager[2].play();
 				}
 				break;
 
@@ -429,6 +434,7 @@ function onKeyDown (event ) {
 					resultantImpulse.op_mul(2);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
+					soundManager[2].play();
 				}
 				break;
 
@@ -453,6 +459,7 @@ function onKeyDown (event ) {
 					resultantImpulse.op_mul(2);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
+					soundManager[2].play();
 				}
 				break;
 		}
