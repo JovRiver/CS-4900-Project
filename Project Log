@@ -613,3 +613,8 @@ Commit #1 of the time period: April 5-12
 4/11 12:30pm - 2:12pm, 2:54pm - 10:06pm
 Added and tested a path with waypoints using yuka.js to control a test object. Made using the makePathAndWaypoints function in level 1, and the sync function below that.
 
+Semira Pinder
+Commit #2 of the time period: April 5-12
+4/12 10:14am-12:19pm
+Corrected path of spherical test object for level 1. (Circle now follows the position of the vehicle)
+
