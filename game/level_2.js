@@ -34,14 +34,16 @@ function createLevel2() {
      //scene.add( helper );
 
      function createPlatform() {
+        let scale, pos, quat, has_Boundry, isPlatform;
         scale = {x: 60, y: 2, z: 20};
         pos = {x: 0, y: 99, z: 0};
         quat = {x: 0, y: 0, z: 0, w: 1};
         has_Boundry = true;
+        isPlatform = true;
 
         texture = new THREE.MeshLambertMaterial(level_2_Textures(1));
 
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundry);
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundry, isPlatform);
      }
 
      function sound_Loader(){
