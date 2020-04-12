@@ -338,7 +338,7 @@ function renderFrame(){
 	if (this.debugDrawer)
 		this.debugDrawer.update();
 
-	if(theMixer && engine && testYuka != null){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
+	if(theMixer && engine){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
 		//multiple cats
 		theMixer.update(deltaTime);//updates the time for the animations with the THREE.Clock object
 
@@ -349,7 +349,7 @@ function renderFrame(){
 		//testYuka.position.add(temp);
 		//testYuka.position.add(followPath.calculate(yukaVehicle, new YUKA.Vector3(), delt));
 		//try to get it to update with the entity directly instead
-		testYuka.position.copy(yukaVehicle.position);
+		kitty.scene.position.copy(yukaVehicle.position);
 		engine.update(delt);
 	}
 

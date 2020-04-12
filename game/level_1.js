@@ -1303,11 +1303,12 @@ function createLevel1() {
 
 
                 //testing the path and moving a mesh with a sphere.
-                testYuka = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), new THREE.MeshBasicMaterial({color:0xfffff0}));
-                //testYuka.position.copy(new THREE.Vector3(-3, 100, 0));
+                /*testYuka = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), new THREE.MeshBasicMaterial({color:0xfffff0}));
+                testYuka.position.copy(new THREE.Vector3(-3, 100, 0));
                 scene.add(testYuka);
-                testYuka.matrixautoUpdate = false;
-                makePathAndWaypoints(testYuka);
+                testYuka.matrixautoUpdate = false;*/
+                kitty.matrixAutoUpdate = false;
+                makePathAndWaypoints(kitty.scene);//push the box of the catEnemy to the function
             },
             function(xhr){//onProgress
                 loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
@@ -1587,10 +1588,10 @@ function createLevel1() {
 		yukaVehicle.updateWorldMatrix();
 
         let path = new YUKA.Path();
-        path.add(new YUKA.Vector3(-6, 100, 6));
-        path.add(new YUKA.Vector3(6, 100, 6));
-        path.add(new YUKA.Vector3(6, 100, -6));
-        path.add(new YUKA.Vector3(-6, 100, -6));
+        path.add(new YUKA.Vector3(-6, 102.5, 6));
+        path.add(new YUKA.Vector3(6, 102.5, 6));
+        path.add(new YUKA.Vector3(6, 102.5, -6));
+        path.add(new YUKA.Vector3(-6, 102.5, -6));
         path.loop = true;
 
         yukaVehicle.position.copy(path.current());
@@ -1599,13 +1600,12 @@ function createLevel1() {
         yukaVehicle.setRenderComponent(enemy, sync);
         //yukaVehicle.add(enemy);
         enemy.position.copy(yukaVehicle.position);//local position since it's a child to that object
-        //^that breaks it
         followPath = new YUKA.FollowPathBehavior(path, 1);//number is not the speed.
         onPath = new YUKA.OnPathBehavior(path, .1, 1);//1st number is the radius of the mesh, 2nd is the prediction
         //onPath and followPathBehavior for strict paths
         yukaVehicle.steering.add(followPath);
         yukaVehicle.steering.add(onPath);
-        //yukaVehicle.weight = .1;//amount of weight for the object, doesn't seem to change speed
+        yukaVehicle.weight = 10;//amount of weight for the object, doesn't seem to change speed
         
         
         //update rotation and location for the entity so it moves the cat in the same way
@@ -1688,6 +1688,9 @@ function createLevel1() {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
+    function moveACat(enemy){
+        
+    }
     setupPhysicsWorld();
     initDebug();
     gamePlay = true;
