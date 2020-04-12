@@ -341,13 +341,15 @@ function renderFrame(){
 	if(theMixer && engine && testYuka != null){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
 		//multiple cats
 		theMixer.update(deltaTime);//updates the time for the animations with the THREE.Clock object
-		
 
 		//update movements for the cat(s) with yuka's AI
 		let delt = yukaDelta.update().getDelta();
+		yukaVehicle.updateWorldMatrix(false, false);
 		//let temp = followPath.calculate(yukaVehicle, new YUKA.Vector3(), delt).add(onPath.calculate(yukaVehicle, new YUKA.Vector3(), delt));
-		testYuka.position.add(followPath.calculate(yukaVehicle, new YUKA.Vector3(), delt));
+		//testYuka.position.add(temp);
+		//testYuka.position.add(followPath.calculate(yukaVehicle, new YUKA.Vector3(), delt));
 		//try to get it to update with the entity directly instead
+		testYuka.position.copy(yukaVehicle.position);
 		engine.update(delt);
 	}
 

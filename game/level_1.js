@@ -1304,7 +1304,7 @@ function createLevel1() {
 
                 //testing the path and moving a mesh with a sphere.
                 testYuka = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), new THREE.MeshBasicMaterial({color:0xfffff0}));
-                testYuka.position.copy(new THREE.Vector3(-3, 100, 0));
+                //testYuka.position.copy(new THREE.Vector3(-3, 100, 0));
                 scene.add(testYuka);
                 testYuka.matrixautoUpdate = false;
                 makePathAndWaypoints(testYuka);
@@ -1584,32 +1584,37 @@ function createLevel1() {
     function makePathAndWaypoints(enemy){//start point for cat is : {x: 5, y: 105, z: 0}
         //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html
         yukaVehicle = new YUKA.Vehicle();
-        
+		yukaVehicle.updateWorldMatrix();
+
         let path = new YUKA.Path();
-        path.add(new YUKA.Vector3(-1, 100, 0));
-        path.add(new YUKA.Vector3(1, 100, 0));
-        path.add(new YUKA.Vector3(1, 100, -1));
-        path.add(new YUKA.Vector3(-1, 100, -1));
+        path.add(new YUKA.Vector3(-6, 100, 6));
+        path.add(new YUKA.Vector3(6, 100, 6));
+        path.add(new YUKA.Vector3(6, 100, -6));
+        path.add(new YUKA.Vector3(-6, 100, -6));
         path.loop = true;
 
         yukaVehicle.position.copy(path.current());
         //test.position.copy(path.current());
-        //attach cat to vehicle
+        //set enemy to vehicle position
         yukaVehicle.setRenderComponent(enemy, sync);
-        followPath = new YUKA.FollowPathBehavior(path, .5);//raising the number too high makes it jittery.
-        //onPath = new YUKA.OnPathBehavior(path, 1, 1);
+        //yukaVehicle.add(enemy);
+        enemy.position.copy(yukaVehicle.position);//local position since it's a child to that object
+        //^that breaks it
+        followPath = new YUKA.FollowPathBehavior(path, 1);//number is not the speed.
+        onPath = new YUKA.OnPathBehavior(path, .1, 1);//1st number is the radius of the mesh, 2nd is the prediction
         //onPath and followPathBehavior for strict paths
         yukaVehicle.steering.add(followPath);
-        //yukaVehicle.steering.add(onPath);
-
+        yukaVehicle.steering.add(onPath);
+        //yukaVehicle.weight = .1;//amount of weight for the object, doesn't seem to change speed
+        
         
         //update rotation and location for the entity so it moves the cat in the same way
         //with the entity manager for YUKA  
         engine = new YUKA.EntityManager();
         //engine.add(enemy);
         engine.add(yukaVehicle);
+        //scene.add(yukaVehicle);
         yukaDelta = new YUKA.Time();
-        yukaVehicle.start();
         /*path.advance();
         path.advance();
         path.advance();*/
