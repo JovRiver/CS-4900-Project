@@ -1703,18 +1703,26 @@ function createLevel1() {
 
     object_Loader();
 }
-
+let bump = true;
 function moveACat(enemy, vehicle, delta){
     //set values to set velocity
     let scalingFactor = 5;
-    let vertex = vehicle.steering.calculate(vehicle, new THREE.Vector3(), delta);
+    let vertex = new THREE.Vector3().copy(vehicle.steering.calculate(vehicle, vehicle.steering._steeringForce, delta));
     vertex.applyQuaternion(enemy.scene.quaternion);
 
     if(vertex.x == 0 && vertex.y == 0 && vertex.z == 0) return;
-
+    let resultantImpulse;
     //set velocity and rotation to userdata
-    let resultantImpulse = new Ammo.btVector3( vertex.x, vertex.y, vertex.z );
-    resultantImpulse.op_mul(scalingFactor);
+    if (bump == true){
+        resultantImpulse = new Ammo.btVector3( vertex.x, vertex.y+0.2, vertex.z );
+        bump = false;
+    }
+    else{
+        resultantImpulse = new Ammo.btVector3( vertex.x, vertex.y, vertex.z );
+        bump = true;
+    }
+
+        resultantImpulse.op_mul(scalingFactor);
 
     let physicsBody = enemy.scene.userData.physicsBody;
     physicsBody.setLinearVelocity( resultantImpulse);
