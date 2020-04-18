@@ -618,3 +618,13 @@ Commit #2 of the time period: April 5-12
 4/12 10:14am-12:19pm
 Corrected path of spherical test object for level 1. (Circle now follows the position of the vehicle)
 
+Semira Pinder
+Commit #3 of the time period: April 5-12
+Cat moves on a path, but it hovers upward.
+
+
+Semira Pinder
+Commit #1 of the time period: April 12-19
+4/18 4:23-4:41pm
+Moved many of the enemy manipulation functions to the new catGun.js file, and added a script statement in the index file.
+The functions were removed from level 1.
