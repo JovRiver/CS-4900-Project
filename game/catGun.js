@@ -12,7 +12,7 @@ let x, y, z;
 //variables for YUKA ai movements
 let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null, lastVehiclePosition;
 let bump = true;
-let catHandle = null, cats = [];
+let catHandle = null, cats = [], i = 0;
 
 function shootBullet(){
     //set position of the bullet initially
@@ -52,14 +52,16 @@ function moveACat(enem, vehicle, delta){
     let enemy = enem.body;
     //set values to set velocity
     let scalingFactor = 5;
-    let vertex = new THREE.Vector3().copy(vehicle.steering.calculate(vehicle, vehicle.steering._steeringForce, delta));
+    /*let vertex = new THREE.Vector3().copy(vehicle.steering.calculate(vehicle, vehicle.steering._steeringForce, delta));
     vertex.applyQuaternion(enemy.scene.quaternion);
 
     if(vertex.x == 0 && vertex.y == 0 && vertex.z == 0) return;
-    let resultantImpulse;
+    */let resultantImpulse;
+    let actualEnemy = enemy.scene.position;
+    let actualCar = vehicle.position;
     //set velocity and rotation to userdata
     //if (bump == true){
-        resultantImpulse = new Ammo.btVector3( vertex.x, vertex.y, vertex.z );
+        resultantImpulse = new Ammo.btVector3(actualCar.x - actualEnemy.x, actualCar.y - actualEnemy.y, actualCar.z - actualEnemy.z);
     /*    bump = false;
     }*/
     /*else{
@@ -68,9 +70,10 @@ function moveACat(enem, vehicle, delta){
     }*/
 
         resultantImpulse.op_mul(scalingFactor);
-
-    let physicsBody = enemy.scene.userData.physicsBody;
-    physicsBody.setLinearVelocity( resultantImpulse);
+        
+        let physicsBody = enemy.scene.userData.physicsBody;
+        physicsBody.setLinearVelocity( resultantImpulse);
+    //i++;
 }
 
 
@@ -81,15 +84,16 @@ let enemy = enem.body;
 //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html
 yukaVehicle = new YUKA.Vehicle();
 yukaVehicle.updateWorldMatrix();
-
+let yy = 102.5;
 let path = new YUKA.Path();
-path.add(new YUKA.Vector3(-6, 110, 6));
-path.add(new YUKA.Vector3(6, 110, 6));
-path.add(new YUKA.Vector3(6, 110, -6));
-path.add(new YUKA.Vector3(-6, 110, -6));
+path.add(new YUKA.Vector3(-6, yy, 6));
+path.add(new YUKA.Vector3(6, yy, 6));
+path.add(new YUKA.Vector3(6, yy, -6));
+path.add(new YUKA.Vector3(-6, yy, -6));
 path.loop = true;
 
 yukaVehicle.position.copy(path.current());
+//yukaVehicle.position.copy(enemy.scene.position);
 //test.position.copy(path.current());
 //set enemy to vehicle position
 //yukaVehicle.setRenderComponent(enemy, sync);
