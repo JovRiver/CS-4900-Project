@@ -650,3 +650,9 @@ Semira Pinder
 Commit #5
 4/19 3:51pm - 4:16
 The catObj class now takes an array as an argument, and it uses that array to construct a path for the vehicle using the makePathAndWaypoints function.
+
+4/19/2020
+Ryan Slaybaugh:
+Commit 45:
+
+  Worked on BGM for menu and level 1 and uploaded the audio files to the master branch.
