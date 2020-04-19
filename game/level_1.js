@@ -1230,7 +1230,7 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////
     }
 
-    function object_Loader(){//https://threejs.org/docs/#examples/en/loaders/OBJLoader
+    function object_Loader(){//gltf loader
         let loadBar = document.getElementById('load');
 
         //enemy models
@@ -1238,9 +1238,12 @@ function createLevel1() {
         catLoader.load(
             "objects/cat/catGun.glb",
             function(obj) {//onLoad, obj is a GLTF
-                
+                let arr = [-6, 6,
+                    6, 6,
+                    6, -6,
+                    -6, -6];
                 catHandle = new catHandler();
-                let c = new catObj(obj);
+                let c = new catObj(obj, arr);
 
                 c.addMixer(new THREE.AnimationMixer(obj.scene.children[2]));//the mesh itself
                 

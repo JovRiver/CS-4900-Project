@@ -79,17 +79,20 @@ function moveACat(enem, vehicle, delta){
 
 
 //https://github.com/Mugen87/yuka/blob/master/examples/ for yuka implementations
-function makePathAndWaypoints(enem){//start point for cat is : {x: 5, y: 105, z: 0}
+function makePathAndWaypoints(enem, arr){//start point for cat is : {x: 5, y: 105, z: 0}
 let enemy = enem.body;
 //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html
 yukaVehicle = new YUKA.Vehicle();
 yukaVehicle.updateWorldMatrix();
-let yy = 102.5;
+let yy = 103;
 let path = new YUKA.Path();
-path.add(new YUKA.Vector3(-6, yy, 6));
+for(let e = 0; e < arr.length; e += 2)
+    path.add(new YUKA.Vector3(arr[e], yy, arr[e+1]));
+
+/*path.add(new YUKA.Vector3(-6, yy, 6));
 path.add(new YUKA.Vector3(6, yy, 6));
 path.add(new YUKA.Vector3(6, yy, -6));
-path.add(new YUKA.Vector3(-6, yy, -6));
+path.add(new YUKA.Vector3(-6, yy, -6));*/
 path.loop = true;
 
 yukaVehicle.position.copy(path.current());
@@ -217,11 +220,12 @@ class catObj{
     body;
     vehicle;
     mixer;
-    constructor(bod){
+    constructor(bod, arr){//arr carries x's and z's in alternating order, Y's will be added later in a way that takes the height 
+    //in consideration
         this.body = bod;
         this.mixer = null;
         this.vehicle = null;
-        makePathAndWaypoints(this);
+        makePathAndWaypoints(this, arr);
     }
 
     setUpMixer(){
