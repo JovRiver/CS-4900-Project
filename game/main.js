@@ -21,7 +21,6 @@ let customUniforms, lava;
 let scene;
 let camera;
 
-let theMixer;// = new THREE.AnimationMixer();
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
@@ -293,22 +292,8 @@ function renderFrame(){
 	if (this.debugDrawer)
 		this.debugDrawer.update();
 
-	if(theMixer && engine){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
-		//multiple cats
-		theMixer.update(deltaTime);//updates the time for the animations with the THREE.Clock object
-
-
-		//update movements for the cat(s) with yuka's AI
-		let delt = yukaDelta.update().getDelta();
-		yukaVehicle.updateWorldMatrix(false, false);
-		
-		//try to get it to update with the entity directly instead
-		//kitty.scene.position.copy(yukaVehicle.position);
-		moveACat(kitty, yukaVehicle, delt);
-		engine.update(delt);
-		//lastVehiclePosition = yukaVehicle.position;
-
-	}
+	if(catHandle)
+		catHandle.update(deltaTime, yukaDelta);//updates multiple things involving the cat object(s). (movement, vehicles, bullets)
 
 	if(bulletInScene)//animate a bullet, change to different bullets over time
 		bullet.position.add(bulletChange);
