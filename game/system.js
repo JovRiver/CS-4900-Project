@@ -345,7 +345,7 @@ function jumpSoundLoader(){
             loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
             if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                 document.getElementById("blocker").style.display = "block";
-                after_Game_Menu(loadBar);
+                shootSoundLoader(loadBar);
             }
         },
         function(err){//onError
@@ -354,4 +354,97 @@ function jumpSoundLoader(){
         }
     );
     player.add( soundManager[2] );
+}
+
+function shootSoundLoader(){
+    let listener = new THREE.AudioListener();
+
+    let loadBar = document.getElementById('load');
+
+    // create a global audio source
+    soundManager[3] = new THREE.Audio( listener );
+
+    // load a sound and set it as the Audio object's buffer
+    let audioLoader = new THREE.AudioLoader();
+    audioLoader.load( './sound/shoot.wav',
+        function( buffer ) {
+            soundManager[3].setBuffer( buffer );
+            soundManager[3].setLoop( false );
+            soundManager[3].setVolume( 0.85 );
+        },
+        function(xhr){//onProgress
+            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                document.getElementById("blocker").style.display = "block";
+                hitSoundLoader(loadBar);
+            }
+        },
+        function(err){//onError
+            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            console.log("error in loading sound");
+        }
+    );
+    player.add( soundManager[3] );
+}
+
+function hitSoundLoader(){
+    let listener = new THREE.AudioListener();
+
+    let loadBar = document.getElementById('load');
+
+    // create a global audio source
+    soundManager[4] = new THREE.Audio( listener );
+
+    // load a sound and set it as the Audio object's buffer
+    let audioLoader = new THREE.AudioLoader();
+    audioLoader.load( './sound/hit.wav',
+        function( buffer ) {
+            soundManager[4].setBuffer( buffer );
+            soundManager[4].setLoop( false );
+            soundManager[4].setVolume( 0.5 );
+        },
+        function(xhr){//onProgress
+            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                document.getElementById("blocker").style.display = "block";
+                walkingSoundLoader(loadBar);
+            }
+        },
+        function(err){//onError
+            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            console.log("error in loading sound");
+        }
+    );
+    player.add( soundManager[4] );
+}
+
+function walkingSoundLoader(){
+    let listener = new THREE.AudioListener();
+
+    let loadBar = document.getElementById('load');
+
+    // create a global audio source
+    soundManager[5] = new THREE.Audio( listener );
+
+    // load a sound and set it as the Audio object's buffer
+    let audioLoader = new THREE.AudioLoader();
+    audioLoader.load( './sound/walking.wav',
+        function( buffer ) {
+            soundManager[5].setBuffer( buffer );
+            soundManager[5].setLoop( true );
+            soundManager[5].setVolume( 5 );
+        },
+        function(xhr){//onProgress
+            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
+                document.getElementById("blocker").style.display = "block";
+                after_Game_Menu(loadBar);
+            }
+        },
+        function(err){//onError
+            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+            console.log("error in loading sound");
+        }
+    );
+    player.add( soundManager[5] );
 }
