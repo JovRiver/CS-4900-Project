@@ -7,11 +7,12 @@ and creating vehicles that move the cat's body will be handled in function makeP
 //reduce amount of global variables later
 
 //variables for the catGun and bullets
-let animationNum = 0, secondLoopBool = false, anims, shooterAnim, bullet, bulletInScene = false, kitty, bulletChange, bulletSpeed = 1, catAimer, aimerVisible = false;
+let animationNum = 0, secondLoopBool = false, anims = null, shooterAnim, bullet, bulletInScene = false, kitty, bulletChange, bulletSpeed = 1, catAimer, aimerVisible = false;
 let x, y, z;
 //variables for YUKA ai movements
 let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null, lastVehiclePosition;
 let bump = true;
+let catHandle = null;
 
 function shootBullet(){
     //set position of the bullet initially
@@ -90,7 +91,6 @@ yukaVehicle.position.copy(path.current());
 //test.position.copy(path.current());
 //set enemy to vehicle position
 yukaVehicle.setRenderComponent(enemy, sync);
-//yukaVehicle.add(enemy);
 enemy.position.copy(yukaVehicle.position);//local position since it's a child to that object
 followPath = new YUKA.FollowPathBehavior(path, 1);//number is not the speed.
 onPath = new YUKA.OnPathBehavior(path, .1, 1);//1st number is the radius of the mesh, 2nd is the prediction
@@ -100,21 +100,20 @@ yukaVehicle.steering.add(onPath);
 yukaVehicle.weight = 10;//amount of weight for the object, doesn't seem to change speed
 
 
-//update rotation and location for the entity so it moves the cat in the same way
-//with the entity manager for YUKA  
-engine = new YUKA.EntityManager();
-//engine.add(enemy);
+/*update rotation and location for the entity so it moves the cat in the same way
+with the entity manager for YUKA  
+*********There only needs to be 1 entityManager for all the vehicles.****/
+if(engine == null)
+    engine = new YUKA.EntityManager();
+
 engine.add(yukaVehicle);
-//scene.add(yukaVehicle);
 yukaDelta = new YUKA.Time();
-/*path.advance();
-path.advance();
-path.advance();*/
+
 }
 //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html#L113
 //line 52, these next 3 lines:
 function sync( entity, renderComponent ) {
-renderComponent.matrix.copy( entity.worldMatrix );
+    renderComponent.matrix.copy( entity.worldMatrix );
 }
 
 
@@ -151,3 +150,86 @@ function catAnimations(e){//e contains the type action and loopDelta
     //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
 }
 
+
+
+////////////////// classes ////////////////////
+/*class that holds all cat objects in an array, and updates them all with their mixers, bounding box movement, 
+animations, etc. */
+class catHandler{
+    cats;
+    constructor(){
+        this.cats = [];
+    }
+
+    getCats(){
+        return this.cats;
+    }
+    addCat(cat){
+        if(this.cats != null)
+            this.cats.push(cat);
+    }
+    update(deltaTime){//don't use another function for it, it changes the scope and it can't reach variables anymore?
+        //for each cat:
+        let i = 0;
+        while(i < this.cats.length){
+            //update the mixer
+            this.cats[i].mixer.update(deltaTime);//using the deltaTime THREE.clock
+
+            //update worldmatrix for collision box
+
+            i++;
+        }
+    }
+}
+
+
+
+/*
+Holds the cat object including the scene and everything, and the vehicle and bullet.
+*/
+class catObj{
+    body;
+    vehicle;
+    mixer;
+    constructor(bod){
+        this.body = bod;
+        this.mixer = null;
+        this.vehicle = null;
+    }
+
+    setUpMixer(){
+        if(this.mixer == null)
+            return null;
+        
+        if(anims == null)
+            anims = this.body.animations;
+
+        let i = 0;
+        while(i < anims.length){
+            this.mixer.clipAction(anims[i]);
+            if(anims[i].name.match("Shoot") != null){//gets the index of anims that has the shoot clip 
+                shooterAnim = i;
+                break;
+            }
+            i++;
+        }
+
+        this.mixer.clipAction(anims[0]).play();//"death" doesn't play for some reason
+
+        this.mixer.addEventListener('loop', catAnimations);//'finished' does not count a loop ending as finished,
+        //setting amount of repetitions doesn't work either, fix soon
+    }
+
+    addVehicle(vehicle){
+        this.vehicle = vehicle;
+    }
+    addMixer(mix){
+        this.mixer = mix;
+    }
+    getVehicle(){
+        return this.vehicle;
+    }
+    getMixer(mix){
+        return this.mixer;
+    }
+}

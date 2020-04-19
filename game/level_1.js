@@ -1238,7 +1238,12 @@ function createLevel1() {
         catLoader.load(
             "objects/cat/catGun.glb",
             function(obj) {//onLoad, obj is a GLTF
-                theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
+                catHandle = new catHandler();
+                let c = new catObj(obj);
+
+                let theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
+                c.addMixer(theMixer);
+                
                 obj.name = "Enemy";
 
                 let pos ={x: 5, y: 105, z: 0};
@@ -1291,31 +1296,19 @@ function createLevel1() {
                 rigidBodies.push(obj.scene);
 
                 //animation for catGun
-                anims = obj.animations;
                 let j = 0;
-                anims.forEach(function(e){
-                    theMixer.clipAction(e);
-                    if(e.name.match("Shoot") != null)//gets the index of anims that has the shoot clip 
-                        shooterAnim = j;
-                    j++;
-                });
-
-                theMixer.clipAction(anims[0]).play();//"death" doesn't play for some reason
-
-                theMixer.addEventListener('loop', catAnimations);//'finished' does not count a loop ending as finished,
-                //setting amount of repetitions doesn't work either, fix soon
-
                 let meshMaterialBullet = new THREE.MeshBasicMaterial({color: 0xCFC669});
                 let geoBullet = new THREE.SphereGeometry(.5, 10, 10);
                 bullet = new THREE.Mesh(geoBullet, meshMaterialBullet);
                 bullet.name = "ABullet";
-                //bullet.matrixWorldNeedsUpdate = true;//needed when editing the matrix of an object3d
+
+                //adding objects to scenes or classes
                 scene.add(bullet);
-                //obj.scene.children[2].add(bullet);
                 scene.add(obj.scene);
+                catHandle.addCat(c);
+                c.setUpMixer();
 
                 loadBar.innerHTML = "";
-
 
                 //testing the path and moving a mesh with a sphere.
                 /*testYuka = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), new THREE.MeshBasicMaterial({color:0xfffff0}));

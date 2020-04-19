@@ -21,7 +21,6 @@ let customUniforms, lava;
 let scene;
 let camera;
 
-let theMixer;// = new THREE.AnimationMixer();
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
 let vertex = new THREE.Vector3();
@@ -288,10 +287,11 @@ function renderFrame(){
 	if (this.debugDrawer)
 		this.debugDrawer.update();
 
-	if(theMixer && engine){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
-		//multiple cats
-		theMixer.update(deltaTime);//updates the time for the animations with the THREE.Clock object
+	if(catHandle)
+		catHandle.update(deltaTime);//updates multiple things involving the cat object(s).
 
+	if(engine){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
+		//multiple cats
 
 		//update movements for the cat(s) with yuka's AI
 		let delt = yukaDelta.update().getDelta();
