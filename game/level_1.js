@@ -1306,6 +1306,10 @@ function createLevel1() {
 
                 //adding objects to scenes or classes
                 scene.add(bullet);
+
+                //obj.scene.children[2].add(bullet);
+                enemies.push(kitty.scene);
+
                 scene.add(obj.scene);
                 catHandle.addCat(c);
                 c.setUpMixer();
@@ -1449,7 +1453,7 @@ function createLevel1() {
             function( buffer ) {
                 soundManager[0].setBuffer( buffer );
                 soundManager[0].setLoop( true );
-                soundManager[0].setVolume( 0.25 );
+                soundManager[0].setVolume( 0.15 );
             },
             function(xhr){//onProgress
                 loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
@@ -1468,7 +1472,7 @@ function createLevel1() {
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
         //pos = {x: 0, y: 115, z: -2010}; // end of level
-        pos = {x: 24, y: 105, z: -647}; // grappling hook spot
+        //pos = {x: 24, y: 105, z: -647}; // grappling hook spot
 
         //let pos ={x: 5, y: 105, z: 0}; //was cat's position
         //resetPos = {x: 24, y: 105, z: -647}; //beginning of level
