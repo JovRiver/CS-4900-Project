@@ -641,3 +641,7 @@ Commit #3 of the time period: April 12-19
 4/19 12:23pm-3:32pm
 Added vehicle creation to the constructor of catObj objects, and removed vehicle creation from the objloader in level 1.
 
+Semira Pinder
+Commit #4 
+4/19 3:32pm - 3:40
+The cat now moves cleanly on the YUKA path with it's vehicle and collision box. It cannot fall off of the platform. 
