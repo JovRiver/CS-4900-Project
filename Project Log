@@ -645,3 +645,8 @@ Semira Pinder
 Commit #4 
 4/19 3:32pm - 3:40
 The cat now moves cleanly on the YUKA path with it's vehicle and collision box. It cannot fall off of the platform. 
+
+Semira Pinder
+Commit #5
+4/19 3:51pm - 4:16
+The catObj class now takes an array as an argument, and it uses that array to construct a path for the vehicle using the makePathAndWaypoints function.
