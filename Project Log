@@ -628,3 +628,12 @@ Commit #1 of the time period: April 12-19
 4/18 4:23-4:41pm
 Moved many of the enemy manipulation functions to the new catGun.js file, and added a script statement in the index file.
 The functions were removed from level 1.
+
+Semira Pinder
+Commit #2 of the time period: April 12-19
+4/18 6:11pm-10:02pm
+The main catGun object and the animation Mixer linked to it are both stored into the catHandler class, and they are both updated with 
+update() within that method. They are both stored inside one catObj object. Note: use e=> function{} only when you pass the 
+instance of the class (this.) to that function inside a javascript class.
+
+
