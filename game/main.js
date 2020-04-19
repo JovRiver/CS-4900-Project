@@ -288,22 +288,7 @@ function renderFrame(){
 		this.debugDrawer.update();
 
 	if(catHandle)
-		catHandle.update(deltaTime);//updates multiple things involving the cat object(s).
-
-	if(engine){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
-		//multiple cats
-
-		//update movements for the cat(s) with yuka's AI
-		let delt = yukaDelta.update().getDelta();
-		yukaVehicle.updateWorldMatrix(false, false);
-		
-		//try to get it to update with the entity directly instead
-		//kitty.scene.position.copy(yukaVehicle.position);
-		moveACat(kitty, yukaVehicle, delt);
-		engine.update(delt);
-		//lastVehiclePosition = yukaVehicle.position;
-
-	}
+		catHandle.update(deltaTime, yukaDelta);//updates multiple things involving the cat object(s). (movement, vehicles, bullets)
 
 	if(bulletInScene)//animate a bullet, change to different bullets over time
 		bullet.position.add(bulletChange);

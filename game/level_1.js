@@ -1238,15 +1238,14 @@ function createLevel1() {
         catLoader.load(
             "objects/cat/catGun.glb",
             function(obj) {//onLoad, obj is a GLTF
+                
                 catHandle = new catHandler();
                 let c = new catObj(obj);
 
-                let theMixer = new THREE.AnimationMixer(obj.scene.children[2]);//the mesh itself
-                c.addMixer(theMixer);
+                c.addMixer(new THREE.AnimationMixer(obj.scene.children[2]));//the mesh itself
                 
                 obj.name = "Enemy";
-
-                let pos ={x: 5, y: 105, z: 0};
+                let pos ={x: 5, y: 105, z: 0}; //was cat's position
 
                 obj.scene.position.x = pos.x;
                 obj.scene.position.y = pos.y;
@@ -1295,7 +1294,7 @@ function createLevel1() {
 
                 rigidBodies.push(obj.scene);
 
-                //animation for catGun
+                //bullet animation for catGun
                 let j = 0;
                 let meshMaterialBullet = new THREE.MeshBasicMaterial({color: 0xCFC669});
                 let geoBullet = new THREE.SphereGeometry(.5, 10, 10);
@@ -1315,8 +1314,6 @@ function createLevel1() {
                 testYuka.position.copy(new THREE.Vector3(-3, 100, 0));
                 scene.add(testYuka);
                 testYuka.matrixautoUpdate = false;*/
-                kitty.matrixAutoUpdate = false;
-                makePathAndWaypoints(kitty.scene);//push the box of the catEnemy to the function
             },
             function(xhr){//onProgress
                 loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
@@ -1470,7 +1467,10 @@ function createLevel1() {
         //pos = {x: 0, y: 115, z: -2010}; // end of level
         pos = {x: 24, y: 105, z: -647}; // grappling hook spot
 
-        resetPos = {x: 24, y: 105, z: -647}; //beginning of level
+        //let pos ={x: 5, y: 105, z: 0}; //was cat's position
+        //resetPos = {x: 24, y: 105, z: -647}; //beginning of level
+
+        resetPos = {x: -4, y: 101, z: -44}; //back of the level on the second-to-last platform
         //resetPos = {x: 0, y: 101, z: 0}; //grappling hook reset
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};

@@ -12,7 +12,7 @@ let x, y, z;
 //variables for YUKA ai movements
 let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null, lastVehiclePosition;
 let bump = true;
-let catHandle = null;
+let catHandle = null, cats = [];
 
 function shootBullet(){
     //set position of the bullet initially
@@ -48,7 +48,8 @@ function shootBullet(){
 
 
 
-function moveACat(enemy, vehicle, delta){
+function moveACat(enem, vehicle, delta){
+    let enemy = enem.body;
     //set values to set velocity
     let scalingFactor = 5;
     let vertex = new THREE.Vector3().copy(vehicle.steering.calculate(vehicle, vehicle.steering._steeringForce, delta));
@@ -57,14 +58,14 @@ function moveACat(enemy, vehicle, delta){
     if(vertex.x == 0 && vertex.y == 0 && vertex.z == 0) return;
     let resultantImpulse;
     //set velocity and rotation to userdata
-    if (bump == true){
-        resultantImpulse = new Ammo.btVector3( vertex.x, vertex.y+0.2, vertex.z );
-        bump = false;
-    }
-    else{
+    //if (bump == true){
+        resultantImpulse = new Ammo.btVector3( vertex.x, vertex.y, vertex.z );
+    /*    bump = false;
+    }*/
+    /*else{
         resultantImpulse = new Ammo.btVector3( vertex.x, vertex.y, vertex.z );
         bump = true;
-    }
+    }*/
 
         resultantImpulse.op_mul(scalingFactor);
 
@@ -75,23 +76,24 @@ function moveACat(enemy, vehicle, delta){
 
 
 //https://github.com/Mugen87/yuka/blob/master/examples/ for yuka implementations
-function makePathAndWaypoints(enemy){//start point for cat is : {x: 5, y: 105, z: 0}
+function makePathAndWaypoints(enem){//start point for cat is : {x: 5, y: 105, z: 0}
+let enemy = enem.body;
 //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html
 yukaVehicle = new YUKA.Vehicle();
 yukaVehicle.updateWorldMatrix();
 
 let path = new YUKA.Path();
-path.add(new YUKA.Vector3(-6, 102.5, 6));
-path.add(new YUKA.Vector3(6, 102.5, 6));
-path.add(new YUKA.Vector3(6, 102.5, -6));
-path.add(new YUKA.Vector3(-6, 102.5, -6));
+path.add(new YUKA.Vector3(-6, 110, 6));
+path.add(new YUKA.Vector3(6, 110, 6));
+path.add(new YUKA.Vector3(6, 110, -6));
+path.add(new YUKA.Vector3(-6, 110, -6));
 path.loop = true;
 
 yukaVehicle.position.copy(path.current());
 //test.position.copy(path.current());
 //set enemy to vehicle position
-yukaVehicle.setRenderComponent(enemy, sync);
-enemy.position.copy(yukaVehicle.position);//local position since it's a child to that object
+//yukaVehicle.setRenderComponent(enemy, sync);
+enemy.scene.position.copy(yukaVehicle.position);//local position since it's a child to that object
 followPath = new YUKA.FollowPathBehavior(path, 1);//number is not the speed.
 onPath = new YUKA.OnPathBehavior(path, .1, 1);//1st number is the radius of the mesh, 2nd is the prediction
 //onPath and followPathBehavior for strict paths
@@ -108,7 +110,7 @@ if(engine == null)
 
 engine.add(yukaVehicle);
 yukaDelta = new YUKA.Time();
-
+enem.addVehicle(yukaVehicle);
 }
 //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html#L113
 //line 52, these next 3 lines:
@@ -131,8 +133,8 @@ function catAnimations(e){//e contains the type action and loopDelta
             animationNum = 0;
         //if(e.action.clip.name == "")
         //start the next animation in the queue with crossFadeFrom, the previous action is faded out while the next one is faded in
-        theMixer.clipAction(anims[animationNum]).reset();
-        theMixer.clipAction(anims[animationNum]).play();
+        e.action.getMixer().clipAction(anims[animationNum]).reset();
+        e.action.getMixer().clipAction(anims[animationNum]).play();
 
         //shoot a bullet if the animation's the correct one, "Shoot"
 
@@ -141,7 +143,7 @@ function catAnimations(e){//e contains the type action and loopDelta
             bullet.visible = false;
             bulletInScene = false;
         }
-        e.action.crossFadeTo(theMixer.clipAction(anims[animationNum]), .4, false);
+        e.action.crossFadeTo(e.action.getMixer().clipAction(anims[animationNum]), .4, false);
     }
     if(animationNum == shooterAnim)//matches returns an array with matches or null if nothing's found.
         shootBullet();
@@ -156,28 +158,48 @@ function catAnimations(e){//e contains the type action and loopDelta
 /*class that holds all cat objects in an array, and updates them all with their mixers, bounding box movement, 
 animations, etc. */
 class catHandler{
-    cats;
+    //cats;
     constructor(){
-        this.cats = [];
+        //this.cats = [];
     }
 
-    getCats(){
-        return this.cats;
-    }
+    /*getCats(){
+        return cats;
+    }*/
     addCat(cat){
-        if(this.cats != null)
-            this.cats.push(cat);
+        if(cats != null)
+            cats.push(cat);
     }
-    update(deltaTime){//don't use another function for it, it changes the scope and it can't reach variables anymore?
+    update(deltaTime, yukaDelta){//don't use another function for it, it changes the scope and it can't reach variables anymore?
         //for each cat:
         let i = 0;
-        while(i < this.cats.length){
+        while(i < cats.length){
             //update the mixer
-            this.cats[i].mixer.update(deltaTime);//using the deltaTime THREE.clock
+            cats[i].mixer.update(deltaTime);//using the deltaTime THREE.clock
 
             //update worldmatrix for collision box
 
             i++;
+        }
+
+        if(engine){ //null would be false, updates the mixer for animating the catGun object, may need to expand it when there's
+		//multiple cats
+
+		    //update movements for the cat(s) with yuka's AI
+            let delt = yukaDelta.update().getDelta();
+            for(let j = 0; j < cats.length; j++){//update vehicles per cat
+                if(cats[j].vehicle == null)
+                    continue;
+
+        		cats[j].vehicle.updateWorldMatrix(false, false);
+		
+    		    //try to get it to update with the entity directly instead
+        		//kitty.scene.position.copy(yukaVehicle.position);
+                moveACat(cats[j], cats[j].vehicle, delt);
+            }
+
+		    engine.update(delt);//update engine
+		    //lastVehiclePosition = yukaVehicle.position;
         }
     }
 }
@@ -195,6 +217,7 @@ class catObj{
         this.body = bod;
         this.mixer = null;
         this.vehicle = null;
+        makePathAndWaypoints(this);
     }
 
     setUpMixer(){
@@ -221,6 +244,7 @@ class catObj{
     }
 
     addVehicle(vehicle){
+        this.body.matrixAutoUpdate = false;
         this.vehicle = vehicle;
     }
     addMixer(mix){
