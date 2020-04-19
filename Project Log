@@ -636,4 +636,8 @@ The main catGun object and the animation Mixer linked to it are both stored into
 update() within that method. They are both stored inside one catObj object. Note: use e=> function{} only when you pass the 
 instance of the class (this.) to that function inside a javascript class.
 
+Semira Pinder
+Commit #3 of the time period: April 12-19
+4/19 12:23pm-3:32pm
+Added vehicle creation to the constructor of catObj objects, and removed vehicle creation from the objloader in level 1.
 
