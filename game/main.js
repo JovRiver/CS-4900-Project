@@ -1,5 +1,5 @@
 //variable declaration section
-let physicsWorld, renderer, stats, down, controls, rigidBodies = [], platforms = [], resetPlatform = [], tmpTrans = null;
+let physicsWorld, renderer , moving, stats, down, controls, rigidBodies = [], platforms = [], resetPlatform = [], tmpTrans = null, playerBullets = [], enemies =[];
 let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
 let soundManager = [];
@@ -45,7 +45,7 @@ const STATE = {
 	DISABLE_SIMULATION : 5
 }
 
-let level = 0;	//set to 0 for main menu, 1 or higher for levels
+let level = 1;	//set to 0 for main menu, 1 or higher for levels
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let in_Game_Menu_Group; // in_Game_Menu_Group to hold menu items for raycaster detection
@@ -171,6 +171,7 @@ function updatePhysics( deltaTime ){
 	}
 }
 
+
 movementCallBack.addSingleResult = function () {
 	//todo Fix sliding off platform flying movement
 	if(gamePlay){
@@ -248,6 +249,10 @@ function renderFrame(){
 		stats.update();
 		customUniforms.time.value += deltaTime;
 
+		playerBullets.forEach(b => {
+			b.translateZ(-300 * deltaTime); // move along the local z-axis
+		});
+
 		if(!startClock){
 			let mins =  Math.floor(gameClock.getElapsedTime()/60);
 			let secs;
@@ -308,6 +313,7 @@ function renderFrame(){
 	if(bulletInScene)//animate a bullet, change to different bullets over time
 		bullet.position.add(bulletChange);
 
+
 	renderFrameId = requestAnimationFrame( renderFrame );
 	renderer.render(scene, camera);
 }
@@ -333,35 +339,87 @@ function onWindowResize() {
 }
 
 function onMouseDown(event){
-	if(event.which === 3){
-		let direction = new THREE.Vector3(0,0,0);
-		let raycasterRope = new THREE.Raycaster(); // create once and reuse
-		controls.getDirection( direction );
-		raycasterRope.set( controls.getObject().position, direction );
-		raycasterRope.near = 1;
-		raycasterRope.far = 15;
-		let intersects = raycasterRope.intersectObjects( platforms );
-		for ( let i = 0; i < intersects.length; i++ ) {
-			if(intersects.length === 1){
-				createGrapplingHook(intersects[i].point);
-				physicsWorld.setGravity(new Ammo.btVector3(0, -30, 0));
-				soundManager[1].play();
+	if(gamePlay){
+		switch (event.which) {
+			case 1:{
+				let pBullet = new THREE.Mesh(new THREE.SphereGeometry(0.25, 4, 2), new THREE.MeshBasicMaterial({
+					color: "aqua"
+				}));
+				let tempPos = new THREE.Vector3;
+				scene.getObjectByName("Gun").getWorldPosition(tempPos)
+				pBullet.position.copy(tempPos); // start position - the tip of the weapon
+
+				pBullet.quaternion.copy(camera.quaternion); // apply camera's quaternion
+				scene.add(pBullet);
+				playerBullets.push(pBullet);
+
+				let direction = new THREE.Vector3(0,0,0);
+				let raycaster = new THREE.Raycaster(); // create once and reuse
+				controls.getDirection( direction );
+				raycaster.set( controls.getObject().position, direction );
+				raycaster.near = 0.01;
+				raycaster.far = 50;
+				let intersects = raycaster.intersectObjects( platforms );
+				for ( let i = 0; i < intersects.length; i++ ) {
+					if(soundManager[4].isPlaying){
+						soundManager[4].stop();
+						soundManager[4].play();
+					}else{
+						soundManager[4].play();
+					}
+				}
+
+				if(soundManager[3].isPlaying){
+					soundManager[3].stop();
+					soundManager[3].play();
+				}else{
+					soundManager[3].play();
+				}
+
+
+				break;
+			}
+			case 3:{
+				let direction = new THREE.Vector3(0,0,0);
+				let raycasterRope = new THREE.Raycaster(); // create once and reuse
+				controls.getDirection( direction );
+				raycasterRope.set( controls.getObject().position, direction );
+				raycasterRope.near = 1;
+				raycasterRope.far = 15;
+				let intersects = raycasterRope.intersectObjects( platforms );
+				for ( let i = 0; i < intersects.length; i++ ) {
+					if(intersects.length === 1){
+						createGrapplingHook(intersects[i].point);
+						physicsWorld.setGravity(new Ammo.btVector3(0, -30, 0));
+						soundManager[1].play();
+					}
+				}
+				break;
 			}
 		}
 	}
 }
 
 function onMouseUp(event){
-	if(event.which === 3){
-		if(rope != null){
-			physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
-			physicsWorld.removeCollisionObject(rope.userData.physicsBody);
-			scene.remove(rope);
-			soundManager[1].stop();
-		}
-		if(scene.getObjectByName( "Hook_Box" ) != null){
-			physicsWorld.removeCollisionObject(scene.getObjectByName( "Hook_Box" ).userData.physicsBody);
-			scene.remove(scene.getObjectByName( "Hook_Box" ));
+	if(gamePlay) {
+		switch (event.which) {
+			case 1: {
+
+				break;
+			}
+			case 3: {
+				if (rope != null) {
+					physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
+					physicsWorld.removeCollisionObject(rope.userData.physicsBody);
+					scene.remove(rope);
+					soundManager[1].stop();
+				}
+				if (scene.getObjectByName("Hook_Box") != null) {
+					physicsWorld.removeCollisionObject(scene.getObjectByName("Hook_Box").userData.physicsBody);
+					scene.remove(scene.getObjectByName("Hook_Box"));
+				}
+				break;
+			}
 		}
 	}
 }
@@ -372,24 +430,44 @@ function onKeyDown (event ) {
 			case 87: // w
 				if (canMove) {
 					playerMoveDirection.forward = 1;
+					moving = true;
+					if(soundManager[5].isPlaying){
+					}else{
+						soundManager[5].play();
+					}
 				}
 				break;
 
 			case 65: // a
 				if (canMove) {
 					playerMoveDirection.left = 1;
+					moving = true;
+					if(soundManager[5].isPlaying){
+					}else{
+						soundManager[5].play();
+					}
 				}
 				break;
 
 			case 83: // s
 				if (canMove) {
 					playerMoveDirection.back = 1;
+					moving = true;
+					if(soundManager[5].isPlaying){
+					}else{
+						soundManager[5].play();
+					}
 				}
 				break;
 
 			case 68: // d
 				if (canMove) {
 					playerMoveDirection.right = 1;
+					moving = true;
+					if(soundManager[5].isPlaying){
+					}else{
+						soundManager[5].play();
+					}
 				}
 				break;
 
@@ -478,21 +556,37 @@ function onKeyUp( event ) {
 	switch ( event.keyCode ) {
 		case 87: // w
 			playerMoveDirection.forward = 0;
+			moving = false;
+			if(!moving){
+				soundManager[5].stop();
+			}
 			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
 
 		case 65: // a
 			playerMoveDirection.left = 0;
+			moving = false;
+			if(!moving){
+				soundManager[5].stop();
+			}
 			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
 
 		case 83: // s
 			playerMoveDirection.back = 0;
+			moving = false;
+			if(!moving){
+				soundManager[5].stop();
+			}
 			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
 
 		case 68: // d
 			playerMoveDirection.right = 0;
+			moving = false;
+			if(!moving){
+				soundManager[5].stop();
+			}
 			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
 
