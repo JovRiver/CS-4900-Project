@@ -448,3 +448,46 @@ function walkingSoundLoader(){
     );
     player.add( soundManager[5] );
 }
+
+function loadSounds(){
+    let count = 0;
+    let loadBar = document.getElementById('load');
+
+    for(let i = 0; i< 8; i++){
+        let listener = new THREE.AudioListener();
+        camera.add( listener );
+        // create a global audio source
+        soundManager[i] = new THREE.Audio( listener );
+        // load a sound and set it as the Audio object's buffer
+        let audioLoader = new THREE.AudioLoader();
+        audioLoader.load( soundss[i].url,
+            function( buffer ) {
+                soundManager[i].setBuffer( buffer );
+                soundManager[i].setLoop( soundss[i].loop );
+                soundManager[i].setVolume( soundss[i].volume );
+                count ++;
+            },
+            function(xhr){//onProgress
+                loadBar.innerHTML = "<h2>Loading Sounds " + ((xhr.loaded / xhr.total) * count / 8  * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                if((xhr.loaded / xhr.total)/8 * 100 == 100){ //if done loading loads next loader
+                }
+            },
+            function(err){//onError
+                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
+                console.log("error in loading sound");
+            }
+        );
+    }
+    loadModels();
+
+}
+
+function loadModels(){
+    let count = 0;
+    let loadBar = document.getElementById('load');
+
+
+
+
+    load_Manager();
+}

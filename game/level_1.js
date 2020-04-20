@@ -1429,7 +1429,8 @@ function createLevel1() {
                 loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     document.getElementById("blocker").style.display = "block";
-                    sound_Loader(loadBar);
+                    //sound_Loader(loadBar);
+                    after_Game_Menu(loadBar);
                     b = true;
                 }
             },

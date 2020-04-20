@@ -19,7 +19,7 @@ let resetPos = {x: 0, y: 0, z: 0};
 let customUniforms, lava;
 
 let scene;
-let camera;
+let camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 10000 );;
 
 let prevTime = performance.now();
 let direction = new THREE.Vector3();
@@ -35,6 +35,35 @@ let timer = document.getElementById('clock');
 
 let renderFrameId;
 let onBox = 0;
+
+const sounds = {
+	level1BGM:	{ url: './sound/level_1_Audio.mp3', loop: true, volume: 0.15},
+	hook:    	{ url: './sound/hook.wav', loop: false, volume: 0.85 },
+	jump:		{ url: './sound/jump.wav', loop: false, volume: 0.85 },
+	shoot:		{ url: './sound/shoot.wav', loop: false, volume: 0.85 },
+	enemyHit:   { url: './sound/hit.wav', loop: false, volume: 0.5 },
+	walking:	{ url: './sound/walking.wav', loop: true, volume: 5 },
+	playerHit:	{ url: './sound/playerHit.wav', loop: false, volume: 0.15 },
+	menuBGM:	{ url: './sound/title_Audio.mp3', loop: true, volume: 0.85 },
+};
+
+let soundss = [];
+soundss.push({ url: './sound/level_1_Audio.mp3', loop: true, volume: 0.15});
+soundss.push({ url: './sound/hook.wav', loop: false, volume: 0.85 });
+soundss.push({ url: './sound/jump.wav', loop: false, volume: 0.85 });
+soundss.push({ url: './sound/shoot.wav', loop: false, volume: 0.85 });
+soundss.push({ url: './sound/hit.wav', loop: false, volume: 0.5 });
+soundss.push({ url: './sound/walking.wav', loop: true, volume: 5 });
+soundss.push({ url: './sound/playerHit.wav', loop: false, volume: 0.15 });
+soundss.push({ url: './sound/title_Audio.mp3', loop: true, volume: 0.85 });
+
+
+
+const models = {
+	enemy:	{ url: './objects/cat/catGun.glb' },
+	flag:	{ url: './objects/flag/objFlag.obj' },
+	gun:	{ url: './objects/gun/gun.obj' },
+};
 
 const STATE = {
 	ACTIVE_TAG : 1,
@@ -76,7 +105,8 @@ function start (){
 
 	setupEventHandlers();
 	showStats();
-	load_Manager();
+	loadSounds();
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
