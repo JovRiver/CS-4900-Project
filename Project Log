@@ -664,5 +664,12 @@ Commit 46:
   Added BGM ON OFF to options menu to allow the user to turn on or off a new variable called play_Music, I will continue working on adding
 the menu audio and the functionality of this new variable to turn on or off the game music.
 
+4/25/2020
+Ryan Slaybaugh:
+Commit 47:
+  
+  Continuing to work on a way to get the menu audio to play, I linked the BGM play_Music variable to the music for level 1 so that it will play
+if set to true and not if set to false.
+
 
 
