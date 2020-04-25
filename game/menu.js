@@ -27,6 +27,7 @@ function create_Start_Menu() {
 				if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
 					document.getElementById("load").style.display = "none";
 					document.getElementById("blocker").style.display = "none";
+					soundManager[7].play();
 				}
 			},
 			function(err){//onError

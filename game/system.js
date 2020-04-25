@@ -16,7 +16,10 @@ function setupControls(){
     let blocker = document.getElementById( 'blocker' );
     let instructions = document.getElementById( 'instructions' );
     instructions.addEventListener( 'click', function () {controls.lock();}, false );
-    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; soundManager[0].play();
+    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; 
+        if (play_Music === true) {
+            soundManager[0].play();
+        }
         if(startClock){
             gameClock.start();
             startClock = false;
@@ -438,7 +441,6 @@ function walkingSoundLoader(){
             loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
             if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                 document.getElementById("blocker").style.display = "block";
-                //after_Game_Menu(loadBar);
             }
         },
         function(err){//onError

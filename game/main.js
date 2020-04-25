@@ -199,7 +199,6 @@ function updatePhysics( deltaTime ){
 	}
 }
 
-
 movementCallBack.addSingleResult = function () {
 	//todo Fix sliding off platform flying movement
 	if(gamePlay){
@@ -643,12 +642,14 @@ function menu_Selection(event) {
 
 			if (intersects[0].object.name === "BGM_ON") {
 				play_Music = true;
+				soundManager[7].play();
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				menu_Group.getObjectByName("BGM_OFF").material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 			}
 
 			if (intersects[0].object.name === "BGM_OFF") {
 				play_Music = false;
+				soundManager[7].stop();
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				menu_Group.getObjectByName("BGM_ON").material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 			}
