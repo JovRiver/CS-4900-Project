@@ -616,18 +616,26 @@ function menu_Selection(event) {
 		let intersects = raycaster.intersectObject(menu_Group, true);
 
 		if (intersects.length > 0) {
+			if (intersects[0].object.name === "Press_Start") {
+				camera.position.set(0,-10, 50);
+				camera.lookAt(0,0,0);
+				setTimeout(function () {soundManager[7].play();}, 500);
+			}
+
 			if (intersects[0].object.name === "Select_Level") {
 				camera.position.y += 80;
 			}
 
 			if (intersects[0].object.name === "Level_1" || intersects[0].object.name === "Level_1_Cube") {
 				level = 1;
+				soundManager[7].stop();
 				onBox = false;
 				load_Manager();
 			}
 
 			if (intersects[0].object.name === "Level_2" || intersects[0].object.name === "Level_2_Cube") {
 				level = 2;
+				soundManager[7].stop();
 				load_Manager();
 			}
 
@@ -665,6 +673,7 @@ function menu_Selection(event) {
 
 			if (intersects[0].object.name === "Main_Menu") {
 				level = 0;
+				soundManager[7].play();
 				load_Manager();
 			}
 

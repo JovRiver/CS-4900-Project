@@ -6,8 +6,7 @@ function create_Start_Menu() {
 
 	//create camera
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
-	camera.position.set(0,-10, 50);
-	camera.lookAt(0,0,0);
+	camera.position.set(0, -140, 50);
 
 	//setup point light for the scene
 	let pointLight = new THREE.PointLight(0xffffff, 1.5);
@@ -18,6 +17,7 @@ function create_Start_Menu() {
 
 	function load_Menu() {
 		loader.load( "fonts/28 Days Later_Regular.json", function ( font ) {
+			start_Menu(font);
 			main_Menu(font);
 			level_Select_Menu(font);
 			options_Menu(font);
@@ -27,7 +27,6 @@ function create_Start_Menu() {
 				if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
 					document.getElementById("load").style.display = "none";
 					document.getElementById("blocker").style.display = "none";
-					soundManager[7].play();
 				}
 			},
 			function(err){//onError
@@ -35,6 +34,38 @@ function create_Start_Menu() {
 				console.log("error in loading fonts");
 			}
 		);
+	}
+
+	function start_Menu(font) {
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Grappling_Game
+
+		textGeo = new THREE.TextBufferGeometry( "Press Start", {
+
+			font: font,
+			size: 10,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.y = -145;
+
+		mesh.rotation.x = THREE.Math.degToRad(-10);
+
+		mesh.name = "Press_Start";
+
+		menu_Group.add(mesh);
+
+		scene.add(menu_Group);
 	}
 
     function main_Menu(font) {
