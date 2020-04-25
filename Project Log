@@ -671,5 +671,12 @@ Commit 47:
   Continuing to work on a way to get the menu audio to play, I linked the BGM play_Music variable to the music for level 1 so that it will play
 if set to true and not if set to false.
 
+4/25/2020
+Ryan Slaybaugh:
+Commit 48:
+
+  Added a press start section to the main menu for the user to click on to take them to the main menu. This also serves as a way to get user input
+to start playing the menu BGM. Adjusted code as necessary to cancel audio when switching levels.
+
 
 
