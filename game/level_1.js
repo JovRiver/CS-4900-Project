@@ -1258,17 +1258,6 @@ function createLevel1() {
                 kitty = obj;
                 obj.matrixAutoUpdate = true;//changed from false
 
-                let materialAimer = new THREE.MeshBasicMaterial({color: 0xC0F0F0});
-                let geoAimer = new THREE.SphereGeometry(1, 10, 10);
-                catAimer = new THREE.Mesh(geoAimer, materialAimer);
-                catAimer.visible = aimerVisible;
-
-                obj.scene.children[2].add(catAimer);
-                catAimer.position.copy(obj.scene.children[2].position);
-
-                catAimer.position.x += 1;//in local
-                //catAimer.position.y += 2;//in local
-                //catAimer.position.z += 1;//in local
 
                 let vect3 = new THREE.Vector3();
                 let box = new THREE.Box3().setFromObject(obj.scene).getSize(vect3);
@@ -1296,13 +1285,6 @@ function createLevel1() {
                 obj.scene.userData.physicsBody = objBody;
 
                 rigidBodies.push(obj.scene);
-
-                //bullet animation for catGun
-                let j = 0;
-                let meshMaterialBullet = new THREE.MeshBasicMaterial({color: 0xCFC669});
-                let geoBullet = new THREE.SphereGeometry(.5, 10, 10);
-                bullet = new THREE.Mesh(geoBullet, meshMaterialBullet);
-                bullet.name = "ABullet";
 
                 //adding objects to scenes or classes
                 scene.add(bullet);

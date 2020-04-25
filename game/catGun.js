@@ -7,14 +7,16 @@ and creating vehicles that move the cat's body will be handled in function makeP
 //reduce amount of global variables later
 
 //variables for the catGun and bullets
-let animationNum = 0, secondLoopBool = false, anims = null, shooterAnim, bullet, bulletInScene = false, kitty, bulletChange, bulletSpeed = 1, catAimer, aimerVisible = false;
+let animationNum = 0, secondLoopBool = false, anims = null, shooterAnim, kitty, aimerVisible = true;
 let x, y, z;
 //variables for YUKA ai movements
 let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null, lastVehiclePosition;
 let bump = true;
 let catHandle = null, cats = [], i = 0;
 
-function shootBullet(){
+function shootBullet(enem){
+    let enemy = enem.body;
+    let bullet = enem.bullet;
     //set position of the bullet initially
     bullet.visible = true;
     //putting the bullet right in front of the cat, https://stackoverflow.com/questions/37641773/three-js-how-to-copy-object-direction-that-its-facing helped with this
@@ -23,27 +25,27 @@ function shootBullet(){
     //localToWorld may be destructive to the data, https://stackoverflow.com/questions/44676015/localtoworld-weird-behaviour
     
     //convert aimer position to world, while keeping the original position untouched.
-    let temp = kitty.scene.children[2].localToWorld(catAimer.position.clone());
+    let temp = enemy.body.scene.children[2].localToWorld(catAimer.position.clone());
 
     //put bullet in the aimer position, then set the movement values
     bullet.position.copy(temp);
-    bulletChange = new THREE.Vector3(
-        kitty.scene.children[2].position.x,
-        kitty.scene.children[2].position.y,
-        kitty.scene.children[2].position.z);
+    enemy.bulletChange = new THREE.Vector3(
+        enemy.body.scene.children[2].position.x,
+        enemy.body.scene.children[2].position.y,
+        enemy.body.scene.children[2].position.z);
 
-    bulletChange.copy(kitty.scene.children[2].localToWorld(bulletChange.clone()));
-    bulletChange.copy(new THREE.Vector3(
-        -(bulletChange.x - temp.x),
-        bulletChange.y - temp.y,
-        -(bulletChange.z - temp.z)
+    enemy.bulletChange.copy(enemy.body.scene.children[2].localToWorld(enemy.bulletChange.clone()));
+    enemy.bulletChange.copy(new THREE.Vector3(
+        -(enemy.bulletChange.x - temp.x),
+        enemy.bulletChange.y - temp.y,
+        -(enemy.bulletChange.z - temp.z)
     )
     );//the cat was aligned weird in blender i think
     
-    bulletChange.multiplyScalar(bulletSpeed);
+    enemy.bulletChange.multiplyScalar(bulletSpeed);
     
     //tell the main loop that there's a bullet active
-    bulletInScene = true;
+    enemy.bulletInScene = true;
 }
 
 
@@ -133,7 +135,7 @@ function catAnimations(e){//e contains the type action and loopDelta
     //when this is called at the end of a loop, it checks if this is the second time the loop has run.
     //If not, then the
 
-    if (secondLoopBool){//if it's on the 2nd loop, adjust the animationMixer so that we don't have to do this later
+    //if (secondLoopBool){//if it's on the 2nd loop, adjust the animationMixer so that we don't have to do this later
         //e.action.stop();
         animationNum++;
         if (animationNum == anims.length)
@@ -145,15 +147,16 @@ function catAnimations(e){//e contains the type action and loopDelta
 
         //shoot a bullet if the animation's the correct one, "Shoot"
 
-        if(animationNum != shooterAnim){//bullet's not visible for now
-        //scene.remove(scene.getObjectByName(bullet.name));
-            bullet.visible = false;
-            bulletInScene = false;
+        if(animationNum != shooterAnim){//makes the bullet not visible, will replace with something time related 
+            //scene.remove(scene.getObjectByName(bullet.name));
+            e.action.getMixer().getRoot().parent.bullet.visible = false;
+            e.action.getMixer().getRoot().parent.bulletInScene = false;
         }
+        else//matches returns an array with matches or null if nothing's found.
+            shootBullet(e.action.getMixer().getRoot().parent);
+
         e.action.crossFadeTo(e.action.getMixer().clipAction(anims[animationNum]), .4, false);
-    }
-    if(animationNum == shooterAnim)//matches returns an array with matches or null if nothing's found.
-        shootBullet();
+    //}
 
     secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
     //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
@@ -184,7 +187,8 @@ class catHandler{
             //update the mixer
             cats[i].mixer.update(deltaTime);//using the deltaTime THREE.clock
 
-            //update worldmatrix for collision box
+            if(cats[i].bulletInScene)//animate a bullet
+                bullet.position.add(cats[i].bulletChange);
 
             i++;
         }
@@ -206,7 +210,8 @@ class catHandler{
             }
 
 		    engine.update(delt);//update engine
-		    //lastVehiclePosition = yukaVehicle.position;
+            //lastVehiclePosition = yukaVehicle.position;
+            
         }
     }
 }
@@ -220,12 +225,26 @@ class catObj{
     body;
     vehicle;
     mixer;
+    bullet;
+    bulletInScene;
+    bulletChange;
+    bulletSpeed;
+    catAimer;
+
     constructor(bod, arr){//arr carries x's and z's in alternating order, Y's will be added later in a way that takes the height 
     //in consideration
         this.body = bod;
         this.mixer = null;
         this.vehicle = null;
         makePathAndWaypoints(this, arr);
+        this.bullet = null;
+        this.bulletInScene = false;
+        this.bulletChange = null;
+        this.bulletSpeed = 1;
+        this.catAimer = null;
+        this.addBullet();
+        //this.body.scene.add(this);//makes this class instance a child of the body, so it's more accessible... doesn't work.
+            
     }
 
     setUpMixer(){
@@ -258,10 +277,26 @@ class catObj{
     addMixer(mix){
         this.mixer = mix;
     }
-    getVehicle(){
-        return this.vehicle;
-    }
-    getMixer(mix){
-        return this.mixer;
+    addBullet(){
+        //bullet aimer for the cat.
+        let materialAimer = new THREE.MeshBasicMaterial({color: 0xC0F0F0});
+        let geoAimer = new THREE.SphereGeometry(1, 10, 10);
+        this.catAimer = new THREE.Mesh(geoAimer, materialAimer);
+        this.catAimer.visible = aimerVisible;
+        
+        this.body.scene.children[2].add(this.catAimer);
+        this.catAimer.position.copy(this.body.scene.children[2].position);
+        this.catAimer.position.x += 1;//in local
+        //catAimer.position.y += 2;//in local
+        //catAimer.position.z += 1;//in local
+
+        //bullet for catGun
+        let meshMaterialBullet = new THREE.MeshBasicMaterial({color: 0xCFC669});
+        let geoBullet = new THREE.SphereGeometry(.5, 10, 10);
+        let bullet = new THREE.Mesh(geoBullet, meshMaterialBullet);
+        bullet.name = "ABullet";
+        this.bullet = bullet;
+        //bullet variables for the cat set here
+
     }
 }
