@@ -656,3 +656,13 @@ Ryan Slaybaugh:
 Commit 45:
 
   Worked on BGM for menu and level 1 and uploaded the audio files to the master branch.
+
+4/25/2020
+Ryan Slaybaugh:
+Commit 46:
+
+  Added BGM ON OFF to options menu to allow the user to turn on or off a new variable called play_Music, I will continue working on adding
+the menu audio and the functionality of this new variable to turn on or off the game music.
+
+
+
