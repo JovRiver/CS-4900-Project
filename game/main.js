@@ -37,26 +37,25 @@ let renderFrameId;
 let onBox = 0;
 
 const sounds = {
-	level1BGM:	{ url: './sound/level_1_Audio.mp3', loop: true, volume: 0.15},
+	level1BGM:	{ url: './sound/level_1_Audio.mp3', loop: true, volume: 0.5},
 	hook:    	{ url: './sound/hook.wav', loop: false, volume: 0.85 },
 	jump:		{ url: './sound/jump.wav', loop: false, volume: 0.85 },
 	shoot:		{ url: './sound/shoot.wav', loop: false, volume: 0.85 },
 	enemyHit:   { url: './sound/hit.wav', loop: false, volume: 0.5 },
 	walking:	{ url: './sound/walking.wav', loop: true, volume: 5 },
 	playerHit:	{ url: './sound/playerHit.wav', loop: false, volume: 0.15 },
-	menuBGM:	{ url: './sound/title_Audio.mp3', loop: true, volume: 0.85 },
+	menuBGM:	{ url: './sound/title_Audio.mp3', loop: true, volume: 0.5 },
 };
 
 let soundss = [];
-soundss.push({ url: './sound/level_1_Audio.mp3', loop: true, volume: 0.15});
+soundss.push({ url: './sound/level_1_Audio.mp3', loop: true, volume: 0.5});
 soundss.push({ url: './sound/hook.wav', loop: false, volume: 0.85 });
 soundss.push({ url: './sound/jump.wav', loop: false, volume: 0.85 });
 soundss.push({ url: './sound/shoot.wav', loop: false, volume: 0.85 });
 soundss.push({ url: './sound/hit.wav', loop: false, volume: 0.5 });
 soundss.push({ url: './sound/walking.wav', loop: true, volume: 5 });
 soundss.push({ url: './sound/playerHit.wav', loop: false, volume: 0.15 });
-soundss.push({ url: './sound/title_Audio.mp3', loop: true, volume: 0.85 });
-
+soundss.push({ url: './sound/title_Audio.mp3', loop: true, volume: 0.5 });
 
 
 const models = {
@@ -76,6 +75,7 @@ const STATE = {
 let level = 0;	//set to 0 for main menu, 1 or higher for levels
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
+let play_Music = true;
 let in_Game_Menu_Group; // in_Game_Menu_Group to hold menu items for raycaster detection
 
 //Ammojs Initialization
@@ -106,7 +106,6 @@ function start (){
 	setupEventHandlers();
 	showStats();
 	loadSounds();
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -642,8 +641,16 @@ function menu_Selection(event) {
 				camera.lookAt(0, 0, 0);
 			}
 
-			if (intersects[0].object.name === "Exit_Game") {
-				//window.close();
+			if (intersects[0].object.name === "BGM_ON") {
+				play_Music = true;
+				intersects[0].object.material.emissive.setHex(0xdde014);
+				menu_Group.getObjectByName("BGM_OFF").material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
+			}
+
+			if (intersects[0].object.name === "BGM_OFF") {
+				play_Music = false;
+				intersects[0].object.material.emissive.setHex(0xdde014);
+				menu_Group.getObjectByName("BGM_ON").material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 			}
 		}
 	}
@@ -664,11 +671,6 @@ function menu_Selection(event) {
 				level++;
 				load_Manager();
 			}
-
-			//if (intersects[0].object.name === "Level_2" || intersects[0].object.name === "Level_2_Cube") {
-			//	level = 2;
-			//	load_Manager();
-			//}
 		}
 	}
 }
@@ -688,6 +690,9 @@ function on_Mouse_Move(event) {
 			}
 			else if (intersects[0].object.name === "Level_2_Cube") {
 				onBox = 2;
+			}
+			else if (intersects[0].object.name === "BGM_ON" || intersects[0].object.name === "BGM_OFF") {
+				//
 			}
 			else if (intersected_Object != intersects[0].object) {
 				if (intersected_Object){

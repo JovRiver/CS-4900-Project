@@ -58,10 +58,10 @@ function create_Start_Menu() {
 		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 		mesh = new THREE.Mesh( textGeo, textMaterial );
-			mesh.position.x = centerOffset;
-			mesh.position.y = 10;
+		mesh.position.x = centerOffset;
+		mesh.position.y = 10;
 
-			mesh.rotation.x = THREE.Math.degToRad(10);
+		mesh.rotation.x = THREE.Math.degToRad(10);
 
 		scene.add(mesh);
 
@@ -84,11 +84,11 @@ function create_Start_Menu() {
         centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 		mesh = new THREE.Mesh( textGeo, textMaterial );
-			mesh.position.x = centerOffset;
-			mesh.position.y = -5;
-			mesh.rotation.x = THREE.Math.degToRad(-5);
+		mesh.position.x = centerOffset;
+		mesh.position.y = -5;
+		mesh.rotation.x = THREE.Math.degToRad(-5);
 
-			mesh.name = "Select_Level";
+		mesh.name = "Select_Level";
 
 		menu_Group.add(mesh);
 
@@ -111,38 +111,11 @@ function create_Start_Menu() {
         centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 		mesh = new THREE.Mesh( textGeo, textMaterial );
-			mesh.position.x = centerOffset;
-			mesh.position.y = -15;
-			mesh.rotation.x = THREE.Math.degToRad(-10);
+		mesh.position.x = centerOffset;
+		mesh.position.y = -15;
+		mesh.rotation.x = THREE.Math.degToRad(-10);
 
-			mesh.name = "Options";
-
-		menu_Group.add(mesh);
-
-	    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//	Exit_Game
-
-		textGeo = new THREE.TextBufferGeometry( "Exit Game", {
-
-			font: font,
-			size: 5,
-			height: 1,
-			curveSegments: 12,
-			bevelThickness: .5,
-			bevelSize: .3,
-			bevelEnabled: true
-		});
-
-		textGeo.computeBoundingBox();
-
-        centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
-		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
-		mesh = new THREE.Mesh( textGeo, textMaterial );
-			mesh.position.x = centerOffset;
-			mesh.position.y = -25;
-			mesh.rotation.x = THREE.Math.degToRad(-15);
-
-			mesh.name = "Exit_Game";
+		mesh.name = "Options";
 
 		menu_Group.add(mesh);
 
@@ -172,14 +145,14 @@ function create_Start_Menu() {
 		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 		mesh = new THREE.Mesh( textGeo, textMaterial );
-			mesh.position.x = centerOffset;
-			mesh.position.x = -50;
-			mesh.position.y += 110;
+		mesh.position.x = centerOffset;
+		mesh.position.x = -50;
+		mesh.position.y += 110;
 
-			mesh.rotation.x = THREE.Math.degToRad(30);
-			mesh.rotation.y = THREE.Math.degToRad(20);
+		mesh.rotation.x = THREE.Math.degToRad(30);
+		mesh.rotation.y = THREE.Math.degToRad(20);
 
-			mesh.name = "Back_Level";
+		mesh.name = "Back_Level";
 
 		menu_Group.add(mesh);
 
@@ -202,15 +175,15 @@ function create_Start_Menu() {
 		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 		mesh = new THREE.Mesh( textGeo, textMaterial );
-			mesh.position.x = centerOffset;
-			mesh.position.x = -45;
-			mesh.position.y += 80;
+		mesh.position.x = centerOffset;
+		mesh.position.x = -45;
+		mesh.position.y += 80;
 
-			mesh.rotation.x = THREE.Math.degToRad(30);
-			mesh.rotation.y = THREE.Math.degToRad(20);
-			mesh.rotation.z = THREE.Math.degToRad(-8);
+		mesh.rotation.x = THREE.Math.degToRad(30);
+		mesh.rotation.y = THREE.Math.degToRad(20);
+		mesh.rotation.z = THREE.Math.degToRad(-8);
 
-			mesh.name = "Level_1";
+		mesh.name = "Level_1";
 
 		menu_Group.add(mesh);
 
@@ -246,13 +219,13 @@ function create_Start_Menu() {
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 	
 		mesh = new THREE.Mesh( textGeo, textMaterial );
-			mesh.position.x = -12;
-			mesh.position.z = -5;
-			mesh.position.y += 80.3;
+		mesh.position.x = -12;
+		mesh.position.z = -5;
+		mesh.position.y += 80.3;
 	
-			mesh.rotation.x = THREE.Math.degToRad(20);
+		mesh.rotation.x = THREE.Math.degToRad(20);
 	
-			mesh.name = "Level_2";
+		mesh.name = "Level_2";
 	
 		menu_Group.add(mesh);
 
@@ -297,14 +270,105 @@ function create_Start_Menu() {
 		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 		mesh = new THREE.Mesh( textGeo, textMaterial );
-			mesh.position.x = centerOffset;
-			mesh.position.x = -50;
-			mesh.position.y -= 50;
+		mesh.position.x = centerOffset;
+		mesh.position.x -= 50;
+		mesh.position.y -= 50;
 
-			mesh.rotation.x = THREE.Math.degToRad(30);
-			mesh.rotation.y = THREE.Math.degToRad(20);
+		mesh.rotation.x = THREE.Math.degToRad(30);
+		mesh.rotation.y = THREE.Math.degToRad(20);
 
-			mesh.name = "Back_Options";
+		mesh.name = "Back_Options";
+
+		menu_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	BGM
+
+		textGeo = new THREE.TextBufferGeometry( "BGM", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = -32;
+		mesh.position.y -= 70;
+
+		mesh.rotation.x = THREE.Math.degToRad(20);
+		mesh.rotation.y = THREE.Math.degToRad(20);
+
+		mesh.name = "BGM";
+
+		scene.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	BGM ON
+
+		textGeo = new THREE.TextBufferGeometry( "ON", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 10;
+		mesh.position.y -= 70;
+
+		mesh.rotation.x = THREE.Math.degToRad(20);
+		mesh.rotation.y = THREE.Math.degToRad(-15);
+
+		mesh.name = "BGM_ON";
+		mesh.material.emissive.setHex(0xdde014);
+
+		menu_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	BGM OFF
+
+		textGeo = new THREE.TextBufferGeometry( "OFF", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 23;
+		mesh.position.y -= 70;
+
+		mesh.rotation.x = THREE.Math.degToRad(20);
+		mesh.rotation.y = THREE.Math.degToRad(-23);
+
+		mesh.name = "BGM_OFF";
 
 		menu_Group.add(mesh);
 

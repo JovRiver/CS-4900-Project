@@ -1326,9 +1326,7 @@ function createLevel1() {
                 loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     flag_Loader(loadBar);
-
                 }
-
             },
             function(err){//onError
                 loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
@@ -1441,35 +1439,6 @@ function createLevel1() {
         );
     }
 
-    function sound_Loader(loadBar){
-        let listener = new THREE.AudioListener();
-        camera.add( listener );
-
-        // create a global audio source
-        soundManager[0] = new THREE.Audio( listener );
-
-        // load a sound and set it as the Audio object's buffer
-        let audioLoader = new THREE.AudioLoader();
-        audioLoader.load( './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3',
-            function( buffer ) {
-                soundManager[0].setBuffer( buffer );
-                soundManager[0].setLoop( true );
-                soundManager[0].setVolume( 0.15 );
-            },
-            function(xhr){//onProgress
-                loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-                if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-                    document.getElementById("blocker").style.display = "block";
-                    grappleSoundLoader();
-                }
-            },
-            function(err){//onError
-                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-                console.log("error in loading sound");
-            }
-        );
-    }
-
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
         //pos = {x: 0, y: 115, z: -2010}; // end of level
@@ -1521,7 +1490,6 @@ function createLevel1() {
         a = true;
     }
 
-
        function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
         addSprite(spriteMap, 50, 50);
@@ -1555,13 +1523,13 @@ function createLevel1() {
             }   );
 
         lava = new THREE.Mesh( new THREE.BoxBufferGeometry(), customMaterial );
-        lava.scale.set(400, 0.5, 2300);
+        lava.scale.set(400, 0.5, 2400);
         lava.position.set(0, 80, -1120);
         scene.add( lava );
 
         texture = new THREE.MeshLambertMaterial({visible: false});
         let resetBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
-        resetBox.scale.set(200, 0.5, 1150);
+        resetBox.scale.set(200, 0.5, 1200);
         resetBox.position.set(0, 80, -1120);
         resetBox.name ="Reset_Box";
         scene.add(resetBox);
@@ -1571,7 +1539,7 @@ function createLevel1() {
         transform.setOrigin(new Ammo.btVector3(0, 80, -1120)); //set to middle of map
         transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
         let motionState = new Ammo.btDefaultMotionState(transform);
-        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(200, 0.5, 1150));
+        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(200, 0.5, 1200));
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);

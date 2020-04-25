@@ -438,7 +438,7 @@ function walkingSoundLoader(){
             loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
             if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                 document.getElementById("blocker").style.display = "block";
-                after_Game_Menu(loadBar);
+                //after_Game_Menu(loadBar);
             }
         },
         function(err){//onError
@@ -479,15 +479,11 @@ function loadSounds(){
         );
     }
     loadModels();
-
 }
 
 function loadModels(){
     let count = 0;
     let loadBar = document.getElementById('load');
-
-
-
 
     load_Manager();
 }
