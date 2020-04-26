@@ -1069,7 +1069,6 @@ function create_Start_Menu() {
 		mesh.material.emissive.setHex(0xdde014);
 
 		options_Group.add(mesh);
-		options_Highlight.push(mesh);
 
 		scene.add(options_Group);
 	}
