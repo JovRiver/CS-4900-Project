@@ -231,7 +231,11 @@ resetCallBack.addSingleResult = function () {
 
 flagCallBack.addSingleResult = function () {
 	if(gamePlay){
-		let gameTime = gameClock.elapsedTime;
+		let gameTime =  Math.floor( gameClock.elapsedTime);
+		let score =  Math.floor(10000 - (gameTime * (50/3)));
+		if(score < 0){
+			score = 0;
+		}
 		gameClock.stop();
 		gameClock =  new THREE.Clock();
 		startClock = true;
@@ -245,6 +249,10 @@ flagCallBack.addSingleResult = function () {
 		scene.getObjectByName("crosshair").visible = false;
 		scene.getObjectByName("Gun").visible = false;
 		in_Game_Menu_Group.visible = true;
+
+		createScore(score);
+		console.log(score);
+
 	}
 };
 
@@ -519,7 +527,10 @@ function onKeyDown (event ) {
 				break;
 
 			case 16: // shift
-				//player.scale.set(1, 1, 1);
+				resetPos.x = player.position.x;
+				resetPos.y = player.position.y;
+				resetPos.z = player.position.z;
+				console.log(resetPos);
 				break;
 
 			case 81: // q
@@ -540,7 +551,7 @@ function onKeyDown (event ) {
 					let jump = new THREE.Vector3(-5, 5, 0);
 					jump.applyQuaternion(camera.quaternion);
 					let resultantImpulse = new Ammo.btVector3(jump.x, 5, jump.z);
-					resultantImpulse.op_mul(2);
+					resultantImpulse.op_mul(3);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
 					soundManager[2].play();
@@ -565,7 +576,7 @@ function onKeyDown (event ) {
 					let jump = new THREE.Vector3(5, 5, 0);
 					jump.applyQuaternion(camera.quaternion);
 					let resultantImpulse = new Ammo.btVector3(jump.x, 5, jump.z);
-					resultantImpulse.op_mul(2);
+					resultantImpulse.op_mul(3);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
 					soundManager[2].play();
@@ -759,7 +770,7 @@ function on_Mouse_Move(event) {
 		let intersects = raycaster.intersectObject(in_Game_Menu_Group, true);
 
 		if (intersects.length > 0) {
-			if (intersects[0].object.name === "Congratulations" || intersects[0].object.name === "Time") {
+			if (intersects[0].object.name === "Congratulations" || intersects[0].object.name === "Time" || intersects[0].object.name === "Score") {
 				if (intersected_Object){
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 				}

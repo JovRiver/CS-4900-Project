@@ -1,4 +1,5 @@
-function create_Start_Menu() {	
+let fonts;
+function create_Start_Menu() {
 	let loader = new THREE.FontLoader();
 	let loadBar = document.getElementById('load');
 
@@ -21,6 +22,7 @@ function create_Start_Menu() {
 			main_Menu(font);
 			level_Select_Menu(font);
 			options_Menu(font);
+			fonts = font;
         }, 
         	function(xhr){//onProgress
 				loadBar.innerHTML = "<h2>Loading Fonts " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
@@ -1135,7 +1137,7 @@ function after_Game_Menu(loadBar) {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//	Time
 
-		textGeo = new THREE.TextBufferGeometry( "Time ", {
+		textGeo = new THREE.TextBufferGeometry( "Score: ", {
 
 			font: font,
 			size: 5,
@@ -1157,6 +1159,8 @@ function after_Game_Menu(loadBar) {
 
 		mesh.name = "Time";
 		in_Game_Menu_Group.add(mesh);
+
+
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//	Main_Menu
@@ -1243,4 +1247,32 @@ function after_Game_Menu(loadBar) {
 	}
 
 	load_In_Game_Menu(loadBar);
+}
+
+function createScore(score){
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//	Score
+
+	textGeo = new THREE.TextBufferGeometry( score.toString(), {
+
+		font: fonts,
+		size: 5,
+		height: 1,
+		curveSegments: 12,
+		bevelThickness: .5,
+		bevelSize: .3,
+		bevelEnabled: true
+	});
+
+	textGeo.computeBoundingBox();
+
+	let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+	let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+	let mesh = new THREE.Mesh( textGeo, textMaterial );
+	mesh.position.x = centerOffset + 5;
+	mesh.position.y = 210;
+	mesh.position.z = -50;
+
+	mesh.name = "Score";
+	in_Game_Menu_Group.add(mesh);
 }
