@@ -678,5 +678,10 @@ Commit 48:
   Added a press start section to the main menu for the user to click on to take them to the main menu. This also serves as a way to get user input
 to start playing the menu BGM. Adjusted code as necessary to cancel audio when switching levels.
 
+4/25/2020
+Ryan Slaybaugh:
+Commit 49:
 
+  Added scaling audio options for a Master Volume and BGM and continuing to work on one for sounds, I also added an option to turn on or off
+anti-aliasing.
 
