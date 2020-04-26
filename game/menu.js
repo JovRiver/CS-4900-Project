@@ -6,7 +6,7 @@ function create_Start_Menu() {
 
 	//create camera
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
-	camera.position.set(0, -140, 50);
+	camera.position.set(0, -160, 50);
 
 	//setup point light for the scene
 	let pointLight = new THREE.PointLight(0xffffff, 1.5);
@@ -57,7 +57,7 @@ function create_Start_Menu() {
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 		mesh = new THREE.Mesh( textGeo, textMaterial );
 		mesh.position.x = centerOffset;
-		mesh.position.y = -145;
+		mesh.position.y = -165;
 
 		mesh.rotation.x = THREE.Math.degToRad(-10);
 
@@ -313,6 +313,230 @@ function create_Start_Menu() {
 
 		menu_Group.add(mesh);
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		// MASTER VOLUME
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Master Volume
+
+		textGeo = new THREE.TextBufferGeometry( "Master Volume", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = -55;
+		mesh.position.y -= 70;
+
+		mesh.rotation.x = THREE.Math.degToRad(18);
+		mesh.rotation.y = THREE.Math.degToRad(15);
+
+		scene.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Master Volume 0
+
+		textGeo = new THREE.TextBufferGeometry( "0", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 12;
+		mesh.position.y -= 67;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "MV0";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Master Volume Level 1
+
+		textGeo = new THREE.TextBufferGeometry( "1", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 18;
+		mesh.position.y -= 66.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "MV1";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Master Volume Level 2
+
+		textGeo = new THREE.TextBufferGeometry( "2", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 23.5;
+		mesh.position.y -= 66.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "MV2";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Master Volume Level 3
+
+		textGeo = new THREE.TextBufferGeometry( "3", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 30;
+		mesh.position.y -= 66.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "MV3";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Master Volume Level 4
+
+		textGeo = new THREE.TextBufferGeometry( "4", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 36;
+		mesh.position.y -= 66.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-15);
+
+		mesh.name = "MV4";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Master Volume Level 5
+
+		textGeo = new THREE.TextBufferGeometry( "5", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 42;
+		mesh.position.y -= 66.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-15);
+
+		mesh.name = "MV5";
+		mesh.material.emissive.setHex(0xdde014);
+		options_Highlight.push(mesh);
+
+		options_Group.add(mesh);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		// BGM
+
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//	BGM
 
@@ -333,18 +557,456 @@ function create_Start_Menu() {
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 		mesh = new THREE.Mesh( textGeo, textMaterial );
 		mesh.position.x = centerOffset;
-		mesh.position.x = -32;
-		mesh.position.y -= 70;
+		mesh.position.x = -36;
+		mesh.position.y -= 80;
 
-		mesh.rotation.x = THREE.Math.degToRad(20);
+		mesh.rotation.x = THREE.Math.degToRad(15);
 		mesh.rotation.y = THREE.Math.degToRad(20);
-
-		mesh.name = "BGM";
 
 		scene.add(mesh);
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//	BGM ON
+		// BGM Volume 0
+
+		textGeo = new THREE.TextBufferGeometry( "0", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 11.5;
+		mesh.position.y -= 77;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "BGM0";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// BGM Volume Level 1
+
+		textGeo = new THREE.TextBufferGeometry( "1", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 17.5;
+		mesh.position.y -= 76.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "BGM1";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// BGM Volume Level 2
+
+		textGeo = new THREE.TextBufferGeometry( "2", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 22.5;
+		mesh.position.y -= 76.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "BGM2";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// BGM Volume Level 3
+
+		textGeo = new THREE.TextBufferGeometry( "3", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 29.5;
+		mesh.position.y -= 76.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "BGM3";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// BGM Volume Level 4
+
+		textGeo = new THREE.TextBufferGeometry( "4", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 35.5;
+		mesh.position.y -= 76.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-15);
+
+		mesh.name = "BGM4";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// BGM Volume Level 5
+
+		textGeo = new THREE.TextBufferGeometry( "5", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 41.5;
+		mesh.position.y -= 76.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(15);
+		mesh.rotation.y = THREE.Math.degToRad(-15);
+
+		mesh.name = "BGM5";
+		mesh.material.emissive.setHex(0xdde014);
+		options_Highlight.push(mesh);
+
+		options_Group.add(mesh);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		// SOUND
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Sound
+
+		textGeo = new THREE.TextBufferGeometry( "Sound", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = -37.5;
+		mesh.position.y -= 90;
+
+		mesh.rotation.x = THREE.Math.degToRad(8);
+		mesh.rotation.y = THREE.Math.degToRad(20);
+
+		scene.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Sound Volume 0
+
+		textGeo = new THREE.TextBufferGeometry( "0", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 11.5;
+		mesh.position.y -= 87;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(10);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "S0";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Sound Volume Level 1
+
+		textGeo = new THREE.TextBufferGeometry( "1", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 17.5;
+		mesh.position.y -= 86.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(10);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "S1";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Sound Volume Level 2
+
+		textGeo = new THREE.TextBufferGeometry( "2", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 22.5;
+		mesh.position.y -= 86.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(10);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "S2";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Sound Volume Level 3
+
+		textGeo = new THREE.TextBufferGeometry( "3", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 29;
+		mesh.position.y -= 86.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(10);
+		mesh.rotation.y = THREE.Math.degToRad(-10);
+
+		mesh.name = "S3";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Sound Volume Level 4
+
+		textGeo = new THREE.TextBufferGeometry( "4", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 35;
+		mesh.position.y -= 86.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(10);
+		mesh.rotation.y = THREE.Math.degToRad(-15);
+
+		mesh.name = "S4";
+
+		options_Group.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Sound Volume Level 5
+
+		textGeo = new THREE.TextBufferGeometry( "5", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = 41;
+		mesh.position.y -= 86.5;
+		mesh.position.z = -10;
+
+		mesh.rotation.x = THREE.Math.degToRad(10);
+		mesh.rotation.y = THREE.Math.degToRad(-15);
+
+		mesh.name = "S5";
+		mesh.material.emissive.setHex(0xdde014);
+		options_Highlight.push(mesh);
+
+		options_Group.add(mesh);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//ANTI-ALIASING
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Anti-Aliasing
+
+		textGeo = new THREE.TextBufferGeometry( "Anti Aliasing", {
+
+			font: font,
+			size: 5,
+			height: 1,
+			curveSegments: 12,
+			bevelThickness: 1,
+			bevelSize: .5,
+			bevelEnabled: true
+		});
+
+		textGeo.computeBoundingBox();
+
+		centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
+		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
+		mesh = new THREE.Mesh( textGeo, textMaterial );
+		mesh.position.x = centerOffset;
+		mesh.position.x = -48;
+		mesh.position.y -= 100;
+
+		mesh.rotation.x = THREE.Math.degToRad(0);
+		mesh.rotation.y = THREE.Math.degToRad(18);
+
+		scene.add(mesh);
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//	Anti-Aliasing ON
 
 		textGeo = new THREE.TextBufferGeometry( "ON", {
 
@@ -363,19 +1025,19 @@ function create_Start_Menu() {
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 		mesh = new THREE.Mesh( textGeo, textMaterial );
 		mesh.position.x = centerOffset;
-		mesh.position.x = 10;
-		mesh.position.y -= 70;
+		mesh.position.x = 15;
+		mesh.position.y -= 99;
+		mesh.position.z = -10;
 
-		mesh.rotation.x = THREE.Math.degToRad(20);
+		mesh.rotation.x = THREE.Math.degToRad(0);
 		mesh.rotation.y = THREE.Math.degToRad(-15);
 
-		mesh.name = "BGM_ON";
-		mesh.material.emissive.setHex(0xdde014);
+		mesh.name = "AA_ON";
 
-		menu_Group.add(mesh);
+		options_Group.add(mesh);
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//	BGM OFF
+		//	Anti-Aliasing OFF
 
 		textGeo = new THREE.TextBufferGeometry( "OFF", {
 
@@ -394,17 +1056,19 @@ function create_Start_Menu() {
 		textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 		mesh = new THREE.Mesh( textGeo, textMaterial );
 		mesh.position.x = centerOffset;
-		mesh.position.x = 23;
-		mesh.position.y -= 70;
+		mesh.position.x = 28;
+		mesh.position.y -= 99;
+		mesh.position.z = -10;
 
-		mesh.rotation.x = THREE.Math.degToRad(20);
+		mesh.rotation.x = THREE.Math.degToRad(0);
 		mesh.rotation.y = THREE.Math.degToRad(-23);
 
-		mesh.name = "BGM_OFF";
+		mesh.name = "AA_OFF";
+		mesh.material.emissive.setHex(0xdde014);
 
-		menu_Group.add(mesh);
+		options_Group.add(mesh);
 
-		scene.add(menu_Group);
+		scene.add(options_Group);
 	}
 	
 	load_Menu();
