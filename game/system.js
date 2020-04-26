@@ -11,22 +11,48 @@ function setupPhysicsWorld(){
 }
 
 function setupControls(){
+    let tempStartTime;
+    let tempOldTime;
+    let tempElapsedTime;
+    let tempRunning;
+    let tempClock =  new THREE.Clock();
     //create controls
     controls = new THREE.PointerLockControls( camera, document.body );
     let blocker = document.getElementById( 'blocker' );
     let instructions = document.getElementById( 'instructions' );
+    let timer = document.getElementById('clock');
     instructions.addEventListener( 'click', function () {controls.lock();}, false );
-    controls.addEventListener( 'lock', function () {instructions.style.display = 'none'; blocker.style.display = 'none'; 
+    controls.addEventListener( 'lock', function () {
+        instructions.style.display = 'none';
+        blocker.style.display = 'none';
+        timer.style.display = 'block';
         if (play_Music === true) {
             soundManager[0].play();
         }
         if(startClock){
             gameClock.start();
             startClock = false;
-        }} );
+        }
+        if(!startClock){
+
+            let deltaTime = tempClock.getDelta();
+            tempClock.stop();
+            gameClock.startTime = tempStartTime;
+            gameClock.oldTime = tempOldTime;
+            gameClock.elapsedTime = tempElapsedTime - deltaTime;
+            gameClock.running = tempRunning;
+        }
+        } );
     controls.addEventListener( 'unlock', function () {
         if(gamePlay){
+            tempClock =  new THREE.Clock();
+            timer.style.display = 'none';
             blocker.style.display = 'block';
+            tempStartTime = gameClock.startTime;
+            tempOldTime = gameClock.oldTime;
+            tempElapsedTime = gameClock.elapsedTime;
+            tempRunning = gameClock.running;
+            tempClock.start();
         }
         instructions.style.display = ''; soundManager[0].pause();} );
 

@@ -31,7 +31,6 @@ let mouse = new THREE.Vector2(), intersected_Object;
 let startClock = true;
 let gamePlay = false; // Set this value someone when game starts.
 
-let timer = document.getElementById('clock');
 
 let renderFrameId;
 let onBox = 0;
@@ -232,15 +231,28 @@ resetCallBack.addSingleResult = function () {
 
 flagCallBack.addSingleResult = function () {
 	if(gamePlay){
-		let gameTime = gameClock.getDelta();
+		let gameTime =  Math.floor( gameClock.elapsedTime);
+		let score =  Math.floor(10000 - (gameTime * (50/3)));
+		if(score < 0){
+			score = 0;
+		}
+		gameClock.stop();
+		gameClock =  new THREE.Clock();
+		startClock = true;
 		gamePlay = false;
 		controls.unlock();
+		let timer = document.getElementById('clock');
+		timer.style.display = 'none';
 
 		scene.getObjectByName("background").visible = true;
 		scene.getObjectByName("spotlight").visible = true;
 		scene.getObjectByName("crosshair").visible = false;
 		scene.getObjectByName("Gun").visible = false;
 		in_Game_Menu_Group.visible = true;
+
+		createScore(score);
+		console.log(score);
+
 	}
 };
 
@@ -281,6 +293,18 @@ function renderFrame(){
 
 		playerBullets.forEach(b => {
 			b.translateZ(-300 * deltaTime); // move along the local z-axis
+			if(b.position.distanceTo(player.position) > 50){
+				for(var i = 0; i < playerBullets.length; i++) {
+					if(playerBullets[i].uuid == b.uuid) {
+						scene.remove(b);
+						playerBullets.splice(i, 1);
+						break;
+					}
+				}
+			}
+
+
+
 		});
 
 		if(!startClock){
@@ -291,8 +315,10 @@ function renderFrame(){
 			}else{
 				secs =  Math.floor(gameClock.getElapsedTime()%60);
 			}
-			if(gamePlay)
-				timer.innerHTML = "<h1>"+ mins +":" + secs + "</h1>";
+			if(gamePlay) {
+				let timer = document.getElementById('clock');
+				timer.innerHTML = "<h1>" + mins + ":" + secs + "</h1>";
+			}
 		}
 
 		if ( controls.isLocked === true ) {
@@ -376,7 +402,7 @@ function onMouseDown(event){
 				raycaster.set( controls.getObject().position, direction );
 				raycaster.near = 0.01;
 				raycaster.far = 50;
-				let intersects = raycaster.intersectObjects( platforms );
+				let intersects = raycaster.intersectObjects( enemies, true   );
 				for ( let i = 0; i < intersects.length; i++ ) {
 					if(soundManager[4].isPlaying){
 						soundManager[4].stop();
@@ -513,7 +539,10 @@ function onKeyDown (event ) {
 				break;
 
 			case 16: // shift
-				//player.scale.set(1, 1, 1);
+				resetPos.x = player.position.x;
+				resetPos.y = player.position.y;
+				resetPos.z = player.position.z;
+				console.log(resetPos);
 				break;
 
 			case 81: // q
@@ -534,7 +563,7 @@ function onKeyDown (event ) {
 					let jump = new THREE.Vector3(-5, 5, 0);
 					jump.applyQuaternion(camera.quaternion);
 					let resultantImpulse = new Ammo.btVector3(jump.x, 5, jump.z);
-					resultantImpulse.op_mul(2);
+					resultantImpulse.op_mul(3);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
 					soundManager[2].play();
@@ -559,7 +588,7 @@ function onKeyDown (event ) {
 					let jump = new THREE.Vector3(5, 5, 0);
 					jump.applyQuaternion(camera.quaternion);
 					let resultantImpulse = new Ammo.btVector3(jump.x, 5, jump.z);
-					resultantImpulse.op_mul(2);
+					resultantImpulse.op_mul(3);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
 					soundManager[2].play();
@@ -753,7 +782,7 @@ function on_Mouse_Move(event) {
 		let intersects = raycaster.intersectObject(in_Game_Menu_Group, true);
 
 		if (intersects.length > 0) {
-			if (intersects[0].object.name === "Congratulations" || intersects[0].object.name === "Time") {
+			if (intersects[0].object.name === "Congratulations" || intersects[0].object.name === "Time" || intersects[0].object.name === "Score") {
 				if (intersected_Object){
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 				}
