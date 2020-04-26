@@ -402,7 +402,7 @@ function onMouseDown(event){
 				raycaster.set( controls.getObject().position, direction );
 				raycaster.near = 0.01;
 				raycaster.far = 50;
-				let intersects = raycaster.intersectObjects( platforms );
+				let intersects = raycaster.intersectObjects( enemies, true   );
 				for ( let i = 0; i < intersects.length; i++ ) {
 					if(soundManager[4].isPlaying){
 						soundManager[4].stop();
