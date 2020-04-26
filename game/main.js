@@ -633,7 +633,7 @@ function onKeyUp( event ) {
 			break;
 
 		case 16: // shift
-			player.scale.set(2, 2, 2);
+
 			break;
 	}
 }
