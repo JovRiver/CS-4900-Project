@@ -692,3 +692,24 @@ Commit 50:
   Finished linking all appropriate audio levels to their respective sounds and managed to keep consistent audio level changes across both
 Master Volume and BGM.
 
+
+
+Semira Pinder
+1st commit
+4/25 6:40-49
+In-progress moving the bullet and animation variables into individual catObj instances. There was a problem with variable
+scopes that I did not find a solution to. 
+
+Semira Pinder
+2nd commit
+4/25-4/26
+11:09pm-1am, 3:40am-4:07am and 11:58pm-2:28pm
+Finished moving the animation counters to individual cats and added a global flag to check for bullet animations.
+When the catHandler updater sees that it's up, it allows all cats that are doing a shooting animation to shoot a bullet.
+It then turns the flag off. It calls a function after the flag's up that removes all bullets after a few seconds.
+There's also a cat animation setup function so that the old event handler function can use the enemy's class variables.
+
+Semira Pinder
+3rd commit
+4/26 2:45pm-4:19pm
+Fixed bullet not appearing for the shooting animation, it now shoots for a set amount of milliseconds.
