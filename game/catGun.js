@@ -7,16 +7,17 @@ and creating vehicles that move the cat's body will be handled in function makeP
 //reduce amount of global variables later
 
 //variables for the catGun and bullets
-let animationNum = 0, secondLoopBool = false, anims = null, shooterAnim, kitty, aimerVisible = true;
+let /*animationNum = 0,*/ secondLoopBool = false, anims = null, shooterAnim, kitty, aimerVisible = true;
 let x, y, z;
 //variables for YUKA ai movements
 let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null, lastVehiclePosition;
 let bump = true;
 let catHandle = null, cats = [], i = 0;
+let bulletFlag = false;
 
-function shootBullet(enem){
-    let enemy = enem.body;
-    let bullet = enem.bullet;
+function shootBullet(classEnem){
+    let enemy = classEnem.body;
+    let bullet = classEnem.bullet;
     //set position of the bullet initially
     bullet.visible = true;
     //putting the bullet right in front of the cat, https://stackoverflow.com/questions/37641773/three-js-how-to-copy-object-direction-that-its-facing helped with this
@@ -25,27 +26,28 @@ function shootBullet(enem){
     //localToWorld may be destructive to the data, https://stackoverflow.com/questions/44676015/localtoworld-weird-behaviour
     
     //convert aimer position to world, while keeping the original position untouched.
-    let temp = enemy.body.scene.children[2].localToWorld(catAimer.position.clone());
+    let temp = enemy.scene.children[2].localToWorld(classEnem.catAimer.position.clone());
 
     //put bullet in the aimer position, then set the movement values
     bullet.position.copy(temp);
-    enemy.bulletChange = new THREE.Vector3(
-        enemy.body.scene.children[2].position.x,
-        enemy.body.scene.children[2].position.y,
-        enemy.body.scene.children[2].position.z);
+    classEnem.bulletChange = new THREE.Vector3(
+        enemy.scene.children[2].position.x,
+        enemy.scene.children[2].position.y,
+        enemy.scene.children[2].position.z);
 
-    enemy.bulletChange.copy(enemy.body.scene.children[2].localToWorld(enemy.bulletChange.clone()));
-    enemy.bulletChange.copy(new THREE.Vector3(
-        -(enemy.bulletChange.x - temp.x),
-        enemy.bulletChange.y - temp.y,
-        -(enemy.bulletChange.z - temp.z)
+    classEnem.bulletChange.copy(enemy.scene.children[2].localToWorld(classEnem.bulletChange.clone()));
+    classEnem.bulletChange.copy(new THREE.Vector3(
+        -(classEnem.bulletChange.x - temp.x),
+        classEnem.bulletChange.y - temp.y,
+        -(classEnem.bulletChange.z - temp.z)
     )
-    );//the cat was aligned weird in blender i think
+    );//the cat was aligned oddly in blender.
     
-    enemy.bulletChange.multiplyScalar(bulletSpeed);
+    classEnem.bulletChange.multiplyScalar(classEnem.bulletSpeed);
     
     //tell the main loop that there's a bullet active
-    enemy.bulletInScene = true;
+    classEnem.bulletInScene = true;
+    scene.add(bullet);
 }
 
 
@@ -86,7 +88,7 @@ let enemy = enem.body;
 //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html
 yukaVehicle = new YUKA.Vehicle();
 yukaVehicle.updateWorldMatrix();
-let yy = 103;
+let yy = 112;
 let path = new YUKA.Path();
 for(let e = 0; e < arr.length; e += 2)
     path.add(new YUKA.Vector3(arr[e], yy, arr[e+1]));
@@ -130,36 +132,38 @@ function sync( entity, renderComponent ) {
 
 ////////////////// event handlers ////////////////////
 
+function catAniSetup(e){
+    let enemy = catHandle.findCatByMixer(e.action.getMixer());
+    setTimeout(catAnimations(e, enemy), 2000);
+}
 
-function catAnimations(e){//e contains the type action and loopDelta
+function catAnimations(e, enemy){//e contains the type action and loopDelta
     //when this is called at the end of a loop, it checks if this is the second time the loop has run.
     //If not, then the
-
     //if (secondLoopBool){//if it's on the 2nd loop, adjust the animationMixer so that we don't have to do this later
-        //e.action.stop();
-        animationNum++;
-        if (animationNum == anims.length)
-            animationNum = 0;
+    //e.action.stop();
+        enemy.animationNum += 1;
+        if (enemy.animationNum == anims.length)
+        enemy.animationNum = 0;
         //if(e.action.clip.name == "")
         //start the next animation in the queue with crossFadeFrom, the previous action is faded out while the next one is faded in
-        e.action.getMixer().clipAction(anims[animationNum]).reset();
-        e.action.getMixer().clipAction(anims[animationNum]).play();
-
+        let clipNext = e.action.getMixer().clipAction(anims[enemy.animationNum]);
+        clipNext.reset();
+        clipNext.play();
+        e.action.crossFadeTo(clipNext, .2, false);
         //shoot a bullet if the animation's the correct one, "Shoot"
-
-        if(animationNum != shooterAnim){//makes the bullet not visible, will replace with something time related 
+        //instead of removing the bullet each time a different animation plays, there'll be a timer for the bullets.
+        /*if(animationNum != shooterAnim){//makes the bullet not visible, will replace with something time related 
             //scene.remove(scene.getObjectByName(bullet.name));
             e.action.getMixer().getRoot().parent.bullet.visible = false;
             e.action.getMixer().getRoot().parent.bulletInScene = false;
-        }
-        else//matches returns an array with matches or null if nothing's found.
-            shootBullet(e.action.getMixer().getRoot().parent);
-
-        e.action.crossFadeTo(e.action.getMixer().clipAction(anims[animationNum]), .4, false);
-    //}
-
-    secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
+        }*/
+        if(enemy.animationNum == shooterAnim)//matches returns an array with matches or null if nothing's found.
+            bulletFlag = true;    
+    //secondLoopBool ^= true;//^ is XOR, ^= is xor equals, so it flips the boolean each time instead of using an if-else statement
     //https://stackoverflow.com/questions/2479058/how-to-make-a-boolean-variable-switch-between-true-and-false-every-time-a-method
+    
+
 }
 
 
@@ -213,7 +217,35 @@ class catHandler{
             //lastVehiclePosition = yukaVehicle.position;
             
         }
+
+        if(bulletFlag){
+            bulletFlag = false;
+            for(let r = 0; r < cats.length; r++){
+                let e = cats[r].mixer.clipAction(anims[shooterAnim]);
+                if(e.weight > .1){//weight of 0 = no influence on the cat. 1 = full influence
+                    shootBullet(cats[r]);//wait a 1-3 seconds
+                    setTimeout(stopBullet(cats[r]), 1000);//wait a 1-3 seconds
+                }
+            }
+        }
     }
+    findCatByMixer(mixer){
+        for(let f = 0; f < cats.length; f++){
+            if(cats[f].mixer == mixer)
+                return cats[f];
+        }
+        return null;
+    }
+
+}
+    /*            e.action.getMixer().getRoot().parent.bullet.visible = false;
+            e.action.getMixer().getRoot().parent.bulletInScene = false;
+     */
+
+function stopBullet(catOb){
+    //go through the list and make the bullet invisible
+    catOb.bullet.visible = false;
+    catOb.bulletInScene = false;
 }
 
 
@@ -230,7 +262,8 @@ class catObj{
     bulletChange;
     bulletSpeed;
     catAimer;
-
+    //bullet clock, old time and animationnumber
+    animationNum;
     constructor(bod, arr){//arr carries x's and z's in alternating order, Y's will be added later in a way that takes the height 
     //in consideration
         this.body = bod;
@@ -243,9 +276,9 @@ class catObj{
         this.bulletSpeed = 1;
         this.catAimer = null;
         this.addBullet();
+        this.animationNum = 0;
         //this.body.scene.add(this);//makes this class instance a child of the body, so it's more accessible... doesn't work.
-            
-    }
+        }
 
     setUpMixer(){
         if(this.mixer == null)
@@ -266,7 +299,7 @@ class catObj{
 
         this.mixer.clipAction(anims[0]).play();//"death" doesn't play for some reason
 
-        this.mixer.addEventListener('loop', catAnimations);//'finished' does not count a loop ending as finished,
+        this.mixer.addEventListener('loop', catAniSetup);//'finished' does not count a loop ending as finished,
         //setting amount of repetitions doesn't work either, fix soon
     }
 
@@ -299,4 +332,21 @@ class catObj{
         //bullet variables for the cat set here
 
     }
+
 }
+
+/** to do:
+ * check for the animation num in the update function, if it matches the shooteranim, shoot the bullet.
+ * only shoot it like once, tho.
+ * 
+ * also, removethat part from the animation thing.
+ * 
+ * Maybe make a flag that lets the updater know that one cat's shooting instead of 
+ *         if(animationNum == shooterAnim)//matches returns an array with matches or null if nothing's found.
+            shootBullet(e.action.getMixer().getRoot().parent);
+in that function, then the catupdate sets it to false after a loop of updates if it finds a few that are 
+shooting.
+
+also, possibly set up the animations so they play by themselves without setting a loop for them.
+or set up so they find the next animation in line by themselves.
+ */

@@ -73,7 +73,7 @@ const STATE = {
 	DISABLE_SIMULATION : 5
 }
 
-let level = 0;	//set to 0 for main menu, 1 or higher for levels
+let level = 1;	//set to 0 for main menu, 1 or higher for levels
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let in_Game_Menu_Group; // in_Game_Menu_Group to hold menu items for raycaster detection
@@ -324,10 +324,6 @@ function renderFrame(){
 
 	if(catHandle)
 		catHandle.update(deltaTime, yukaDelta);//updates multiple things involving the cat object(s). (movement, vehicles, bullets)
-
-	if(bulletInScene)//animate a bullet, change to different bullets over time
-		bullet.position.add(bulletChange);
-
 
 	renderFrameId = requestAnimationFrame( renderFrame );
 	renderer.render(scene, camera);

@@ -1287,8 +1287,6 @@ function createLevel1() {
                 rigidBodies.push(obj.scene);
 
                 //adding objects to scenes or classes
-                scene.add(bullet);
-
                 //obj.scene.children[2].add(bullet);
                 enemies.push(kitty.scene);
 
