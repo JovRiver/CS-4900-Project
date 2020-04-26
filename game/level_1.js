@@ -1441,7 +1441,7 @@ function createLevel1() {
 
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
-        //pos = {x: 0, y: 115, z: -2010}; // end of level
+        pos = {x: 0, y: 115, z: -2010}; // end of level
         //pos = {x: 24, y: 105, z: -647}; // grappling hook spot
 
         //let pos ={x: 5, y: 105, z: 0}; //was cat's position
@@ -1449,6 +1449,7 @@ function createLevel1() {
 
         resetPos = {x: -4, y: 101, z: -44}; //back of the level on the second-to-last platform
         //resetPos = {x: 0, y: 101, z: 0}; //grappling hook reset
+        resetPos = {x: 0, y: 115, z: -2010}; // end of level
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};
         let mass = 1;

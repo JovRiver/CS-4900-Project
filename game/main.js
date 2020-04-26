@@ -31,7 +31,6 @@ let mouse = new THREE.Vector2(), intersected_Object;
 let startClock = true;
 let gamePlay = false; // Set this value someone when game starts.
 
-let timer = document.getElementById('clock');
 
 let renderFrameId;
 let onBox = 0;
@@ -232,9 +231,14 @@ resetCallBack.addSingleResult = function () {
 
 flagCallBack.addSingleResult = function () {
 	if(gamePlay){
-		let gameTime = gameClock.getDelta();
+		let gameTime = gameClock.elapsedTime;
+		gameClock.stop();
+		gameClock =  new THREE.Clock();
+		startClock = true;
 		gamePlay = false;
 		controls.unlock();
+		let timer = document.getElementById('clock');
+		timer.style.display = 'none';
 
 		scene.getObjectByName("background").visible = true;
 		scene.getObjectByName("spotlight").visible = true;
@@ -291,8 +295,10 @@ function renderFrame(){
 			}else{
 				secs =  Math.floor(gameClock.getElapsedTime()%60);
 			}
-			if(gamePlay)
-				timer.innerHTML = "<h1>"+ mins +":" + secs + "</h1>";
+			if(gamePlay) {
+				let timer = document.getElementById('clock');
+				timer.innerHTML = "<h1>" + mins + ":" + secs + "</h1>";
+			}
 		}
 
 		if ( controls.isLocked === true ) {
