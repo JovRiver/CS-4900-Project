@@ -33,7 +33,6 @@ function setupControls(){
             gameClock.start();
             startClock = false;
         }
-        console.log(startClock);
         if(!startClock){
 
             let deltaTime = tempClock.getDelta();
