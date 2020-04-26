@@ -685,3 +685,10 @@ Commit 49:
   Added scaling audio options for a Master Volume and BGM and continuing to work on one for sounds, I also added an option to turn on or off
 anti-aliasing.
 
+4/25/2020
+Ryan Slaybaugh:
+Commit 50:
+
+  Finished linking all appropriate audio levels to their respective sounds and managed to keep consistent audio level changes across both
+Master Volume and BGM.
+
