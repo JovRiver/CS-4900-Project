@@ -1137,7 +1137,7 @@ function after_Game_Menu(loadBar) {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//	Time
 
-		textGeo = new THREE.TextBufferGeometry( "Score: ", {
+		textGeo = new THREE.TextBufferGeometry( "Score ", {
 
 			font: font,
 			size: 5,

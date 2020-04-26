@@ -293,6 +293,18 @@ function renderFrame(){
 
 		playerBullets.forEach(b => {
 			b.translateZ(-300 * deltaTime); // move along the local z-axis
+			if(b.position.distanceTo(player.position) > 50){
+				for(var i = 0; i < playerBullets.length; i++) {
+					if(playerBullets[i].uuid == b.uuid) {
+						scene.remove(b);
+						playerBullets.splice(i, 1);
+						break;
+					}
+				}
+			}
+
+
+
 		});
 
 		if(!startClock){
