@@ -692,8 +692,6 @@ Commit 50:
   Finished linking all appropriate audio levels to their respective sounds and managed to keep consistent audio level changes across both
 Master Volume and BGM.
 
-
-
 Semira Pinder
 1st commit
 4/25 6:40-49
@@ -713,3 +711,12 @@ Semira Pinder
 3rd commit
 4/26 2:45pm-4:19pm
 Fixed bullet not appearing for the shooting animation, it now shoots for a set amount of milliseconds.
+
+5/1/2020
+Ryan Slaybaugh:
+Commit 51:
+
+  Fixed the audio level selector to be consistent when changing audio levels and adjusted audio call backs in soundManager to be consistent
+with the new changes.
+
+
