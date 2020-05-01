@@ -1133,7 +1133,8 @@ function after_Game_Menu(loadBar) {
 		mesh.position.z = -50;
 
 		mesh.name = "Congratulations";
-		in_Game_Menu_Group.add(mesh);
+		scene.add(mesh);
+		mesh.visible = false;
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//	Time
@@ -1158,10 +1159,9 @@ function after_Game_Menu(loadBar) {
 		mesh.position.y = 210;
 		mesh.position.z = -50;
 
-		mesh.name = "Time";
-		in_Game_Menu_Group.add(mesh);
-
-
+		mesh.name = "Score";
+		scene.add(mesh);
+		mesh.visible = false;
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//	Main_Menu
@@ -1270,10 +1270,10 @@ function createScore(score){
 	let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 	let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 	let mesh = new THREE.Mesh( textGeo, textMaterial );
-	mesh.position.x = centerOffset + 5;
+	mesh.position.x = centerOffset + 10;
 	mesh.position.y = 210;
 	mesh.position.z = -50;
 
-	mesh.name = "Score";
-	in_Game_Menu_Group.add(mesh);
+	mesh.name = "Points";
+	scene.add(mesh);
 }

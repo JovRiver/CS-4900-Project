@@ -251,6 +251,8 @@ flagCallBack.addSingleResult = function () {
 
 		scene.getObjectByName("background").visible = true;
 		scene.getObjectByName("spotlight").visible = true;
+		scene.getObjectByName("Congratulations").visible = true;
+		scene.getObjectByName("Score").visible = true;
 		scene.getObjectByName("crosshair").visible = false;
 		scene.getObjectByName("Gun").visible = false;
 		in_Game_Menu_Group.visible = true;
@@ -763,13 +765,7 @@ function on_Mouse_Move(event) {
 		let intersects = raycaster.intersectObject(in_Game_Menu_Group, true);
 
 		if (intersects.length > 0) {
-			if (intersects[0].object.name === "Congratulations" || intersects[0].object.name === "Time" || intersects[0].object.name === "Score") {
-				if (intersected_Object){
-					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
-				}
-				intersected_Object = null;
-			}
-			else if (intersected_Object != intersects[0].object) {
+			if (intersected_Object != intersects[0].object) {
 				if (intersected_Object){
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 				}
@@ -785,7 +781,6 @@ function on_Mouse_Move(event) {
 			}
 
 			intersected_Object = null;
-			onBox = false;
 		}
 	}
 }
