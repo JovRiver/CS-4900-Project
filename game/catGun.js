@@ -232,7 +232,17 @@ class catHandler{
         return null;
     }
 
+    findCatByID(ID){//if it finds the ID in one of the catObjs (from the mesh of the cat), return that obj, otherwise return null.
+        //cats[0].body.scene.children[2].id
+        for(let y = 0; y < cats.length; y++){
+            if(cats[y].ID == ID)
+                return cats[y];
+        }
+        return null;
+    }
 }
+
+
 /*            e.action.getMixer().getRoot().parent.bullet.visible = false;
         e.action.getMixer().getRoot().parent.bulletInScene = false;
  */
@@ -259,6 +269,8 @@ class catObj{
     bulletChange;
     bulletSpeed;
     catAimer;
+    health;
+    ID;
     //bullet clock, old time and animationnumber
     animationNum;
     constructor(bod, arr){//arr carries x's and z's in alternating order, Y's will be added later in a way that takes the height 
@@ -274,7 +286,10 @@ class catObj{
         this.catAimer = null;
         this.addBullet();
         this.animationNum = 0;
-        //this.body.scene.add(this);//makes this class instance a child of the body, so it's more accessible... doesn't work.
+        //cats[0].body.scene.children[2].id = id of the mesh
+        //put the ID in a variable to fetch it faster during searching.
+        this.health = 100;
+        this.ID = this.body.scene.children[2].id;
     }
 
     setUpMixer(){
