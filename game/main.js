@@ -38,7 +38,7 @@ let onBox = 0;
 const sounds = {
 	menuBGM:	{ url: './sound/title_Audio.mp3', loop: true, volume: 0.5 },
 	level1BGM:	{ url: './sound/level_1_Audio.mp3', loop: true, volume: 0.5},
-	level2BGM:	{ url: './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3', loop: true, volume: 0.25},
+	level2BGM:	{ url: './sound/level_2_Audio.mp3', loop: true, volume: 0.5},
 	hook:    	{ url: './sound/hook.wav', loop: false, volume: 0.85 },
 	jump:		{ url: './sound/jump.wav', loop: false, volume: 0.85 },
 	shoot:		{ url: './sound/shoot.wav', loop: false, volume: 0.85 },
@@ -50,7 +50,7 @@ const sounds = {
 let soundss = [];
 soundss.push({ url: './sound/title_Audio.mp3', loop: true, volume: 0.5 });
 soundss.push({ url: './sound/level_1_Audio.mp3', loop: true, volume: 0.5});
-soundss.push({ url: './sound/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3', loop: true, volume: 0.25});
+soundss.push({ url: './sound/level_2_Audio.mp3', loop: true, volume: 0.5});
 soundss.push({ url: './sound/hook.wav', loop: false, volume: 0.85 });
 soundss.push({ url: './sound/jump.wav', loop: false, volume: 0.85 });
 soundss.push({ url: './sound/shoot.wav', loop: false, volume: 0.85 });
