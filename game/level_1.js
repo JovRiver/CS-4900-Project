@@ -1433,7 +1433,7 @@ function createLevel1() {
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
         //pos = {x: 0, y: 115, z: -2010}; // end of level
-        pos = {x: 24, y: 105, z: -647}; // grappling hook spot
+        //pos = {x: 24, y: 105, z: -647}; // grappling hook spot
 
         //let pos ={x: 5, y: 105, z: 0}; //was cat's position
         //resetPos = {x: 24, y: 105, z: -647}; //beginning of level
@@ -1521,7 +1521,7 @@ function createLevel1() {
 
         texture = new THREE.MeshLambertMaterial({visible: false});
         let resetBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
-        resetBox.scale.set(200, 0.5, 1200);
+        resetBox.scale.set(200, 0.5, 1250);
         resetBox.position.set(0, 80, -1120);
         resetBox.name ="Reset_Box";
         scene.add(resetBox);
@@ -1531,7 +1531,7 @@ function createLevel1() {
         transform.setOrigin(new Ammo.btVector3(0, 80, -1120)); //set to middle of map
         transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
         let motionState = new Ammo.btDefaultMotionState(transform);
-        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(200, 0.5, 1200));
+        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(200, 0.5, 1250));
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
@@ -1541,6 +1541,31 @@ function createLevel1() {
         resetBox.userData.physicsBody = body;
         physicsWorld.addRigidBody(body, ghostGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
         resetPlatform.push(resetBox);
+
+        texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
+        let resetBoxBound1 = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+        resetBoxBound1.scale.set(10, 10, 2410);
+        resetBoxBound1.position.set(-205, 80, -1120);
+
+        scene.add(resetBoxBound1);
+
+        let resetBoxBound2 = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+        resetBoxBound2.scale.set(10, 10, 2410);
+        resetBoxBound2.position.set(205, 80, -1120);
+
+        scene.add(resetBoxBound2);
+
+        let resetBoxBound3 = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+        resetBoxBound3.scale.set(420, 10, 10);
+        resetBoxBound3.position.set(0, 80, 85);
+
+        scene.add(resetBoxBound3);
+
+        let resetBoxBound4 = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
+        resetBoxBound4.scale.set(420, 10, 10);
+        resetBoxBound4.position.set(0, 80, -2325);
+
+        scene.add(resetBoxBound4);
     }
 
     setupPhysicsWorld();
