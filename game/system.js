@@ -272,39 +272,6 @@ function level_2_Textures(text) {
     }
 }
 
-//Test code for autogenerating collision for models.
-function test(){
-    //variables
-    let i, width, height, depth,
-        vertices, face, triangles = [];
-
-    //grab faces and triangles
-    for ( i = 0; i < geometry.faces.length; i++ ) {
-        face = geometry.faces[i];
-        if ( face instanceof THREE.Face3) {
-
-            triangles.push([
-                { x: vertices[face.a].x, y: vertices[face.a].y, z: vertices[face.a].z },
-                { x: vertices[face.b].x, y: vertices[face.b].y, z: vertices[face.b].z },
-                { x: vertices[face.c].x, y: vertices[face.c].y, z: vertices[face.c].z }
-            ]);
-
-        } else if ( face instanceof THREE.Face4 ) {
-
-            triangles.push([
-                { x: vertices[face.a].x, y: vertices[face.a].y, z: vertices[face.a].z },
-                { x: vertices[face.b].x, y: vertices[face.b].y, z: vertices[face.b].z },
-                { x: vertices[face.d].x, y: vertices[face.d].y, z: vertices[face.d].z }
-            ]);
-            triangles.push([
-                { x: vertices[face.b].x, y: vertices[face.b].y, z: vertices[face.b].z },
-                { x: vertices[face.c].x, y: vertices[face.c].y, z: vertices[face.c].z },
-                { x: vertices[face.d].x, y: vertices[face.d].y, z: vertices[face.d].z }
-            ]);
-        }
-    }
-}
-
 function addSprite(spriteMap, xPercent, yPercent){
     let spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xff0000 } );
     let sprite = new THREE.Sprite( spriteMaterial );
@@ -321,37 +288,6 @@ function addSprite(spriteMap, xPercent, yPercent){
 
     scene.add(sprite);
     camera.add( sprite );
-}
-
-function grappleSoundLoader(){
-    let listener = new THREE.AudioListener();
-
-    let loadBar = document.getElementById('load');
-
-    // create a global audio source
-    soundManager[1] = new THREE.PositionalAudio( listener );
-
-    // load a sound and set it as the Audio object's buffer
-    let audioLoader = new THREE.AudioLoader();
-    audioLoader.load( './sound/hook.wav',
-        function( buffer ) {
-            soundManager[1].setBuffer( buffer );
-            soundManager[1].setLoop( false );
-            soundManager[1].setVolume( 0.85 );
-        },
-        function(xhr){//onProgress
-            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-                document.getElementById("blocker").style.display = "block";
-                jumpSoundLoader();
-            }
-        },
-        function(err){//onError
-            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-            console.log("error in loading sound");
-        }
-    );
-    player.add( soundManager[1] );
 }
 
 function jumpSoundLoader(){
@@ -514,4 +450,238 @@ function loadModels(){
     let loadBar = document.getElementById('load');
 
     load_Manager();
+}
+
+function addPlatform(model, pos, quat, id, width, length){
+    let w = 5;
+    let l = 11;
+    if(width === 1 && length === 1) {
+        let obj = model.scene.clone();
+        addPlatformHelper(pos.x,pos.y,pos.z,quat,id,obj);
+    }
+
+    if(width === 2 && length === 1) {
+        let obj1 = model.scene.clone();
+        let x = pos.x -w;
+        addPlatformHelper(x,pos.y,pos.z,quat,id,obj1);
+
+        let obj2 = model.scene.clone();
+        x = pos.x + w;
+        addPlatformHelper(x,pos.y,pos.z,quat,id,obj2);
+
+    }
+
+    if(width === 1 && length === 2) {
+        let obj1 = model.scene.clone();
+        let z = pos.z - l;
+        addPlatformHelper(pos.x,pos.y,z,quat,id,obj1);
+
+        let obj2 = model.scene.clone();
+        z = pos.z + l;
+        addPlatformHelper(pos.x,pos.y,z,quat,id,obj2);
+
+    }
+    if(width === 2 && length === 2) {
+        let x1 = pos.x -w;
+        let x2 = pos.x + w;
+        let z1 = pos.z - l;
+        let z2 = pos.z + l;
+
+        let obj1 = model.scene.clone();
+        addPlatformHelper(x1, pos.y, z1, quat, id, obj1);
+
+        let obj2 = model.scene.clone();
+        addPlatformHelper(x1, pos.y, z2, quat,id, obj2);
+
+        let obj3 = model.scene.clone();
+        addPlatformHelper(x2, pos.y, z1, quat,id, obj3);
+
+        let obj4 = model.scene.clone();
+        addPlatformHelper(x2, pos.y, z2, quat, id, obj4);
+    }
+
+}
+
+function addPlatformHelper(x,y,z,quat,id,obj){
+        obj.name = id;
+        obj.position.x = x;
+        obj.position.y = y;
+        obj.position.z = z;
+        //obj.rotation.y = -1.2;
+        obj.scale.set( 4, 4, 4 );
+        scene.add(obj);
+
+        let vect3 = new THREE.Vector3();
+        let box = new THREE.Box3().setFromObject(obj).getSize(vect3);
+
+        let transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin( new Ammo.btVector3( x, y, z ) );
+        transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+        let motionState = new Ammo.btDefaultMotionState( transform );
+
+        colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2, box.y/2, box.z/2));
+        let localInertia = new Ammo.btVector3( 0, 0, 0 );
+        colShape.calculateLocalInertia( 1, localInertia );
+        let rbInfo = new Ammo.btRigidBodyConstructionInfo( 1, motionState, colShape, localInertia );
+        let objBody = new Ammo.btRigidBody( rbInfo );
+        objBody.setFriction(4);
+        objBody.setRollingFriction(10);
+        objBody.setActivationState( STATE.DISABLE_DEACTIVATION );
+        objBody.setCollisionFlags( 2 );
+        physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
+        obj.userData.physicsBody = objBody;
+        rigidBodies.push(obj);
+        platforms.push(obj);
+    }
+
+
+
+
+function addStarGrapple(model, pos, quat, id){
+    let obj = model.scene.clone();
+    obj.name = id;
+    obj.position.x = pos.x;
+    obj.position.y = pos.y;
+    obj.position.z = pos.z;
+    obj.scale.set( 5, 5, 5 );
+    scene.add(obj);
+    let vect3 = new THREE.Vector3();
+    let box = new THREE.Box3().setFromObject(obj).getSize(vect3);
+
+    let geometry = new THREE.BoxBufferGeometry( 4, 4, 2 );
+    let material = new THREE.MeshBasicMaterial( { color: 0xffff00, visible: false} );
+    let hook = new THREE.Mesh( geometry, material );
+    hook.position.x = pos.x;
+    hook.position.y = pos.y;
+    hook.position.z = pos.z;
+
+    let transform = new Ammo.btTransform();
+    transform.setIdentity();
+    transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+    transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+    let motionState = new Ammo.btDefaultMotionState( transform );
+
+    let colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2, box.y/2, box.z/2));
+    let localInertia = new Ammo.btVector3( 0, 0, 0 );
+    colShape.calculateLocalInertia( 1, localInertia );
+    let rbInfo = new Ammo.btRigidBodyConstructionInfo( 1, motionState, colShape, localInertia );
+    let objBody = new Ammo.btRigidBody( rbInfo );
+    objBody.setFriction(4);
+    objBody.setRollingFriction(10);
+    objBody.setActivationState( STATE.DISABLE_DEACTIVATION );
+    objBody.setCollisionFlags( 2 );
+    physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
+    hook.userData.physicsBody = objBody;
+    rigidBodies.push(hook);
+
+
+    scene.add( hook );
+    star.push(obj);
+
+    hookSpot.push(hook);
+}
+
+function addCloud(model, pos, quat){
+    let obj = model.scene.clone();
+    obj.position.x = pos.x;
+    obj.position.y = pos.y;
+    obj.position.z = pos.z;
+    obj.scale.set( 7, 7, 7 );
+    scene.add(obj);
+
+    let vect3 = new THREE.Vector3();
+    let box = new THREE.Box3().setFromObject(obj).getSize(vect3);
+
+    let transform = new Ammo.btTransform();
+    transform.setIdentity();
+    transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+    transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+    let motionState = new Ammo.btDefaultMotionState( transform );
+
+    let colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2, box.y/2, box.z/2));
+    let localInertia = new Ammo.btVector3( 0, 0, 0 );
+    colShape.calculateLocalInertia( 1, localInertia );
+    let rbInfo = new Ammo.btRigidBodyConstructionInfo( 1, motionState, colShape, localInertia );
+    let objBody = new Ammo.btRigidBody( rbInfo );
+    objBody.setFriction(4);
+    objBody.setRollingFriction(10);
+    objBody.setActivationState( STATE.DISABLE_DEACTIVATION );
+    objBody.setCollisionFlags( 2 );
+    physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
+    obj.userData.physicsBody = objBody;
+    rigidBodies.push(obj);
+
+    clouds.push(obj);
+
+}
+
+function addWall(model, pos, length, quat, which){
+    let left = 110;
+    let right = 20;
+    for(let i = 0; i < length; i++){
+        if(which){
+            let obj = model.scene.clone();
+            obj.position.x = pos.x;
+            obj.position.y = pos.y;
+            obj.position.z = pos.z - ((left) * i);
+            obj.scale.set( 60, 60, 60 );
+            scene.add(obj);
+
+            let vect3 = new THREE.Vector3();
+            let box = new THREE.Box3().setFromObject(obj).getSize(vect3);
+
+            let transform = new Ammo.btTransform();
+            transform.setIdentity();
+            transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z -  ((left) * i) ) );
+            transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+            let motionState = new Ammo.btDefaultMotionState( transform );
+
+            let colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2, box.y/2, box.z/2));
+            let localInertia = new Ammo.btVector3( 0, 0, 0 );
+            colShape.calculateLocalInertia( 1, localInertia );
+            let rbInfo = new Ammo.btRigidBodyConstructionInfo( 1, motionState, colShape, localInertia );
+            let objBody = new Ammo.btRigidBody( rbInfo );
+            objBody.setFriction(4);
+            objBody.setRollingFriction(10);
+            objBody.setActivationState( STATE.DISABLE_DEACTIVATION );
+            objBody.setCollisionFlags( 2 );
+            physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
+            obj.userData.physicsBody = objBody;
+            rigidBodies.push(obj);
+        }else{
+            let obj = model.scene.clone();
+            obj.position.x = pos.x - ((left) * i);
+            obj.position.y = pos.y;
+            obj.position.z = pos.z;
+            obj.scale.set( 60, 60, 60 );
+            scene.add(obj);
+
+            let vect3 = new THREE.Vector3();
+            let box = new THREE.Box3().setFromObject(obj).getSize(vect3);
+
+            let transform = new Ammo.btTransform();
+            transform.setIdentity();
+            transform.setOrigin( new Ammo.btVector3( pos.x - ((left) * i), pos.y, pos.z ) );
+            transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+            let motionState = new Ammo.btDefaultMotionState( transform );
+
+            let colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2, box.y/2, box.z/2));
+            let localInertia = new Ammo.btVector3( 0, 0, 0 );
+            colShape.calculateLocalInertia( 1, localInertia );
+            let rbInfo = new Ammo.btRigidBodyConstructionInfo( 1, motionState, colShape, localInertia );
+            let objBody = new Ammo.btRigidBody( rbInfo );
+            objBody.setFriction(4);
+            objBody.setRollingFriction(10);
+            objBody.setActivationState( STATE.DISABLE_DEACTIVATION );
+            objBody.setCollisionFlags( 2 );
+            physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
+            obj.userData.physicsBody = objBody;
+            rigidBodies.push(obj);
+        }
+    }
+
+
+
+
 }
