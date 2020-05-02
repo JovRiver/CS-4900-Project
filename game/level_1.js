@@ -1471,7 +1471,7 @@ function createLevel1() {
         a = true;
     }
 
-       function createCrosshair() {
+    function createCrosshair() {
         let spriteMap = new THREE.TextureLoader().load( "./texture/sprite/crosshair.png" );
         addSprite(spriteMap, 50, 50);
     }
