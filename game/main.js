@@ -82,7 +82,9 @@ let play_Music = true;
 let master_Volume = 1;
 let bgm_Volume = 1; 
 let sound_Volume = 1;
+let alias_Toggle = false;
 let in_Game_Menu_Group; // in_Game_Menu_Group to hold menu items for raycaster detection
+let last_Checked = Date.now();
 
 //Ammojs Initialization
 Ammo().then(start);
@@ -127,6 +129,7 @@ function load_Manager() {
 	in_Game_Menu_Group = new THREE.Group();
 	menu_Group = new THREE.Group();
 	options_Group = new THREE.Group();
+	options_Highlight = [];
 	rigidBodies = [];
 	platforms = [];
 
@@ -716,6 +719,13 @@ function menu_Selection(event) {
 }
 
 function on_Mouse_Move(event) {
+	// Obtained from https://stackoverflow.com/questions/42232001/three-js-performance-very-slow-using-onmousemove-with-raycaster
+	if (Date.now() - last_Checked < 40) {
+        return;
+	} 
+	else {
+        last_Checked = Date.now();
+    }
 
 	if (level === 0) {
 		mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -1091,6 +1101,7 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "AA_ON") {
 				renderer.antialias = true;
+				alias_Toggle = true;
 				options_Highlight[3].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[3] = intersects[0].object;
@@ -1098,6 +1109,7 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "AA_OFF") {
 				renderer.antialias = false;
+				alias_Toggle = false;
 				options_Highlight[3].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[3] = intersects[0].object;
