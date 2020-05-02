@@ -235,10 +235,30 @@ class catHandler{
     findCatByID(ID){//if it finds the ID in one of the catObjs (from the mesh of the cat), return that obj, otherwise return null.
         //cats[0].body.scene.children[2].id
         for(let y = 0; y < cats.length; y++){
-            if(cats[y].ID == ID)
+            if(cats[y].ID === ID)
                 return cats[y];
         }
         return null;
+    }
+
+    findCatByIDNumber(ID){//if it finds the ID in one of the catObjs (from the mesh of the cat), return that obj, otherwise return null.
+        //cats[0].body.scene.children[2].id
+        for(let y = 0; y < cats.length; y++){
+            if(cats[y].ID === ID)
+                return y;
+        }
+        return null;
+    }
+
+    healthHit(catOb){//lowers the health of the cat. if the health <=0, remove the cat from the cats, and remove the body
+        // from the scene.
+        catOb.health -= 20;
+        if(catOb.health <= 0){
+            let x = this.findCatByIDNumber(catOb.ID);//replace this function in the future with an array function
+            //remove the cat from the array
+            cats.splice(x, 1);
+            scene.remove(catOb);//remove the cat from the scene
+        }
     }
 }
 
