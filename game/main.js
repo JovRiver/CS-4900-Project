@@ -720,7 +720,7 @@ function menu_Selection(event) {
 
 function on_Mouse_Move(event) {
 	// Obtained from https://stackoverflow.com/questions/42232001/three-js-performance-very-slow-using-onmousemove-with-raycaster
-	if (Date.now() - last_Checked < 40) {
+	if (Date.now() - last_Checked < 60) {
         return;
 	} 
 	else {
