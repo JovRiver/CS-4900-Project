@@ -719,4 +719,13 @@ Commit 51:
   Fixed the audio level selector to be consistent when changing audio levels and adjusted audio call backs in soundManager to be consistent
 with the new changes.
 
+5/1/2020
+Ryan Slaybaugh:
+Commit 52:
+
+  Found a work around for the lag with the raycaster and the performance hit, and solution seems to work to keep visual performance normal.
+Added a new platform and wall to the end of the first grapple area for the player to land on and added a platform to allow the player easier
+access to the balcony just before the same area. Removed score and congratulations from the in_Game_Menu_Group and added them to the scene by
+themselves to help with reduce raycaster callbacks and also removed points (the number gained when completing the level) from the grou as well.
+
 
