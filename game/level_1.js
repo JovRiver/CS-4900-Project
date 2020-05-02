@@ -308,6 +308,13 @@ function createLevel1() {
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
+        // BALCONY STEP UP
+
+        scale = {x: 20, y: 1, z: 10};
+        pos = {x: 0, y: 95.5, z: -635};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
+
+        /////////////////////////////////////////////////////////////////////
         // P55-64
 
         for (let i = 0; i < 5; i++) {
@@ -345,13 +352,10 @@ function createLevel1() {
         texture = new THREE.MeshLambertMaterial(level_1_Textures(3));
         scale = {x: 2, y: 3, z: 2};
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
             pos = {x: 25, y: 110.5, z: -685 - (i * 40)};
             create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
-
-        pos = {x: 15, y: 110.5, z: -845};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // 67-71 // TEXTURE RETURNED TO STONE
@@ -359,20 +363,27 @@ function createLevel1() {
         texture = new THREE.MeshLambertMaterial(level_1_Textures(1));
         scale = {x: 35, y: 1, z: 2.5};
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
             pos = {x: 40, y: 112, z: -685 - (i * 40)};
             create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
-
-        scale = {x: 45, y: 1, z: 2.5};
-        pos = {x: 35, y: 112, z: -845};
-        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
         // P72
 
         scale = {x: 10, y: 1, z: 60};
         pos = {x: 5, y: 99.5, z: -900};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
+
+        /////////////////////////////////////////////////////////////////////
+        // Landing Platform / Wall
+
+        scale = {x: 30, y: 1, z: 30};
+        pos = {x: 25, y: 99.5, z: -885};
+        create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
+
+        scale = {x: 30, y: 15, z: 1};
+        pos = {x: 25, y: 107, z: -900};
         create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
 
         /////////////////////////////////////////////////////////////////////
@@ -1421,8 +1432,8 @@ function createLevel1() {
 
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
-        pos = {x: 0, y: 115, z: -2010}; // end of level
-        //pos = {x: 24, y: 105, z: -647}; // grappling hook spot
+        //pos = {x: 0, y: 115, z: -2010}; // end of level
+        pos = {x: 24, y: 105, z: -647}; // grappling hook spot
 
         //let pos ={x: 5, y: 105, z: 0}; //was cat's position
         //resetPos = {x: 24, y: 105, z: -647}; //beginning of level
