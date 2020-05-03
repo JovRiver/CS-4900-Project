@@ -35,7 +35,7 @@ function createLevel2() {
 
     function init() {
         setupPhysicsWorld();
-        initDebug();
+        //initDebug();
         gamePlay = true;
         createLights();
         createPlayer();

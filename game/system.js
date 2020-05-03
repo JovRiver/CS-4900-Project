@@ -204,7 +204,7 @@ function createGrapplingHook(vect){
     ropeSoftBody.setActivationState( STATE.DISABLE_DEACTIVATION );
 
     //Create temp physics object at raycast position
-    let texture = new THREE.MeshLambertMaterial();
+    let texture = new THREE.MeshLambertMaterial({visible: false});
     let hookBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
     hookBox.scale.set(1, 1, 1);
     hookBox.position.set(vect.x, vect.y, vect.z);
