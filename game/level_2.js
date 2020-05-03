@@ -313,12 +313,12 @@ function createLevel2() {
 
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
-        pos = {x: 290, y: 115, z: -875}; // end of level
-        pos = {x: 290, y: 120, z: -565}; // grappling hook spot
+        //pos = {x: 290, y: 115, z: -875}; // end of level
+        //pos = {x: -107, y: 124, z: -223}; // grappling hook spot
         //let pos ={x: 5, y: 105, z: 0}; //was cat's position
         resetPos = {x: 0, y: 105, z: 0}; //beginning of level
 
-        resetPos = {x:  290, y: 120, z: -565}; //back of the level on the second-to-last platform
+        //resetPos = {x:  290, y: 120, z: -565}; //back of the level on the second-to-last platform
         //resetPos = {x: 0, y: 101, z: 0}; //grappling hook reset
         //resetPos = {x: 0, y: 115, z: -2010}; // end of level
         let radius = 1;
@@ -484,9 +484,9 @@ function createLevel2() {
         quat = {x: 0, y: 1, z: 0, w: 1};
         addPlatform(models.platform.gltf, pos, quat, "2p", 2,2 );
 
-        pos = {x: 5, y: 100, z: -220};
-        quat = {x: 0, y: 0, z: 0, w: 1};
-        addPlatform(models.platform.gltf, pos, quat, "3p", 2,1 );
+        pos = {x: 5, y: 100, z: -240};
+        quat = {x: 0, y: 1, z: 0, w: 1};
+        addPlatform(models.platform.gltf, pos, quat, "3p", 2,2 );
 
         pos = {x: -20, y: 105, z: -220};
         quat = {x: 0, y: 0, z: 0, w: 1};
@@ -505,6 +505,10 @@ function createLevel2() {
         addPlatform(models.platform.gltf, pos, quat, "6p", 2,1 );
 
         pos = {x: -150, y: 120, z: -320};
+        quat = {x: 0, y: 1, z: 0, w: 1};
+        addPlatform(models.platform.gltf, pos, quat, "6p", 2,1 );
+
+        pos = {x: -170, y: 120, z: -320};
         quat = {x: 0, y: 1, z: 0, w: 1};
         addPlatform(models.platform.gltf, pos, quat, "6p", 2,1 );
 
