@@ -26,8 +26,11 @@ function setupControls(){
         instructions.style.display = 'none';
         blocker.style.display = 'none';
         timer.style.display = 'block';
-        if (play_Music === true) {
-            soundManager[0].play();
+        if (play_Music === true && level === 1) {
+            soundManager[1].play();
+        }
+        if (play_Music === true && level === 2) {
+            soundManager[2].play();
         }
         if(startClock){
             gameClock.start();
@@ -54,7 +57,12 @@ function setupControls(){
             tempRunning = gameClock.running;
             tempClock.start();
         }
-        instructions.style.display = ''; soundManager[0].pause();} );
+        if (level === 1 && play_Music === true) {
+            instructions.style.display = ''; soundManager[1].pause();
+        }
+        if (level === 2 && play_Music === true) {
+            instructions.style.display = ''; soundManager[2].pause();
+        } });
 
     scene.add( controls.getObject() );
 }
@@ -275,7 +283,7 @@ function loadSounds(){
     let count = 0;
     let loadBar = document.getElementById('load');
 
-    for(let i = 0; i< 8; i++){
+    for(let i = 0; i< 9; i++){
         let listener = new THREE.AudioListener();
         camera.add( listener );
         // create a global audio source

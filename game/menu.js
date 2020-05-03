@@ -375,6 +375,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "MV0";
+		if (master_Volume === 0) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -406,6 +410,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "MV1";
+		if (master_Volume === 1/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -437,6 +445,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "MV2";
+		if (master_Volume === 2/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -468,6 +480,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "MV3";
+		if (master_Volume === 3/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -499,6 +515,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-15);
 
 		mesh.name = "MV4";
+		if (master_Volume === 4/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -530,8 +550,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-15);
 
 		mesh.name = "MV5";
-		mesh.material.emissive.setHex(0xdde014);
-		options_Highlight.push(mesh);
+		if (master_Volume === 1) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -595,6 +617,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "BGM0";
+		if (bgm_Volume === 0) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -626,6 +652,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "BGM1";
+		if (bgm_Volume === 1/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -657,6 +687,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "BGM2";
+		if (bgm_Volume === 2/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -688,6 +722,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "BGM3";
+		if (bgm_Volume === 3/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -719,6 +757,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-15);
 
 		mesh.name = "BGM4";
+		if (bgm_Volume === 4/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -750,8 +792,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-15);
 
 		mesh.name = "BGM5";
-		mesh.material.emissive.setHex(0xdde014);
-		options_Highlight.push(mesh);
+		if (bgm_Volume === 1) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -815,6 +859,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "S0";
+		if (sound_Volume === 0) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -846,6 +894,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "S1";
+		if (sound_Volume === 1/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -877,6 +929,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "S2";
+		if (sound_Volume === 2/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -908,6 +964,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-10);
 
 		mesh.name = "S3";
+		if (sound_Volume === 3/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -939,6 +999,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-15);
 
 		mesh.name = "S4";
+		if (sound_Volume === 4/5) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -970,8 +1034,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-15);
 
 		mesh.name = "S5";
-		mesh.material.emissive.setHex(0xdde014);
-		options_Highlight.push(mesh);
+		if (sound_Volume === 1) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -1035,6 +1101,10 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-15);
 
 		mesh.name = "AA_ON";
+		if (alias_Toggle === true) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
 
@@ -1066,11 +1136,12 @@ function create_Start_Menu() {
 		mesh.rotation.y = THREE.Math.degToRad(-23);
 
 		mesh.name = "AA_OFF";
-		mesh.material.emissive.setHex(0xdde014);
+		if (alias_Toggle === false) {
+			mesh.material.emissive.setHex(0xdde014);
+			options_Highlight.push(mesh);
+		}
 
 		options_Group.add(mesh);
-		options_Highlight.push(mesh);
-
 		scene.add(options_Group);
 	}
 	
@@ -1133,10 +1204,11 @@ function after_Game_Menu(loadBar) {
 		mesh.position.z = -50;
 
 		mesh.name = "Congratulations";
-		in_Game_Menu_Group.add(mesh);
+		scene.add(mesh);
+		mesh.visible = false;
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//	Time
+		//	Score
 
 		textGeo = new THREE.TextBufferGeometry( "Score ", {
 
@@ -1158,10 +1230,9 @@ function after_Game_Menu(loadBar) {
 		mesh.position.y = 210;
 		mesh.position.z = -50;
 
-		mesh.name = "Time";
-		in_Game_Menu_Group.add(mesh);
-
-
+		mesh.name = "Score";
+		scene.add(mesh);
+		mesh.visible = false;
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//	Main_Menu
@@ -1269,10 +1340,11 @@ function createScore(score){
 	let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 	let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 	let mesh = new THREE.Mesh( textGeo, textMaterial );
-	mesh.position.x = centerOffset + 100;
+
+	mesh.position.x = centerOffset + 10;
 	mesh.position.y = 210;
 	mesh.position.z = -50;
 
-	mesh.name = "Score";
-	in_Game_Menu_Group.add(mesh);
+	mesh.name = "Points";
+	scene.add(mesh);
 }
