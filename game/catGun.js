@@ -240,11 +240,12 @@ class catHandler{
     }
 
     handleShot(obj){//given an object, get its ID. If the ID matches a catObj, find the cat in the cats array then remove some health.
-        let id = obj.id;
-        let catFound = this.findCatByID(id);
-        if(catFound)
-            this.healthHit(catFound[0], catFound[1]);
-
+        if(obj) {
+            let id = obj.id;
+            let catFound = this.findCatByID(id);
+            if (catFound)
+                this.healthHit(catFound[0], catFound[1]);
+        }
     }
 
     findCatByID(ID){//if it finds the ID in one of the catObjs (from the mesh of the cat), return that obj, otherwise return null.
@@ -267,15 +268,15 @@ class catHandler{
 
     healthHit(catOb, x){//lowers the health of the cat. if the health <=0, remove the cat from the cats, and remove the body
         // from the scene.
-        setTimeout(function(){//the objects might not be filled in yet
+        //setTimeout(function(){//the objects might not be filled in yet
             catOb.health -= 20;
             if(catOb.health <= 0){
                 //let x = this.findCatByID(catOb.ID)[1];//replace this function in the future with an array function
                 //remove the cat from the array
                 cats.splice(x, 1);
-                scene.remove(catOb);//remove the cat from the scene
+                scene.remove(catOb.body);//remove the cat from the scene
             }
-        }, 500);
+        //}, 500);
     }
 }
 
