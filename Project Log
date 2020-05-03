@@ -729,3 +729,31 @@ access to the balcony just before the same area. Removed score and congratulatio
 themselves to help with reduce raycaster callbacks and also removed points (the number gained when completing the level) from the grou as well.
 
 
+Semira Pinder
+Week of 4/26-5/3/2020
+5/2 6:50pm-7:02pm
+Commit #1
+Made function in catHandler, findCatByID, to search for a catObj given an id of an object. Also made ID and health variables in catObj.
+
+Semira Pinder
+5/2 7:18pm-7:40pm
+Commit #2
+Made a function in catHandler, healthHit, to subtract health from the catObj given. If the health hits or goes below 0, it removes the 
+catObj's body/scene from the scene.
+
+Semira Pinder 
+5/2 10:43pm-11:23pm
+Commit #3
+Made a function in catHandler called handleShot that uses the searching and removing-health functions above given an object with an id.
+
+Semira Pinder 
+5/3 10:42am-12:14pm
+Commit #4
+Gave the enemy a YUKA PursuitBehavior for steering, so now it slowly heads to the player. Will change to OffsetPursuit later so
+it stays a certain distance away.
+
+Semira Pinder 
+5/3 12:49pm-2:13pm
+Commit #5
+Added a function call to use the handleShot inside of the onMouseDown function in main.js that uses the object
+of the intersect results.
