@@ -36,25 +36,27 @@ let renderFrameId;
 let onBox = 0;
 
 const sounds = {
+	menuBGM:	{ url: './sound/title_Audio.mp3', loop: true, volume: 0.5 },
 	level1BGM:	{ url: './sound/level_1_Audio.mp3', loop: true, volume: 0.5},
+	level2BGM:	{ url: './sound/level_2_Audio.mp3', loop: true, volume: 0.5},
 	hook:    	{ url: './sound/hook.wav', loop: false, volume: 0.85 },
 	jump:		{ url: './sound/jump.wav', loop: false, volume: 0.85 },
 	shoot:		{ url: './sound/shoot.wav', loop: false, volume: 0.85 },
 	enemyHit:   { url: './sound/hit.wav', loop: false, volume: 0.5 },
 	walking:	{ url: './sound/walking.wav', loop: true, volume: 5 },
 	playerHit:	{ url: './sound/playerHit.wav', loop: false, volume: 0.15 },
-	menuBGM:	{ url: './sound/title_Audio.mp3', loop: true, volume: 0.5 },
 };
 
 let soundss = [];
+soundss.push({ url: './sound/title_Audio.mp3', loop: true, volume: 0.5 });
 soundss.push({ url: './sound/level_1_Audio.mp3', loop: true, volume: 0.5});
+soundss.push({ url: './sound/level_2_Audio.mp3', loop: true, volume: 0.5});
 soundss.push({ url: './sound/hook.wav', loop: false, volume: 0.85 });
 soundss.push({ url: './sound/jump.wav', loop: false, volume: 0.85 });
 soundss.push({ url: './sound/shoot.wav', loop: false, volume: 0.85 });
 soundss.push({ url: './sound/hit.wav', loop: false, volume: 0.5 });
 soundss.push({ url: './sound/walking.wav', loop: true, volume: 5 });
 soundss.push({ url: './sound/playerHit.wav', loop: false, volume: 0.15 });
-soundss.push({ url: './sound/title_Audio.mp3', loop: true, volume: 0.5 });
 
 
 const models = {
@@ -71,13 +73,18 @@ const STATE = {
 	DISABLE_SIMULATION : 5
 }
 
-let level = 1;	//set to 0 for main menu, 1 or higher for levels
+let level = 0;	//set to 0 for main menu, 1 or higher for levels
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let options_Group;
 let options_Highlight = [];
 let play_Music = true;
+let master_Volume = 1;
+let bgm_Volume = 1; 
+let sound_Volume = 1;
+let alias_Toggle = false;
 let in_Game_Menu_Group; // in_Game_Menu_Group to hold menu items for raycaster detection
+let last_Checked = Date.now();
 
 //Ammojs Initialization
 Ammo().then(start);
@@ -122,6 +129,7 @@ function load_Manager() {
 	in_Game_Menu_Group = new THREE.Group();
 	menu_Group = new THREE.Group();
 	options_Group = new THREE.Group();
+	options_Highlight = [];
 	rigidBodies = [];
 	platforms = [];
 
@@ -246,6 +254,8 @@ flagCallBack.addSingleResult = function () {
 
 		scene.getObjectByName("background").visible = true;
 		scene.getObjectByName("spotlight").visible = true;
+		scene.getObjectByName("Congratulations").visible = true;
+		scene.getObjectByName("Score").visible = true;
 		scene.getObjectByName("crosshair").visible = false;
 		scene.getObjectByName("Gun").visible = false;
 		in_Game_Menu_Group.visible = true;
@@ -400,19 +410,19 @@ function onMouseDown(event){
 				raycaster.far = 50;
 				let intersects = raycaster.intersectObjects( enemies, true   );
 				for ( let i = 0; i < intersects.length; i++ ) {
-					if(soundManager[4].isPlaying){
-						soundManager[4].stop();
-						soundManager[4].play();
+					if(soundManager[6].isPlaying){
+						soundManager[6].stop();
+						soundManager[6].play();
 					}else{
-						soundManager[4].play();
+						soundManager[6].play();
 					}
 				}
 
-				if(soundManager[3].isPlaying){
-					soundManager[3].stop();
-					soundManager[3].play();
+				if(soundManager[5].isPlaying){
+					soundManager[5].stop();
+					soundManager[5].play();
 				}else{
-					soundManager[3].play();
+					soundManager[5].play();
 				}
 
 
@@ -430,7 +440,7 @@ function onMouseDown(event){
 					if(intersects.length === 1){
 						createGrapplingHook(intersects[i].point);
 						physicsWorld.setGravity(new Ammo.btVector3(0, -30, 0));
-						soundManager[1].play();
+						soundManager[3].play();
 					}
 				}
 				break;
@@ -451,7 +461,7 @@ function onMouseUp(event){
 					physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
 					physicsWorld.removeCollisionObject(rope.userData.physicsBody);
 					scene.remove(rope);
-					soundManager[1].stop();
+					soundManager[3].stop();
 				}
 				if (scene.getObjectByName("Hook_Box") != null) {
 					physicsWorld.removeCollisionObject(scene.getObjectByName("Hook_Box").userData.physicsBody);
@@ -470,9 +480,9 @@ function onKeyDown (event ) {
 				if (canMove) {
 					playerMoveDirection.forward = 1;
 					moving = true;
-					if(soundManager[5].isPlaying){
+					if(soundManager[7].isPlaying){
 					}else{
-						soundManager[5].play();
+						soundManager[7].play();
 					}
 				}
 				break;
@@ -481,9 +491,9 @@ function onKeyDown (event ) {
 				if (canMove) {
 					playerMoveDirection.left = 1;
 					moving = true;
-					if(soundManager[5].isPlaying){
+					if(soundManager[7].isPlaying){
 					}else{
-						soundManager[5].play();
+						soundManager[7].play();
 					}
 				}
 				break;
@@ -492,9 +502,9 @@ function onKeyDown (event ) {
 				if (canMove) {
 					playerMoveDirection.back = 1;
 					moving = true;
-					if(soundManager[5].isPlaying){
+					if(soundManager[7].isPlaying){
 					}else{
-						soundManager[5].play();
+						soundManager[7].play();
 					}
 				}
 				break;
@@ -503,9 +513,9 @@ function onKeyDown (event ) {
 				if (canMove) {
 					playerMoveDirection.right = 1;
 					moving = true;
-					if(soundManager[5].isPlaying){
+					if(soundManager[7].isPlaying){
 					}else{
-						soundManager[5].play();
+						soundManager[7].play();
 					}
 				}
 				break;
@@ -530,7 +540,7 @@ function onKeyDown (event ) {
 					resultantImpulse.op_mul(2);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
-					soundManager[2].play();
+					soundManager[4].play();
 				}
 				break;
 
@@ -562,7 +572,7 @@ function onKeyDown (event ) {
 					resultantImpulse.op_mul(3);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
-					soundManager[2].play();
+					soundManager[4].play();
 				}
 				break;
 
@@ -587,7 +597,7 @@ function onKeyDown (event ) {
 					resultantImpulse.op_mul(3);
 					let physicsBody = player.userData.physicsBody;
 					physicsBody.applyImpulse(resultantImpulse);
-					soundManager[2].play();
+					soundManager[4].play();
 				}
 				break;
 		}
@@ -600,7 +610,7 @@ function onKeyUp( event ) {
 			playerMoveDirection.forward = 0;
 			moving = false;
 			if(!moving){
-				soundManager[5].stop();
+				soundManager[7].stop();
 			}
 			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
@@ -609,7 +619,7 @@ function onKeyUp( event ) {
 			playerMoveDirection.left = 0;
 			moving = false;
 			if(!moving){
-				soundManager[5].stop();
+				soundManager[7].stop();
 			}
 			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
@@ -618,7 +628,7 @@ function onKeyUp( event ) {
 			playerMoveDirection.back = 0;
 			moving = false;
 			if(!moving){
-				soundManager[5].stop();
+				soundManager[7].stop();
 			}
 			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
@@ -627,7 +637,7 @@ function onKeyUp( event ) {
 			playerMoveDirection.right = 0;
 			moving = false;
 			if(!moving){
-				soundManager[5].stop();
+				soundManager[7].stop();
 			}
 			tempPlayerMoveDirection = {left: playerMoveDirection.left, right: playerMoveDirection.right, forward: playerMoveDirection.forward, back: playerMoveDirection.back}
 			break;
@@ -648,7 +658,7 @@ function menu_Selection(event) {
 			if (intersects[0].object.name === "Press_Start") {
 				camera.position.set(0,-10, 50);
 				camera.lookAt(0,0,0);
-				setTimeout(function () {soundManager[7].play();}, 500);
+				setTimeout(function () {soundManager[0].play();}, 500);
 			}
 
 			if (intersects[0].object.name === "Select_Level") {
@@ -657,14 +667,15 @@ function menu_Selection(event) {
 
 			if (intersects[0].object.name === "Level_1" || intersects[0].object.name === "Level_1_Cube") {
 				level = 1;
-				soundManager[7].stop();
+				soundManager[0].stop();
 				onBox = false;
 				load_Manager();
 			}
 
 			if (intersects[0].object.name === "Level_2" || intersects[0].object.name === "Level_2_Cube") {
 				level = 2;
-				soundManager[7].stop();
+				soundManager[0].stop();
+				onBox = false;
 				load_Manager();
 			}
 
@@ -689,13 +700,18 @@ function menu_Selection(event) {
 			if (intersects[0].object.name === "Main_Menu") {
 				level = 0;
 				if (play_Music === true) {
-					soundManager[7].play();
+					soundManager[0].play();
 				}
 				load_Manager();
 			}
 
 			if (intersects[0].object.name === "Continue") {
-				level++;
+				if (level === 1) {
+					level = 2;
+				}
+				else {
+					level = 1;
+				}
 				load_Manager();
 			}
 		}
@@ -703,6 +719,13 @@ function menu_Selection(event) {
 }
 
 function on_Mouse_Move(event) {
+	// Obtained from https://stackoverflow.com/questions/42232001/three-js-performance-very-slow-using-onmousemove-with-raycaster
+	if (Date.now() - last_Checked < 60) {
+        return;
+	} 
+	else {
+        last_Checked = Date.now();
+    }
 
 	if (level === 0) {
 		mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -752,13 +775,7 @@ function on_Mouse_Move(event) {
 		let intersects = raycaster.intersectObject(in_Game_Menu_Group, true);
 
 		if (intersects.length > 0) {
-			if (intersects[0].object.name === "Congratulations" || intersects[0].object.name === "Time" || intersects[0].object.name === "Score") {
-				if (intersected_Object){
-					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
-				}
-				intersected_Object = null;
-			}
-			else if (intersected_Object != intersects[0].object) {
+			if (intersected_Object != intersects[0].object) {
 				if (intersected_Object){
 					intersected_Object.material.emissive.setHex(intersected_Object.currentHex);
 				}
@@ -774,7 +791,6 @@ function on_Mouse_Move(event) {
 			}
 
 			intersected_Object = null;
-			onBox = false;
 		}
 	}
 }
@@ -793,10 +809,10 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "MV0") {
 				play_Music = false;
-				soundManager[7].stop();
+				master_Volume = 0;
 
-				for (let i = 0; i < 8; i++) {
-					soundManager[i].setVolume(0.0);
+				for (let i = 0; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume * sound_Volume);
 				}
 
 				options_Highlight[0].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
@@ -806,20 +822,15 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "MV1") {
 				play_Music = true;
-				if (!soundManager[7].isPlaying) {
-					soundManager[7].play();
+				master_Volume = 1/5;
+
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
+				}
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
 
-				for (let i = 0; i < 8; i++) {
-					if (intersects[0].object.name < options_Highlight[0].name) {
-						let j = options_Highlight[0].name.charAt(2) - intersects[0].object.name.charAt(2);
-						soundManager[i].setVolume(soundManager[i].getVolume() - j * (soundss[i].volume * 0.1));
-					}
-					else if (intersects[0].object.name > options_Highlight[0].name) {
-						let j = intersects[0].object.name.charAt(2) - options_Highlight[0].name.charAt(2);
-						soundManager[i].setVolume(soundManager[i].getVolume() + j * (soundss[i].volume * 0.1));
-					}
-				}
 				options_Highlight[0].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[0] = intersects[0].object;
@@ -827,20 +838,15 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "MV2") {
 				play_Music = true;
-				if (!soundManager[7].isPlaying) {
-					soundManager[7].play();
+				master_Volume = 2/5;
+
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
+				}
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
 
-				for (let i = 0; i < 8; i++) {
-					if (intersects[0].object.name < options_Highlight[0].name) {
-						let j = options_Highlight[0].name.charAt(2) - intersects[0].object.name.charAt(2);
-						soundManager[i].setVolume(soundManager[i].getVolume() - j * (soundss[i].volume * 0.1));
-					}
-					else if (intersects[0].object.name > options_Highlight[0].name) {
-						let j = intersects[0].object.name.charAt(2) - options_Highlight[0].name.charAt(2);
-						soundManager[i].setVolume(soundManager[i].getVolume() + j * (soundss[i].volume * 0.1));
-					}
-				}
 				options_Highlight[0].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[0] = intersects[0].object;
@@ -848,20 +854,15 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "MV3") {
 				play_Music = true;
-				if (!soundManager[7].isPlaying) {
-					soundManager[7].play();
+				master_Volume = 3/5;
+
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
+				}
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
 
-				for (let i = 0; i < 8; i++) {
-					if (intersects[0].object.name < options_Highlight[0].name) {
-						let j = options_Highlight[0].name.charAt(2) - intersects[0].object.name.charAt(2);
-						soundManager[i].setVolume(soundManager[i].getVolume() - j * (soundss[i].volume * 0.1));
-					}
-					else if (intersects[0].object.name > options_Highlight[0].name) {
-						let j = intersects[0].object.name.charAt(2) - options_Highlight[0].name.charAt(2);
-						soundManager[i].setVolume(soundManager[i].getVolume() + j * (soundss[i].volume * 0.1));
-					}
-				}
 				options_Highlight[0].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[0] = intersects[0].object;
@@ -869,20 +870,15 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "MV4") {
 				play_Music = true;
-				if (!soundManager[7].isPlaying) {
-					soundManager[7].play();
+				master_Volume = 4/5;
+
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
+				}
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
 
-				for (let i = 0; i < 8; i++) {
-					if (intersects[0].object.name < options_Highlight[0].name) {
-						let j = options_Highlight[0].name.charAt(2) - intersects[0].object.name.charAt(2);
-						soundManager[i].setVolume(soundManager[i].getVolume() - j * (soundss[i].volume * 0.1));
-					}
-					else if (intersects[0].object.name > options_Highlight[0].name) {
-						let j = intersects[0].object.name.charAt(2) - options_Highlight[0].name.charAt(2);
-						soundManager[i].setVolume(soundManager[i].getVolume() + j * (soundss[i].volume * 0.1));
-					}
-				}
 				options_Highlight[0].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[0] = intersects[0].object;
@@ -890,16 +886,15 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "MV5") {
 				play_Music = true;
-				if (!soundManager[7].isPlaying) {
-					soundManager[7].play();
+				master_Volume = 1;
+
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
 				}
-				
-				for (let i = 0; i < 8; i++) {
-					if (intersects[0].object.name > options_Highlight[0].name) {
-						let j = intersects[0].object.name.charAt(2) - options_Highlight[0].name.charAt(2);
-						soundManager[i].setVolume(soundManager[i].getVolume() + j * (soundss[i].volume * 0.1));
-					}
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
+
 				options_Highlight[0].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[0] = intersects[0].object;
@@ -910,10 +905,11 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "BGM0") {
 				play_Music = false;
-				soundManager[7].stop();
+				bgm_Volume = 0;
 
-				soundManager[0].setVolume(0.0);
-				soundManager[7].setVolume(0.0);
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
+				}
 				
 				options_Highlight[1].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
@@ -922,26 +918,10 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "BGM1") {
 				play_Music = true;
-				if (!soundManager[7].isPlaying) {
-					soundManager[7].play();
-				}
+				bgm_Volume = 1/5;
 
-				if (intersects[0].object.name < options_Highlight[1].name) {
-					let j = options_Highlight[1].name.charAt(3) - intersects[0].object.name.charAt(3);
-					soundManager[0].setVolume(soundManager[0].getVolume() - j * (soundss[0].volume * 0.1));
-				}
-				else if (intersects[0].object.name > options_Highlight[1].name) {
-					let j = intersects[0].object.name.charAt(3) - options_Highlight[1].name.charAt(3);
-					soundManager[0].setVolume(soundManager[0].getVolume() + j * (soundss[0].volume * 0.1));
-				}
-
-				if (intersects[0].object.name < options_Highlight[1].name) {
-					let j = options_Highlight[1].name.charAt(3) - intersects[0].object.name.charAt(3);
-					soundManager[7].setVolume(soundManager[7].getVolume() - j * (soundss[7].volume * 0.1));
-				}
-				else if (intersects[0].object.name > options_Highlight[1].name) {
-					let j = intersects[0].object.name.charAt(3) - options_Highlight[1].name.charAt(3);
-					soundManager[7].setVolume(soundManager[7].getVolume() + j * (soundss[7].volume * 0.1));
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
 				}
 				
 				options_Highlight[1].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
@@ -951,26 +931,10 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "BGM2") {
 				play_Music = true;
-				if (!soundManager[7].isPlaying) {
-					soundManager[7].play();
-				}
+				bgm_Volume = 2/5;
 
-				if (intersects[0].object.name < options_Highlight[1].name) {
-					let j = options_Highlight[1].name.charAt(3) - intersects[0].object.name.charAt(3);
-					soundManager[0].setVolume(soundManager[0].getVolume() - j * (soundss[0].volume * 0.1));
-				}
-				else if (intersects[0].object.name > options_Highlight[1].name) {
-					let j = intersects[0].object.name.charAt(3) - options_Highlight[1].name.charAt(3);
-					soundManager[0].setVolume(soundManager[0].getVolume() + j * (soundss[0].volume * 0.1));
-				}
-
-				if (intersects[0].object.name < options_Highlight[1].name) {
-					let j = options_Highlight[1].name.charAt(3) - intersects[0].object.name.charAt(3);
-					soundManager[7].setVolume(soundManager[7].getVolume() - j * (soundss[7].volume * 0.1));
-				}
-				else if (intersects[0].object.name > options_Highlight[1].name) {
-					let j = intersects[0].object.name.charAt(3) - options_Highlight[1].name.charAt(3);
-					soundManager[7].setVolume(soundManager[7].getVolume() + j * (soundss[7].volume * 0.1));
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
 				}
 				
 				options_Highlight[1].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
@@ -980,26 +944,10 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "BGM3") {
 				play_Music = true;
-				if (!soundManager[7].isPlaying) {
-					soundManager[7].play();
-				}
+				bgm_Volume = 3/5;
 
-				if (intersects[0].object.name < options_Highlight[1].name) {
-					let j = options_Highlight[1].name.charAt(3) - intersects[0].object.name.charAt(3);
-					soundManager[0].setVolume(soundManager[0].getVolume() - j * (soundss[0].volume * 0.1));
-				}
-				else if (intersects[0].object.name > options_Highlight[1].name) {
-					let j = intersects[0].object.name.charAt(3) - options_Highlight[1].name.charAt(3);
-					soundManager[0].setVolume(soundManager[0].getVolume() + j * (soundss[0].volume * 0.1));
-				}
-
-				if (intersects[0].object.name < options_Highlight[1].name) {
-					let j = options_Highlight[1].name.charAt(3) - intersects[0].object.name.charAt(3);
-					soundManager[7].setVolume(soundManager[7].getVolume() - j * (soundss[7].volume * 0.1));
-				}
-				else if (intersects[0].object.name > options_Highlight[1].name) {
-					let j = intersects[0].object.name.charAt(3) - options_Highlight[1].name.charAt(3);
-					soundManager[7].setVolume(soundManager[7].getVolume() + j * (soundss[7].volume * 0.1));
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
 				}
 				
 				options_Highlight[1].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
@@ -1009,26 +957,10 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "BGM4") {
 				play_Music = true;
-				if (!soundManager[7].isPlaying) {
-					soundManager[7].play();
-				}
+				bgm_Volume = 4/5;
 
-				if (intersects[0].object.name < options_Highlight[1].name) {
-					let j = options_Highlight[1].name.charAt(3) - intersects[0].object.name.charAt(3);
-					soundManager[0].setVolume(soundManager[0].getVolume() - j * (soundss[0].volume * 0.1));
-				}
-				else if (intersects[0].object.name > options_Highlight[1].name) {
-					let j = intersects[0].object.name.charAt(3) - options_Highlight[1].name.charAt(3);
-					soundManager[0].setVolume(soundManager[0].getVolume() + j * (soundss[0].volume * 0.1));
-				}
-
-				if (intersects[0].object.name < options_Highlight[1].name) {
-					let j = options_Highlight[1].name.charAt(3) - intersects[0].object.name.charAt(3);
-					soundManager[7].setVolume(soundManager[7].getVolume() - j * (soundss[7].volume * 0.1));
-				}
-				else if (intersects[0].object.name > options_Highlight[1].name) {
-					let j = intersects[0].object.name.charAt(3) - options_Highlight[1].name.charAt(3);
-					soundManager[7].setVolume(soundManager[7].getVolume() + j * (soundss[7].volume * 0.1));
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
 				}
 				
 				options_Highlight[1].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
@@ -1038,14 +970,10 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "BGM5") {
 				play_Music = true;
-				if (!soundManager[7].isPlaying) {
-					soundManager[7].play();
-				}
+				bgm_Volume = 1;
 
-				if (intersects[0].object.name > options_Highlight[1].name) {
-					let j = intersects[0].object.name.charAt(3) - options_Highlight[1].name.charAt(3);
-					soundManager[0].setVolume(soundManager[0].getVolume() + j * (soundss[0].volume * 0.1));
-					soundManager[7].setVolume(soundManager[7].getVolume() + j * (soundss[7].volume * 0.1));
+				for (let i = 0; i < 3; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * bgm_Volume);
 				}
 				
 				options_Highlight[1].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
@@ -1057,8 +985,10 @@ function options_Selections(event) {
 			// SOUND VOLUME
 
 			if (intersects[0].object.name === "S0") {
-				for (let i = 1; i < 7; i++) {
-					soundManager[i].setVolume(0.0);
+				sound_Volume = 0;
+				
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
 
 				options_Highlight[2].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
@@ -1067,76 +997,100 @@ function options_Selections(event) {
 			}
 
 			if (intersects[0].object.name === "S1") {
-				for (let i = 1; i < 7; i++) {
-					if (intersects[0].object.name < options_Highlight[2].name) {
-						let j = options_Highlight[2].name.charAt(1) - intersects[0].object.name.charAt(1);
-						soundManager[i].setVolume(soundManager[i].getVolume() - j * (soundss[i].volume * 0.2));
-					}
-					else if (intersects[0].object.name > options_Highlight[2].name) {
-						let j = intersects[0].object.name.charAt(1) - options_Highlight[2].name.charAt(1);
-						soundManager[i].setVolume(soundManager[i].getVolume() + j * (soundss[i].volume * 0.2));
-					}
+				sound_Volume = 1/5;
+				
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
+
+				if (soundManager[5].isPlaying) {
+					soundManager[5].stop();
+					soundManager[5].play();
+				}
+				else {
+					soundManager[5].play();
+				}
+
 				options_Highlight[2].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[2] = intersects[0].object;
 			}
 
 			if (intersects[0].object.name === "S2") {
-				for (let i = 1; i < 7; i++) {
-					if (intersects[0].object.name < options_Highlight[2].name) {
-						let j = options_Highlight[2].name.charAt(1) - intersects[0].object.name.charAt(1);
-						soundManager[i].setVolume(soundManager[i].getVolume() - j * (soundss[i].volume * 0.2));
-					}
-					else if (intersects[0].object.name > options_Highlight[2].name) {
-						let j = intersects[0].object.name.charAt(1) - options_Highlight[2].name.charAt(1);
-						soundManager[i].setVolume(soundManager[i].getVolume() + j * (soundss[i].volume * 0.2));
-					}
+				sound_Volume = 2/5;
+				
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
+
+				if (soundManager[5].isPlaying) {
+					soundManager[5].stop();
+					soundManager[5].play();
+				}
+				else {
+					soundManager[5].play();
+				}
+
 				options_Highlight[2].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[2] = intersects[0].object;
 			}
 
 			if (intersects[0].object.name === "S3") {
-				for (let i = 1; i < 7; i++) {
-					if (intersects[0].object.name < options_Highlight[2].name) {
-						let j = options_Highlight[2].name.charAt(1) - intersects[0].object.name.charAt(1);
-						soundManager[i].setVolume(soundManager[i].getVolume() - j * (soundss[i].volume * 0.2));
-					}
-					else if (intersects[0].object.name > options_Highlight[2].name) {
-						let j = intersects[0].object.name.charAt(1) - options_Highlight[2].name.charAt(1);
-						soundManager[i].setVolume(soundManager[i].getVolume() + j * (soundss[i].volume * 0.2));
-					}
+				sound_Volume = 3/5;
+				
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
+
+				if (soundManager[5].isPlaying) {
+					soundManager[5].stop();
+					soundManager[5].play();
+				}
+				else {
+					soundManager[5].play();
+				}
+	
 				options_Highlight[2].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[2] = intersects[0].object;
 			}
 
 			if (intersects[0].object.name === "S4") {
-				for (let i = 1; i < 7; i++) {
-					if (intersects[0].object.name < options_Highlight[2].name) {
-						let j = options_Highlight[2].name.charAt(1) - intersects[0].object.name.charAt(1);
-						soundManager[i].setVolume(soundManager[i].getVolume() - j * (soundss[i].volume * 0.2));
-					}
-					else if (intersects[0].object.name > options_Highlight[2].name) {
-						let j = intersects[0].object.name.charAt(1) - options_Highlight[2].name.charAt(1);
-						soundManager[i].setVolume(soundManager[i].getVolume() + j * (soundss[i].volume * 0.2));
-					}
+				sound_Volume = 4/5;
+				
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
+
+				if (soundManager[5].isPlaying) {
+					soundManager[5].stop();
+					soundManager[5].play();
+				}
+				else {
+					soundManager[5].play();
+				}
+
 				options_Highlight[2].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[2] = intersects[0].object;
 			}
 
 			if (intersects[0].object.name === "S5") {
-				for (let i = 1; i < 7; i++) {
-					if (intersects[0].object.name > options_Highlight[2].name) {
-						let j = intersects[0].object.name.charAt(2) - options_Highlight[2].name.charAt(2);
-						soundManager[i].setVolume(soundManager[i].getVolume() + j * (soundss[i].volume * 0.2));
-					}
+				sound_Volume = 1;
+				
+				for (let i = 3; i < 9; i++) {
+					soundManager[i].setVolume(soundss[i].volume * master_Volume * sound_Volume);
 				}
+
+				if (soundManager[5].isPlaying) {
+					soundManager[5].stop();
+					soundManager[5].play();
+				}
+				else {
+					soundManager[5].play();
+				}
+
 				options_Highlight[2].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[2] = intersects[0].object;
@@ -1147,6 +1101,7 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "AA_ON") {
 				renderer.antialias = true;
+				alias_Toggle = true;
 				options_Highlight[3].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[3] = intersects[0].object;
@@ -1154,6 +1109,7 @@ function options_Selections(event) {
 
 			if (intersects[0].object.name === "AA_OFF") {
 				renderer.antialias = false;
+				alias_Toggle = false;
 				options_Highlight[3].material.emissive.setHex({ color: 0xff0000, specular: 0xffffff });
 				intersects[0].object.material.emissive.setHex(0xdde014);
 				options_Highlight[3] = intersects[0].object;
