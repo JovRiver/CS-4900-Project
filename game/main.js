@@ -3,6 +3,9 @@ let physicsWorld, renderer , moving, stats, down, controls, rigidBodies = [], pl
 let player = null, flag = null, playerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 }, tempPlayerMoveDirection = { left: 0, right: 0, forward: 0, back: 0 };
 let ammoTmpPos = null, ammoTmpQuat = null;
 let soundManager = [];
+let hookSpot = [];
+let star = [];
+let clouds = [];
 // collision group and detection variables
 let playerGroup = 1, flagGroup = 2, buildingGroup = 3, ghostGroup = 4;
 let a = false;
@@ -72,8 +75,15 @@ const STATE = {
 	DISABLE_DEACTIVATION : 4,
 	DISABLE_SIMULATION : 5
 }
+const FLAGS = {
+	CF_STATIC_OBJECT: 1,
+	CF_KINEMATIC_OBJECT: 2,
+	}
+
+
 
 let level = 0;	//set to 0 for main menu, 1 or higher for levels
+
 
 let menu_Group;	// menu_Group to hold menu items for raycaster detection
 let options_Group;
@@ -100,6 +110,7 @@ function start (){
 	flagCallBack = new Ammo.ConcreteContactResultCallback();
 	movementCallBack = new Ammo.ConcreteContactResultCallback();
 	resetCallBack = new Ammo.ConcreteContactResultCallback();
+	cloudCallBack = new Ammo.ConcreteContactResultCallback();
 
 	//Setup the renderer
 	renderer = new THREE.WebGLRenderer( { antialias: false } );
@@ -156,7 +167,9 @@ function updatePhysics( deltaTime ){
 	if(a && b){
 		physicsWorld.contactPairTest(player.userData.physicsBody, flag.userData.physicsBody, flagCallBack );
 		physicsWorld.contactPairTest(player.userData.physicsBody, resetPlatform[0].userData.physicsBody, resetCallBack );
-
+		clouds.forEach(c =>{
+			physicsWorld.contactPairTest(player.userData.physicsBody, c.userData.physicsBody, cloudCallBack );
+		})
 		let position = new THREE.Vector3();
 		camera.getWorldPosition(position);
 		let direction =  new THREE.Vector3(0,-1,0);
@@ -210,7 +223,6 @@ function updatePhysics( deltaTime ){
 }
 
 movementCallBack.addSingleResult = function () {
-	//todo Fix sliding off platform flying movement
 	if(gamePlay){
 
 		canMove = true;
@@ -220,6 +232,16 @@ movementCallBack.addSingleResult = function () {
 			playerMoveDirection = {left: tempPlayerMoveDirection.left, right: tempPlayerMoveDirection.right, forward: tempPlayerMoveDirection.forward, back: tempPlayerMoveDirection.back}
 			landing = false;
 		}
+	}
+}
+
+cloudCallBack.addSingleResult = function () {
+	if(gamePlay){
+		let resultantImpulse = new Ammo.btVector3( 0, 5, -5 );
+		resultantImpulse.op_mul(5);
+
+		let physicsBody = player.userData.physicsBody;
+		physicsBody.setLinearVelocity ( resultantImpulse );
 	}
 }
 
@@ -312,11 +334,10 @@ function renderFrame(){
 					}
 				}
 			}
-
-
-
 		});
-
+		star.forEach(h =>{
+			h.rotation.y += 0.01;
+		})
 		if(!startClock){
 			let mins =  Math.floor(gameClock.getElapsedTime()/60);
 			let secs;
@@ -435,7 +456,7 @@ function onMouseDown(event){
 				raycasterRope.set( controls.getObject().position, direction );
 				raycasterRope.near = 1;
 				raycasterRope.far = 15;
-				let intersects = raycasterRope.intersectObjects( platforms );
+				let intersects = raycasterRope.intersectObjects( hookSpot, true );
 				for ( let i = 0; i < intersects.length; i++ ) {
 					if(intersects.length === 1){
 						createGrapplingHook(intersects[i].point);

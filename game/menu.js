@@ -1324,8 +1324,7 @@ function after_Game_Menu(loadBar) {
 function createScore(score){
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	Score
-
-	textGeo = new THREE.TextBufferGeometry( score.toString(), {
+	let textGeo = new THREE.TextBufferGeometry( score.toString() , {
 
 		font: fonts,
 		size: 5,
@@ -1341,6 +1340,7 @@ function createScore(score){
 	let centerOffset = - 0.5 * ( textGeo.boundingBox.max.x - textGeo.boundingBox.min.x );
 	let textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xffffff } );
 	let mesh = new THREE.Mesh( textGeo, textMaterial );
+
 	mesh.position.x = centerOffset + 10;
 	mesh.position.y = 210;
 	mesh.position.z = -50;
