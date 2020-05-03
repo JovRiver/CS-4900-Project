@@ -437,6 +437,8 @@ function onMouseDown(event){
 					}else{
 						soundManager[6].play();
 					}
+					//to find which cat has been shot
+					catHandle.handleShot(intersects[i].object.parent);
 				}
 
 				if(soundManager[5].isPlaying){

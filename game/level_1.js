@@ -1244,10 +1244,10 @@ function createLevel1() {
         catLoader.load(
             "objects/cat/catGun.glb",
             function(obj) {//onLoad, obj is a GLTF
-                let arr = [-6, 6,
-                    6, 6,
-                    6, -6,
-                    -6, -6];
+                let arr = [-4, -39,
+                    4, -39,
+                    4, -43,
+                    -4, -43];
                 catHandle = new catHandler();
                 let c = new catObj(obj, arr);
 

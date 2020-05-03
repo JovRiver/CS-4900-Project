@@ -7,10 +7,10 @@ and creating vehicles that move the cat's body will be handled in function makeP
 //reduce amount of global variables later
 
 //variables for the catGun and bullets
-let /*animationNum = 0,*/ secondLoopBool = false, anims = null, shooterAnim, kitty, aimerVisible = true;
+let anims = null, shooterAnim, kitty, aimerVisible = true;
 let x, y, z;
 //variables for YUKA ai movements
-let engine = null, followPath, onPath, yukaDelta, yukaVehicle, testYuka = null, lastVehiclePosition;
+let engine = null, followPath, onPath, yukaDelta, yukaVehicle, playerTarget;
 let bump = true;
 let catHandle = null, cats = [], i = 0;
 let bulletFlag = false;
@@ -84,30 +84,32 @@ function makePathAndWaypoints(enem, arr){//start point for cat is : {x: 5, y: 10
 //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html
     yukaVehicle = new YUKA.Vehicle();
     yukaVehicle.updateWorldMatrix();
-    let yy = 112;
+    let yy = 104;
     let path = new YUKA.Path();
     for(let e = 0; e < arr.length; e += 2)
         path.add(new YUKA.Vector3(arr[e], yy, arr[e+1]));
 
-    /*path.add(new YUKA.Vector3(-6, yy, 6));
-    path.add(new YUKA.Vector3(6, yy, 6));
-    path.add(new YUKA.Vector3(6, yy, -6));
-    path.add(new YUKA.Vector3(-6, yy, -6));*/
     path.loop = true;
 
     yukaVehicle.position.copy(path.current());
-//yukaVehicle.position.copy(enemy.scene.position);
-//test.position.copy(path.current());
-//set enemy to vehicle position
-//yukaVehicle.setRenderComponent(enemy, sync);
+    //set enemy to vehicle position
+    //yukaVehicle.setRenderComponent(enemy, sync);
     enemy.scene.position.copy(yukaVehicle.position);//local position since it's a child to that object
     followPath = new YUKA.FollowPathBehavior(path, 1);//number is not the speed.
     onPath = new YUKA.OnPathBehavior(path, .1, 1);//1st number is the radius of the mesh, 2nd is the prediction
-//onPath and followPathBehavior for strict paths
+
+    //onPath and followPathBehavior for strict paths
     yukaVehicle.steering.add(followPath);
     yukaVehicle.steering.add(onPath);
-    yukaVehicle.weight = 10;//amount of weight for the object, doesn't seem to change speed
+    //yukaVehicle.weight = 10;//amount of weight for the object, doesn't seem to change speed
 
+    //player-hunting behavior/pursuit
+    playerTarget = new YUKA.MovingEntity();
+    playerTarget.position.copy(new YUKA.Vector3(player.position.x, player.position.y, player.position.z));//puts the moving entity where the player should be.
+
+    let pursuit = new YUKA.PursuitBehavior(playerTarget, 1);
+    yukaVehicle.steering.add(pursuit);
+    pursuit.weight = 20;
 
     /*update rotation and location for the entity so it moves the cat in the same way
     with the entity manager for YUKA
@@ -180,7 +182,12 @@ class catHandler{
         if(cats != null)
             cats.push(cat);
     }
-    update(deltaTime, yukaDelta){//don't use another function for it, it changes the scope and it can't reach variables anymore?
+    update(deltaTime, yukaDelta) {//don't use another function for it, it changes the scope and it can't reach variables anymore?
+        if (player != null) {//so the ct can pursue the entity & the player
+            playerTarget.position.x = player.position.x;
+            playerTarget.position.y = player.position.y;
+            playerTarget.position.z = player.position.z;
+        }
         //for each cat:
         let i = 0;
         while(i < cats.length){
@@ -232,7 +239,48 @@ class catHandler{
         return null;
     }
 
+    handleShot(obj){//given an object, get its ID. If the ID matches a catObj, find the cat in the cats array then remove some health.
+        if(obj) {
+            let id = obj.id;
+            let catFound = this.findCatByID(id);
+            if (catFound)
+                this.healthHit(catFound[0], catFound[1]);
+        }
+    }
+
+    findCatByID(ID){//if it finds the ID in one of the catObjs (from the mesh of the cat), return that obj, otherwise return null.
+        //cats[0].body.scene.children[2].id
+        for(let y = 0; y < cats.length; y++){
+            if(cats[y].ID === ID)
+                return [cats[y], y];
+        }
+        return null;
+    }
+
+    /*findCatByIDNumber(ID){//if it finds the ID in one of the catObjs (from the mesh of the cat), return number, otherwise return 0.
+        //cats[0].body.scene.children[2].id
+        for(let y = 0; y < cats.length; y++){
+            if(cats[y].ID === ID)
+                return y;
+        }
+        return null;
+    }*/
+
+    healthHit(catOb, x){//lowers the health of the cat. if the health <=0, remove the cat from the cats, and remove the body
+        // from the scene.
+        //setTimeout(function(){//the objects might not be filled in yet
+            catOb.health -= 20;
+            if(catOb.health <= 0){
+                //let x = this.findCatByID(catOb.ID)[1];//replace this function in the future with an array function
+                //remove the cat from the array
+                cats.splice(x, 1);
+                scene.remove(catOb.body);//remove the cat from the scene
+            }
+        //}, 500);
+    }
 }
+
+
 /*            e.action.getMixer().getRoot().parent.bullet.visible = false;
         e.action.getMixer().getRoot().parent.bulletInScene = false;
  */
@@ -259,6 +307,8 @@ class catObj{
     bulletChange;
     bulletSpeed;
     catAimer;
+    health;
+    ID;
     //bullet clock, old time and animationnumber
     animationNum;
     constructor(bod, arr){//arr carries x's and z's in alternating order, Y's will be added later in a way that takes the height 
@@ -274,7 +324,10 @@ class catObj{
         this.catAimer = null;
         this.addBullet();
         this.animationNum = 0;
-        //this.body.scene.add(this);//makes this class instance a child of the body, so it's more accessible... doesn't work.
+        //cats[0].body.scene.children[2].id = id of the mesh
+        //put the ID in a variable to fetch it faster during searching.
+        this.health = 100;
+        this.ID = this.body.scene.children[2].id;
     }
 
     setUpMixer(){
@@ -287,7 +340,7 @@ class catObj{
         let i = 0;
         while(i < anims.length){
             this.mixer.clipAction(anims[i]);
-            if(anims[i].name.match("Shoot") != null){//gets the index of anims that has the shoot clip 
+            if(anims[i].name.match("Shoot") != null){//gets the index of anims that has the shoot clip
                 shooterAnim = i;
                 break;
             }
