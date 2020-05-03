@@ -29,12 +29,7 @@ function createLevel1() {
     dirLight.shadow.camera.bottom = -500;
 
     dirLight.shadow.camera.far = 13500;
-
-    // helper for directional light
-    //let helper = new THREE.CameraHelper( dirLight.shadow.camera );
-
     scene.add( dirLight );
-    //scene.add( helper );
 
     function createSkyBox() {
         let base_Texture = [
@@ -1322,12 +1317,6 @@ function createLevel1() {
         loader.load(
             "objects/flag/objFlag.obj",
             function(obj) {//onLoad, obj is an Object3D provided by load()
-                //let tex = new THREE.TextureLoader().load("objects/flag/objFlag.png");//possibly 2 quick?
-                //https://stackoverflow.com/questions/33809423/how-to-apply-texture-on-an-object-loaded-by-objloader
-                //obj.traverse(function (child) {
-                //	if (child instanceof THREE.Mesh)
-                //		child.material.map = tex;
-                //});
                 let pos ={ x: 5, y: 131.5, z: -2170};
                 obj.name = "Flag";
                 obj.position.set(pos.x, pos.y, pos.z);//moves the mesh
@@ -1343,9 +1332,6 @@ function createLevel1() {
 
                 scene.add(obj);
                 scene.add( flag );
-                //flag.add(obj);
-
-                //scene.add(obj);
 
                 let transform = new Ammo.btTransform();
                 transform.setIdentity();
@@ -1407,7 +1393,6 @@ function createLevel1() {
                 loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
                 if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
                     document.getElementById("blocker").style.display = "block";
-                    //sound_Loader(loadBar);
                     after_Game_Menu(loadBar);
                     b = true;
                 }
@@ -1421,15 +1406,8 @@ function createLevel1() {
 
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
-        //pos = {x: 0, y: 115, z: -2010}; // end of level
-        //pos = {x: 24, y: 105, z: -647}; // grappling hook spot
-
-        //let pos ={x: 5, y: 105, z: 0}; //was cat's position
-        //resetPos = {x: 24, y: 105, z: -647}; //beginning of level
-
         resetPos = {x: -4, y: 101, z: -44}; //back of the level on the second-to-last platform
-        //resetPos = {x: 0, y: 101, z: 0}; //grappling hook reset
-        //resetPos = {x: 0, y: 115, z: -2010}; // end of level
+
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};
         let mass = 1;

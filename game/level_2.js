@@ -33,8 +33,6 @@ function createLevel2() {
         }
     }
 
-
-
     function init() {
         setupPhysicsWorld();
         initDebug();
@@ -43,10 +41,7 @@ function createLevel2() {
         createPlayer();
         createCrosshair();
         createReset();
-
         createSkyBox();
-
-        //object_Loader();
         loadLevel();
         createWalls();
         createHookBox();
@@ -83,14 +78,10 @@ function createLevel2() {
 
         dirLight.shadow.camera.far = 13500;
 
-        // helper for directional light
-        //let helper = new THREE.CameraHelper( dirLight.shadow.camera );
-
         var light = new THREE.AmbientLight( 0x404040 ); // soft white light
         scene.add( light );
 
         scene.add( dirLight );
-        //scene.add( helper );
     }
 
     function createSkyBox() {
@@ -144,9 +135,6 @@ function createLevel2() {
 
         scene.add(obj);
         scene.add( flag );
-        //flag.add(obj);
-
-        //scene.add(obj);
 
         let transform = new Ammo.btTransform();
         transform.setIdentity();
@@ -206,7 +194,6 @@ function createLevel2() {
         let motionState = new Ammo.btDefaultMotionState( transform );
 
         colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/3.5, box.y/3.5, box.z/3.5));
-        //colShape.setMargin( 0.5 );
 
         let localInertia = new Ammo.btVector3( 0, 0, 0 );
         colShape.calculateLocalInertia( 1, localInertia );
@@ -223,20 +210,11 @@ function createLevel2() {
 
         rigidBodies.push(obj.scene);
 
-        //adding objects to scenes or classes
-        //obj.scene.children[2].add(bullet);
         enemies.push(kitty.scene);
 
         scene.add(obj.scene);
         catHandle.addCat(c);
         c.setUpMixer();
-
-
-        //testing the path and moving a mesh with a sphere.
-        /*testYuka = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), new THREE.MeshBasicMaterial({color:0xfffff0}));
-        testYuka.position.copy(new THREE.Vector3(-3, 100, 0));
-        scene.add(testYuka);
-        testYuka.matrixautoUpdate = false;*/
     }
 
     function cloud(){
@@ -313,14 +291,8 @@ function createLevel2() {
 
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
-        //pos = {x: 290, y: 115, z: -875}; // end of level
-        //pos = {x: -107, y: 124, z: -223}; // grappling hook spot
-        //let pos ={x: 5, y: 105, z: 0}; //was cat's position
         resetPos = {x: 0, y: 105, z: 0}; //beginning of level
 
-        //resetPos = {x:  290, y: 120, z: -565}; //back of the level on the second-to-last platform
-        //resetPos = {x: 0, y: 101, z: 0}; //grappling hook reset
-        //resetPos = {x: 0, y: 115, z: -2010}; // end of level
         let radius = 1;
         let quat = {x: 0 , y: 0, z: 0, w: 1};
         let mass = 1;

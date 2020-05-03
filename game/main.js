@@ -226,11 +226,6 @@ movementCallBack.addSingleResult = function () {
 
 cloudCallBack.addSingleResult = function () {
 	if(gamePlay){
-		//let resultantImpulse = new Ammo.btVector3(0, 5, 0);
-		//resultantImpulse.op_mul(1);
-		//let physicsBody = player.userData.physicsBody;
-		//physicsBody.applyImpulse(resultantImpulse);
-
 		let resultantImpulse = new Ammo.btVector3( 0, 5, -5 );
 		resultantImpulse.op_mul(5);
 

@@ -63,11 +63,6 @@ function initDebug() {
     this.debugDrawer = new THREE.AmmoDebugDrawer(scene, physicsWorld);
     this.debugDrawer.enable();
     this.debugDrawer.setDebugMode(2);
-
-    //setInterval(() => {
-    //let mode = (this.debugDrawer.getDebugMode() + 1) % 3;
-    //this.debugDrawer.setDebugMode(mode);
-    //}, 1000);
 }
 
 function showStats(){
@@ -101,7 +96,6 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform
         let motionState = new Ammo.btDefaultMotionState(transform);
         // set bounding box using each objects x,y,z scale
         let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 +.01, scale.y * 0.5 +.5 , scale.z * 0.5+.01));
-        // colShape.setMargin(0.05);
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
@@ -134,7 +128,6 @@ function createCylinderGeometry(rTop, rBottom, height, pos, quat, texture) {
     let motionState = new Ammo.btDefaultMotionState(transform);
     // set bounding box using each objects x,y,z scale
     let colShape = new Ammo.btBoxShape(new Ammo.btVector3(rTop * 0.8 + 1.5, height * 0.5 + 0.5, rTop * 0.8 + 1.5));
-    // colShape.setMargin(0.05);
     let localInertia = new Ammo.btVector3(0, 0, 0);
     colShape.calculateLocalInertia(0, localInertia);
     let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
@@ -155,7 +148,6 @@ function createBoundingBox(pos, scale, quat) {
     let motionState = new Ammo.btDefaultMotionState(transform);
     // set bounding box using each objects x,y,z scale
     let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 + 0.8, scale.y * 0.5 + 0.5, scale.z * 0.5 + 0.8));
-    // colShape.setMargin(0.05);
     let localInertia = new Ammo.btVector3(0, 0, 0);
     colShape.calculateLocalInertia(0, localInertia);
     let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
@@ -249,20 +241,9 @@ function createGrapplingHook(vect){
 
     let physicsBody = player.userData.physicsBody;
     physicsBody.setLinearVelocity ( resultantImpulse );
-    //todo Make player move towards the direction of grappling hook.
 }
 
 function level_1_Textures(text) {
-    switch (text) {
-        case 1: return {map: new THREE.TextureLoader().load('texture/level1/stone_Walkway.jpg')};
-
-        case 2: return {map: new THREE.TextureLoader().load('texture/level1/grass.jpg')};
-
-        case 3: return {map: new THREE.TextureLoader().load('texture/level1/grappleBox.jpg')};
-    }
-}
-
-function level_2_Textures(text) {
     switch (text) {
         case 1: return {map: new THREE.TextureLoader().load('texture/level1/stone_Walkway.jpg')};
 
@@ -288,129 +269,6 @@ function addSprite(spriteMap, xPercent, yPercent){
 
     scene.add(sprite);
     camera.add( sprite );
-}
-
-function jumpSoundLoader(){
-    let listener = new THREE.AudioListener();
-
-    let loadBar = document.getElementById('load');
-
-    // create a global audio source
-    soundManager[2] = new THREE.PositionalAudio( listener );
-
-    // load a sound and set it as the Audio object's buffer
-    let audioLoader = new THREE.AudioLoader();
-    audioLoader.load( './sound/jump.wav',
-        function( buffer ) {
-            soundManager[2].setBuffer( buffer );
-            soundManager[2].setLoop( false );
-            soundManager[2].setVolume( 0.85 );
-        },
-        function(xhr){//onProgress
-            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-                document.getElementById("blocker").style.display = "block";
-                shootSoundLoader(loadBar);
-            }
-        },
-        function(err){//onError
-            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-            console.log("error in loading sound");
-        }
-    );
-    player.add( soundManager[2] );
-}
-
-function shootSoundLoader(){
-    let listener = new THREE.AudioListener();
-
-    let loadBar = document.getElementById('load');
-
-    // create a global audio source
-    soundManager[3] = new THREE.Audio( listener );
-
-    // load a sound and set it as the Audio object's buffer
-    let audioLoader = new THREE.AudioLoader();
-    audioLoader.load( './sound/shoot.wav',
-        function( buffer ) {
-            soundManager[3].setBuffer( buffer );
-            soundManager[3].setLoop( false );
-            soundManager[3].setVolume( 0.85 );
-        },
-        function(xhr){//onProgress
-            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-                document.getElementById("blocker").style.display = "block";
-                hitSoundLoader(loadBar);
-            }
-        },
-        function(err){//onError
-            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-            console.log("error in loading sound");
-        }
-    );
-    player.add( soundManager[3] );
-}
-
-function hitSoundLoader(){
-    let listener = new THREE.AudioListener();
-
-    let loadBar = document.getElementById('load');
-
-    // create a global audio source
-    soundManager[4] = new THREE.Audio( listener );
-
-    // load a sound and set it as the Audio object's buffer
-    let audioLoader = new THREE.AudioLoader();
-    audioLoader.load( './sound/hit.wav',
-        function( buffer ) {
-            soundManager[4].setBuffer( buffer );
-            soundManager[4].setLoop( false );
-            soundManager[4].setVolume( 0.5 );
-        },
-        function(xhr){//onProgress
-            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-                document.getElementById("blocker").style.display = "block";
-                walkingSoundLoader(loadBar);
-            }
-        },
-        function(err){//onError
-            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-            console.log("error in loading sound");
-        }
-    );
-    player.add( soundManager[4] );
-}
-
-function walkingSoundLoader(){
-    let listener = new THREE.AudioListener();
-
-    let loadBar = document.getElementById('load');
-
-    // create a global audio source
-    soundManager[5] = new THREE.Audio( listener );
-
-    // load a sound and set it as the Audio object's buffer
-    let audioLoader = new THREE.AudioLoader();
-    audioLoader.load( './sound/walking.wav',
-        function( buffer ) {
-            soundManager[5].setBuffer( buffer );
-            soundManager[5].setLoop( true );
-            soundManager[5].setVolume( 5 );
-        },
-        function(xhr){//onProgress
-            loadBar.innerHTML = "<h2>Loading Sounds " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-            if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-                document.getElementById("blocker").style.display = "block";
-            }
-        },
-        function(err){//onError
-            loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-            console.log("error in loading sound");
-        }
-    );
-    player.add( soundManager[5] );
 }
 
 function loadSounds(){
@@ -507,7 +365,6 @@ function addPlatformHelper(x,y,z,quat,id,obj){
         obj.position.x = x;
         obj.position.y = y;
         obj.position.z = z;
-        //obj.rotation.y = -1.2;
         obj.scale.set( 4, 4, 4 );
         scene.add(obj);
 
@@ -534,9 +391,6 @@ function addPlatformHelper(x,y,z,quat,id,obj){
         rigidBodies.push(obj);
         platforms.push(obj);
     }
-
-
-
 
 function addStarGrapple(model, pos, quat, id){
     let obj = model.scene.clone();
