@@ -118,6 +118,44 @@ function create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform
     }
 }
 
+function create_hookSpot(scale, pos, quat, texture, has_Boundary, isPlatform) {
+    let base_Texture = new THREE.MeshLambertMaterial(texture);
+    base_Texture.map.wrapS = base_Texture.map.wrapT = THREE.RepeatWrapping;
+    base_Texture.map.repeat.set(5, 2);
+
+    let box = new THREE.Mesh(new THREE.BoxBufferGeometry(), base_Texture);
+    box.scale.set(scale.x, scale.y, scale.z);
+    box.position.set(pos.x, pos.y, pos.z);
+
+    box.castShadow = true;
+    box.receiveShadow = true;
+
+    scene.add(box);
+
+    if (has_Boundary === true) {
+        // ammo physics bounding box for each building
+        let transform = new Ammo.btTransform();
+        transform.setIdentity();
+        // set origin using each objects x,y,z coordinates
+        transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+        transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w));
+        let motionState = new Ammo.btDefaultMotionState(transform);
+        // set bounding box using each objects x,y,z scale
+        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(scale.x * 0.5 +.01, scale.y * 0.5 +.5 , scale.z * 0.5+.01));
+        let localInertia = new Ammo.btVector3(0, 0, 0);
+        colShape.calculateLocalInertia(0, localInertia);
+        let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);
+        let body = new Ammo.btRigidBody(rbInfo);
+        body.setFriction(4);
+        body.setRollingFriction(10);
+        box.userData.physicsBody = body;
+        physicsWorld.addRigidBody(body, buildingGroup, playerGroup);    // ensures player object and buildings will collide, stopping movement
+        if (isPlatform) {
+            hookSpot.push(box);
+        }
+    }
+}
+
 function createCylinderGeometry(rTop, rBottom, height, pos, quat, texture) {
     let cylinder_Geometry = new THREE.CylinderBufferGeometry(rTop, rBottom, height, 32);
     let cylinder_Texture = new THREE.MeshLambertMaterial(texture);

@@ -261,13 +261,13 @@ function createLevel2() {
             }   );
 
         lava = new THREE.Mesh( new THREE.BoxBufferGeometry(), customMaterial );
-        lava.scale.set(800, 0.5, 1200);
+        lava.scale.set(800, 0.5, 1250);
         lava.position.set(0, 80, -560);
         scene.add( lava );
 
         texture = new THREE.MeshLambertMaterial({visible: false});
         let resetBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
-        resetBox.scale.set(400, 0.5, 600);
+        resetBox.scale.set(400, 0.5, 625);
         resetBox.position.set(0, 80, -560);
         resetBox.name ="Reset_Box";
         scene.add(resetBox);
@@ -277,7 +277,7 @@ function createLevel2() {
         transform.setOrigin(new Ammo.btVector3(0, 80, -560)); //set to middle of map
         transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
         let motionState = new Ammo.btDefaultMotionState(transform);
-        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(400, 0.5, 600));
+        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(400, 0.5, 625));
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);

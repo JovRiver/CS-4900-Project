@@ -349,7 +349,7 @@ function createLevel1() {
 
         for (let i = 0; i < 5; i++) {
             pos = {x: 25, y: 110.5, z: -685 - (i * 40)};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
+            create_hookSpot(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
         /////////////////////////////////////////////////////////////////////
@@ -554,10 +554,10 @@ function createLevel1() {
 
         for (let i = 0; i < 2; i++) {
             pos = {x: -30 + (i * 70), y: 107.5, z: -1535};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
+            create_hookSpot(scale, pos, quat, texture, has_Boundary, isPlatform);
 
             pos = {x: -30 + (i * 70), y: 107.5, z: -1555};
-            create_Box_Geometry(scale, pos, quat, texture, has_Boundary, isPlatform);
+            create_hookSpot(scale, pos, quat, texture, has_Boundary, isPlatform);
         }
 
 /////////////////////////////////////////////////////////////////////////////
