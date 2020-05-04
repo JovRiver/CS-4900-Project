@@ -79,12 +79,11 @@ function moveACat(enem, vehicle, delta){
 
 
 //https://github.com/Mugen87/yuka/blob/master/examples/ for yuka implementations
-function makePathAndWaypoints(enem, arr){//start point for cat is : {x: 5, y: 105, z: 0}
+function makePathAndWaypoints(enem, arr, yy){//start point for cat is : {x: 5, y: 105, z: 0}
     let enemy = enem.body;
 //https://github.com/Mugen87/yuka/blob/master/examples/steering/followPath/index.html
     yukaVehicle = new YUKA.Vehicle();
     yukaVehicle.updateWorldMatrix();
-    let yy = 104;
     let path = new YUKA.Path();
     for(let e = 0; e < arr.length; e += 2)
         path.add(new YUKA.Vector3(arr[e], yy, arr[e+1]));
@@ -108,7 +107,7 @@ function makePathAndWaypoints(enem, arr){//start point for cat is : {x: 5, y: 10
     playerTarget.position.copy(new YUKA.Vector3(player.position.x, player.position.y, player.position.z));//puts the moving entity where the player should be.
 
     let pursuit = new YUKA.PursuitBehavior(playerTarget, 1);
-    yukaVehicle.steering.add(pursuit);
+    //yukaVehicle.steering.add(pursuit);
     pursuit.weight = 20;
 
     /*update rotation and location for the entity so it moves the cat in the same way
@@ -274,7 +273,9 @@ class catHandler{
                 //let x = this.findCatByID(catOb.ID)[1];//replace this function in the future with an array function
                 //remove the cat from the array
                 cats.splice(x, 1);
-                scene.remove(catOb.body);//remove the cat from the scene
+                physicsWorld.removeCollisionObject(catOb.body.scene.userData.physicsBody);
+                catob.body.scene.rotation.y = Math.pi/2;
+
             }
         //}, 500);
     }
@@ -302,6 +303,7 @@ class catObj{
     body;
     vehicle;
     mixer;
+    name;
     bullet;
     bulletInScene;
     bulletChange;
@@ -311,12 +313,13 @@ class catObj{
     ID;
     //bullet clock, old time and animationnumber
     animationNum;
-    constructor(bod, arr){//arr carries x's and z's in alternating order, Y's will be added later in a way that takes the height 
+    constructor(bod, arr, yy, name){//arr carries x's and z's in alternating order, Y's will be added later in a way that takes the height
         //in consideration
         this.body = bod;
         this.mixer = null;
         this.vehicle = null;
-        makePathAndWaypoints(this, arr);
+        this.name = name;
+        makePathAndWaypoints(this, arr, yy);
         this.bullet = null;
         this.bulletInScene = false;
         this.bulletChange = null;

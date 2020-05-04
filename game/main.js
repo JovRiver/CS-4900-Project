@@ -123,7 +123,7 @@ function start (){
 	renderer.shadowMap.enabled = true;
 
 	setupEventHandlers();
-	showStats();
+	//showStats();
 	loadSounds();
 }
 
@@ -320,7 +320,7 @@ function renderFrame(){
 
 	if (level > 0) {
 		updatePhysics( deltaTime );
-		stats.update();
+		//stats.update();
 		customUniforms.time.value += deltaTime;
 
 		playerBullets.forEach(b => {
@@ -337,6 +337,11 @@ function renderFrame(){
 		});
 		star.forEach(h =>{
 			h.rotation.y += 0.01;
+		})
+		enemies.forEach(e =>{
+			e.rotation.x = 0;
+			//e.rotation.y = 0;
+			e.rotation.z = 0;
 		})
 		if(!startClock){
 			let mins =  Math.floor(gameClock.getElapsedTime()/60);

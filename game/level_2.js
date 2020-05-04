@@ -15,7 +15,12 @@ function createLevel2() {
     const models = {
         platform:    { url: "objects/platform/Platform.gltf", gltf: null },
         gun:    { url: "objects/gun/gun.gltf", gltf: null },
-        cat:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat1:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat2:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat3:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat4:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat5:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat6:    { url: "objects/cat/catGun.glb", gltf: null },
         portal:    { url: "objects/portal/portal.gltf", gltf: null },
         star:    { url: "objects/star/star.gltf", gltf: null },
         wall:    { url: "objects/wall/wall.gltf", gltf: null },
@@ -162,59 +167,56 @@ function createLevel2() {
     }
 
     function cat(){
-        let obj = models.cat.gltf;
-         let arr = [-6, 6,
-            6, 6,
-            6, -6,
-            -6, -6];
-        catHandle = new catHandler();
-        let c = new catObj(obj, arr);
+        let cat1 = models.cat1.gltf;
+        let arr = [ 6, -85,
+                    12, -85,
+                    9, -90,
+                    6, -90];
+        let yy = 104;
 
-        c.addMixer(new THREE.AnimationMixer(obj.scene.children[2]));//the mesh itself
+        createCat(cat1, arr, yy, "cat1");
 
-        obj.name = "Enemy";
-        let pos ={x: 5, y: 105, z: 0}; //was cat's position
+        let cat2 = models.cat2.gltf;
+        arr = [ 6, -245, 12, -245, 9, -250, 6, -250];
+        yy = 104;
 
-        obj.scene.position.x = pos.x;
-        obj.scene.position.y = pos.y;
-        obj.scene.position.z = pos.z;
-        obj.scene.rotation.y = -1.2;
+        createCat(cat2, arr, yy, "cat2");
 
-        kitty = obj;
-        obj.matrixAutoUpdate = true;//changed from false
+        let cat3 = models.cat3.gltf;
+        arr = [ -165, -320,
+            -165, -320,
+            -165, -320,
+            -165, -320];
+        yy = 125;
 
+        createCat(cat3, arr, yy, "cat3");
 
-        let vect3 = new THREE.Vector3();
-        let box = new THREE.Box3().setFromObject(obj.scene).getSize(vect3);
+        let cat4 = models.cat4.gltf;
+        arr = [ -110, -560,
+            -110, -560,
+            -110, -560,
+            -110, -560];
+        yy = 105;
 
-        let transform = new Ammo.btTransform();
-        transform.setIdentity();
-        transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
-        transform.setRotation( new Ammo.btQuaternion( 0, -.5, 0, 1 ) );
-        let motionState = new Ammo.btDefaultMotionState( transform );
+        createCat(cat4, arr, yy, "cat4");
 
-        colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/3.5, box.y/3.5, box.z/3.5));
+        let cat5 = models.cat5.gltf;
+        arr = [ -34, -554,
+            -34, -554,
+            -34, -554,
+            -34, -554];
+        yy = 105;
 
-        let localInertia = new Ammo.btVector3( 0, 0, 0 );
-        colShape.calculateLocalInertia( 1, localInertia );
+        createCat(cat5, arr, yy, "cat5");
 
-        let rbInfo = new Ammo.btRigidBodyConstructionInfo( 1, motionState, colShape, localInertia );
-        let objBody = new Ammo.btRigidBody( rbInfo );
+        let cat6 = models.cat6.gltf;
+        arr = [ -287, -548,
+            -287, -548,
+            -287, -548,
+            -287, -548];
+        yy = 120;
 
-        objBody.setFriction(4);
-        objBody.setRollingFriction(10);
-
-        physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
-
-        obj.scene.userData.physicsBody = objBody;
-
-        rigidBodies.push(obj.scene);
-
-        enemies.push(kitty.scene);
-
-        scene.add(obj.scene);
-        catHandle.addCat(c);
-        c.setUpMixer();
+        createCat(cat6, arr, yy, "cat6");
     }
 
     function cloud(){
@@ -267,7 +269,7 @@ function createLevel2() {
 
         texture = new THREE.MeshLambertMaterial({visible: false});
         let resetBox = new THREE.Mesh(new THREE.BoxBufferGeometry(), texture);
-        resetBox.scale.set(400, 0.5, 625);
+        resetBox.scale.set(800, 0.5, 1250);
         resetBox.position.set(0, 80, -560);
         resetBox.name ="Reset_Box";
         scene.add(resetBox);
@@ -277,7 +279,7 @@ function createLevel2() {
         transform.setOrigin(new Ammo.btVector3(0, 80, -560)); //set to middle of map
         transform.setRotation(new Ammo.btQuaternion(0, 0, 0, 1));
         let motionState = new Ammo.btDefaultMotionState(transform);
-        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(400, 0.5, 625));
+        let colShape = new Ammo.btBoxShape(new Ammo.btVector3(800, 0.5, 1250));
         let localInertia = new Ammo.btVector3(0, 0, 0);
         colShape.calculateLocalInertia(0, localInertia);
         let rbInfo = new Ammo.btRigidBodyConstructionInfo(0, motionState, colShape, localInertia);

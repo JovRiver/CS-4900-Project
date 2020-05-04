@@ -585,3 +585,58 @@ function addWall(model, pos, length, quat, which){
 
 
 }
+
+function createCat(model, arr, yy, name){
+    let obj = model;
+
+    catHandle = new catHandler();
+
+    let c = new catObj(obj, arr, yy, name);
+
+    c.addMixer(new THREE.AnimationMixer(obj.scene.children[2]));//the mesh itself
+
+    obj.name = name;
+    let pos ={x: 5, y: 105, z: 0}; //was cat's position
+
+    obj.scene.position.x = pos.x;
+    obj.scene.position.y = pos.y;
+    obj.scene.position.z = pos.z;
+    obj.scene.rotation.y = -1.2;
+
+    kitty = obj;
+    obj.matrixAutoUpdate = true;//changed from false
+
+
+    let vect3 = new THREE.Vector3();
+    let box = new THREE.Box3().setFromObject(obj.scene).getSize(vect3);
+
+    let transform = new Ammo.btTransform();
+    transform.setIdentity();
+    transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+    transform.setRotation( new Ammo.btQuaternion( 0, -.5, 0, 1 ) );
+    let motionState = new Ammo.btDefaultMotionState( transform );
+
+    colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/3.5, box.y/3.5, box.z/3.5));
+
+    let localInertia = new Ammo.btVector3( 0, 0, 0 );
+    colShape.calculateLocalInertia( 1, localInertia );
+
+    let rbInfo = new Ammo.btRigidBodyConstructionInfo( 1, motionState, colShape, localInertia );
+    let objBody = new Ammo.btRigidBody( rbInfo );
+
+    objBody.setFriction(4);
+    objBody.setRollingFriction(10);
+
+    physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
+
+    obj.scene.userData.physicsBody = objBody;
+
+    rigidBodies.push(obj.scene);
+
+    enemies.push(kitty.scene);
+
+    scene.add(obj.scene);
+    catHandle.addCat(c);
+    c.setUpMixer();
+}
+

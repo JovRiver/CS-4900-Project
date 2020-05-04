@@ -1,35 +1,88 @@
 function createLevel1() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 10000 );
 
-    // add hemisphere light
-    let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
-    hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
-    hemiLight.groundColor.setHSL( 0.1, 1, 0.4 );
-    hemiLight.position.set( 0, 50, 0 );
+    const manager = new THREE.LoadingManager();
+    manager.onLoad = init;
+    const progressbarElem = document.getElementById('load');
+    manager.onProgress = (url, itemsLoaded, itemsTotal) => {
+        progressbarElem.style.width = `${itemsLoaded / itemsTotal * 100 | 0}%`;
+    };
+    const models = {
+        gun:    { url: "objects/gun/gun.gltf", gltf: null },
+        cat1:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat2:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat3:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat4:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat5:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat6:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat7:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat8:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat9:    { url: "objects/cat/catGun.glb", gltf: null },
+        cat10:    { url: "objects/cat/catGun.glb", gltf: null },
+        flag:    { url: "objects/portal/portal.gltf", gltf: null },
+    };
 
-    scene.add( hemiLight );
+    {
+        const gltfLoader = new THREE.GLTFLoader(manager);
+        for (const model of Object.values(models)) {
+            gltfLoader.load(model.url, (gltf) => {
+                model.gltf = gltf;
 
-    var light = new THREE.AmbientLight( 0x404040, 0.7 ); // soft white light
-    scene.add( light );
+            });
+        }
+    }
 
-    // add directional light
-    let dirLight = new THREE.DirectionalLight( 0xffffff , 0.75);
-    dirLight.color.setHSL( 0.1, 1, 0.95 );
-    dirLight.position.set( -1, 1.75, 1 );
-    dirLight.position.multiplyScalar( 100 );
+    function init() {
+        setupPhysicsWorld();
+        //initDebug();
+        gamePlay = true;
+        createPlayer();
+        createCrosshair();
+        createReset();
+        addLight();
 
-    dirLight.castShadow = true;
+        createSkyBox();
+        create_Course();
+        create_Walls();
+        create_Columns();
 
-    dirLight.shadow.mapSize.width = 4096;
-    dirLight.shadow.mapSize.height = 4096;
+        //object_Loader();
+        cat();
+        loadFlag();
+        gun();
+    }
 
-    dirLight.shadow.camera.left = -500;
-    dirLight.shadow.camera.right = 500;
-    dirLight.shadow.camera.top = 500;
-    dirLight.shadow.camera.bottom = -500;
+    function addLight(){
+        // add hemisphere light
+        let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
+        hemiLight.color.setHSL( 0.6, 0.6, 0.6 );
+        hemiLight.groundColor.setHSL( 0.1, 1, 0.4 );
+        hemiLight.position.set( 0, 50, 0 );
 
-    dirLight.shadow.camera.far = 13500;
-    scene.add( dirLight );
+        scene.add( hemiLight );
+
+        var light = new THREE.AmbientLight( 0x404040, 0.7 ); // soft white light
+        scene.add( light );
+
+        // add directional light
+        let dirLight = new THREE.DirectionalLight( 0xffffff , 0.75);
+        dirLight.color.setHSL( 0.1, 1, 0.95 );
+        dirLight.position.set( -1, 1.75, 1 );
+        dirLight.position.multiplyScalar( 100 );
+
+        dirLight.castShadow = true;
+
+        dirLight.shadow.mapSize.width = 4096;
+        dirLight.shadow.mapSize.height = 4096;
+
+        dirLight.shadow.camera.left = -500;
+        dirLight.shadow.camera.right = 500;
+        dirLight.shadow.camera.top = 500;
+        dirLight.shadow.camera.bottom = -500;
+
+        dirLight.shadow.camera.far = 13500;
+        scene.add( dirLight );
+    }
 
     function createSkyBox() {
         let base_Texture = [
@@ -1236,184 +1289,156 @@ function createLevel1() {
 /////////////////////////////////////////////////////////////////////////////
     }
 
-    function object_Loader(){//gltf loader
-        let loadBar = document.getElementById('load');
-
-        //enemy models
-        let catLoader = new THREE.GLTFLoader();
-        catLoader.load(
-            "objects/cat/catGun.glb",
-            function(obj) {//onLoad, obj is a GLTF
-                let arr = [-4, -39,
-                    4, -39,
-                    4, -43,
-                    -4, -43];
-                catHandle = new catHandler();
-                let c = new catObj(obj, arr);
-
-                c.addMixer(new THREE.AnimationMixer(obj.scene.children[2]));//the mesh itself
-                
-                obj.name = "Enemy";
-                let pos ={x: 5, y: 105, z: 0}; //was cat's position
-
-                obj.scene.position.x = pos.x;
-                obj.scene.position.y = pos.y;
-                obj.scene.position.z = pos.z;
-                obj.scene.rotation.y = -1.2;
-                
-                kitty = obj;
-                obj.matrixAutoUpdate = true;//changed from false
-
-
-                let vect3 = new THREE.Vector3();
-                let box = new THREE.Box3().setFromObject(obj.scene).getSize(vect3);
-
-                let transform = new Ammo.btTransform();
-                transform.setIdentity();
-                transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
-                transform.setRotation( new Ammo.btQuaternion( 0, -.5, 0, 1 ) );
-                let motionState = new Ammo.btDefaultMotionState( transform );
-
-                colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/3.5, box.y/3.5, box.z/3.5));
-                //colShape.setMargin( 0.5 );
-
-                let localInertia = new Ammo.btVector3( 0, 0, 0 );
-                colShape.calculateLocalInertia( 1, localInertia );
-
-                let rbInfo = new Ammo.btRigidBodyConstructionInfo( 1, motionState, colShape, localInertia );
-                let objBody = new Ammo.btRigidBody( rbInfo );
-
-                objBody.setFriction(4);
-                objBody.setRollingFriction(10);
-
-                physicsWorld.addRigidBody( objBody, playerGroup, buildingGroup );
-
-                obj.scene.userData.physicsBody = objBody;
-
-                rigidBodies.push(obj.scene);
-
-                //adding objects to scenes or classes
-                //obj.scene.children[2].add(bullet);
-                enemies.push(kitty.scene);
-
-                scene.add(obj.scene);
-                catHandle.addCat(c);
-                c.setUpMixer();
-
-                loadBar.innerHTML = "";
-
-                //testing the path and moving a mesh with a sphere.
-                /*testYuka = new THREE.Mesh(new THREE.SphereGeometry(.5, 10, 10), new THREE.MeshBasicMaterial({color:0xfffff0}));
-                testYuka.position.copy(new THREE.Vector3(-3, 100, 0));
-                scene.add(testYuka);
-                testYuka.matrixautoUpdate = false;*/
-            },
-            function(xhr){//onProgress
-                loadBar.innerHTML = "<h2>Loading Models " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-                if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-                    flag_Loader(loadBar);
-                }
-            },
-            function(err){//onError
-                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-                console.log("error in loading enemy model");
-                console.log(err);
-            }
-        );
+    function gun(){
+        let obj = models.gun.gltf.scene.clone();
+        obj.name = "Gun";
+        obj.scale.set( 1/60, 1/60, 1/60 );
+        obj.rotation.y = Math.PI;
+        obj.position.x = 0.5;
+        obj.position.y = -0.25;
+        obj.position.z = -0.5;
+        camera.add(obj);
+        after_Game_Menu(document.getElementById('load'));
+        b = true;
     }
 
-    function flag_Loader(loadBar){
+    function cat(){
+        let cat1 = models.cat1.gltf;
+        let pos = {x: -10, y: 102, z: -155};
+        let arr = [pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z];
+        createCat(cat1, arr, pos.y, "cat1");
+
+        let cat2 = models.cat2.gltf;
+        pos = {x: 10, y: 102, z: -165};
+        arr = [pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z];
+
+        createCat(cat2, arr, pos.y, "cat2");
+
+        let cat3 = models.cat3.gltf;
+        pos = {x: 0, y: 94.5, z: -505};
+        arr = [pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z];
+
+        createCat(cat3, arr, pos.y, "cat3");
+
+        let cat4 = models.cat4.gltf;
+        pos = {x: 0, y: 95, z: -555};
+        arr = [pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z];
+
+        createCat(cat4, arr, pos.y, "cat4");
+
+        let cat5 = models.cat5.gltf;
+        pos = {x: 5, y: 110.5, z: -965};
+        arr = [pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z];
+
+        createCat(cat5, arr, pos.y, "cat5");
+
+        let cat6 = models.cat6.gltf;
+        pos = {x: 5, y: 110.5, z: -1250};
+        arr = [pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z];
+
+        createCat(cat6, arr, pos.y, "cat6");
+
+        let cat7 = models.cat7.gltf;
+        pos = {x: 5, y: 103.5, z: -1430};
+        arr = [pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z];
+
+        createCat(cat7, arr, pos.y, "cat7");
+
+        let cat8 = models.cat8.gltf;
+        pos = {x: 5, y: 102.5, z: -1700};
+        arr = [pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z];
+
+        createCat(cat8, arr, pos.y, "cat8");
+
+        let cat9 = models.cat9.gltf;
+        pos = {x: 5, y: 102.5, z: -1835};
+        arr = [pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z];
+
+        createCat(cat9, arr, pos.y, "cat9");
+
+        let cat10 = models.cat10.gltf;
+        pos = {x: 5, y: 114.5, z: -2010};
+        arr = [pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z,
+            pos.x, pos.z];
+
+        createCat(cat10, arr, pos.y, "cat10");
+    }
+
+
+
+    function loadFlag(){
         // load a flag
-        let loader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
-        loader.load(
-            "objects/flag/objFlag.obj",
-            function(obj) {//onLoad, obj is an Object3D provided by load()
-                let pos ={ x: 5, y: 131.5, z: -2170};
-                obj.name = "Flag";
-                obj.position.set(pos.x, pos.y, pos.z);//moves the mesh
-                obj.scale.set( .3, .3, .3 );
+        let obj = models.flag.gltf.scene.clone();
+        let pos ={ x: 5, y: 131.5, z: -2170};
+        obj.name = "Flag";
+        obj.position.set(pos.x, pos.y, pos.z);//moves the mesh
+        obj.scale.set( .2, .2, .2 );
 
-                let geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-                let material = new THREE.MeshBasicMaterial( { color: 0xffff00} );
-                let vect3 = new THREE.Vector3();
-                let box = new THREE.Box3().setFromObject(obj).getSize(vect3);
+        let geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
+        let material = new THREE.MeshBasicMaterial( { color: 0xffff00} );
+        let vect3 = new THREE.Vector3();
+        let box = new THREE.Box3().setFromObject(obj).getSize(vect3);
 
-                flag = new THREE.Mesh( geometry, material );
-                flag.visible = false;
+        flag = new THREE.Mesh( geometry, material );
+        flag.visible = false;
 
-                scene.add(obj);
-                scene.add( flag );
+        scene.add(obj);
+        scene.add( flag );
 
-                let transform = new Ammo.btTransform();
-                transform.setIdentity();
-                transform.setOrigin( new Ammo.btVector3( pos.x, pos.y+4, pos.z ) );
-                transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
-                let motionState = new Ammo.btDefaultMotionState( transform );
+        let transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin( new Ammo.btVector3( pos.x, pos.y+4, pos.z ) );
+        transform.setRotation( new Ammo.btQuaternion( 0, 0, 0, 1 ) );
+        let motionState = new Ammo.btDefaultMotionState( transform );
 
-                colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2, box.y/2, box.z/2));
-                colShape.setMargin( 0.5 );
+        colShape = new Ammo.btBoxShape(new Ammo.btVector3(box.x/2, box.y/2, box.z/2));
+        colShape.setMargin( 0.5 );
 
-                let localInertia = new Ammo.btVector3( 0, 0, 0 );
-                colShape.calculateLocalInertia( 1, localInertia );
+        let localInertia = new Ammo.btVector3( 0, 0, 0 );
+        colShape.calculateLocalInertia( 1, localInertia );
 
-                let rbInfo = new Ammo.btRigidBodyConstructionInfo( 0, motionState, colShape, localInertia );
-                let flagBody = new Ammo.btRigidBody( rbInfo );
+        let rbInfo = new Ammo.btRigidBodyConstructionInfo( 0, motionState, colShape, localInertia );
+        let flagBody = new Ammo.btRigidBody( rbInfo );
 
-                flagBody.setFriction(4);
-                flagBody.setRollingFriction(10);
+        flagBody.setFriction(4);
+        flagBody.setRollingFriction(10);
 
-                physicsWorld.addRigidBody( flagBody, flagGroup, ghostGroup );
+        physicsWorld.addRigidBody( flagBody, flagGroup, ghostGroup );
 
-                flag.userData.physicsBody = flagBody;
+        flag.userData.physicsBody = flagBody;
 
-                rigidBodies.push(flag);
-
-                loadBar.innerHTML = "";
-            },
-            function(xhr){//onProgress
-                loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-                if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-                    document.getElementById("blocker").style.display = "block";
-                    gun_Loader(loadBar);
-                }
-            },
-            function(err){//onError
-                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-                console.log("error in loading flag");
-            }
-        );
+        rigidBodies.push(flag);
     }
 
-    function gun_Loader(loadBar){
-        // load a gun
-        let loader = new THREE.OBJLoader(THREE.DefaultLoadingManager);
-        loader.load(
-            "objects//gun/gun.obj",
-            function(obj) {//onLoad, obj is an Object3D provided by load()
-                obj.name = "Gun";
-                obj.scale.set( 1/60, 1/60, 1/60 );
-                obj.rotation.y = Math.PI;
-                obj.position.x = 0.5;
-                obj.position.y = -0.25;
-                obj.position.z = -0.5;
-                camera.add(obj);
-
-                loadBar.innerHTML = "";
-            },
-            function(xhr){//onProgress
-                loadBar.innerHTML = "<h2>Loading flag " + (xhr.loaded / xhr.total * 100).toFixed() + "%...</h2>";//#bytes loaded, the header tags at the end maintain the style.
-                if(xhr.loaded / xhr.total * 100 == 100){ //if done loading loads next loader
-                    document.getElementById("blocker").style.display = "block";
-                    after_Game_Menu(loadBar);
-                    b = true;
-                }
-            },
-            function(err){//onError
-                loadBar.innerHTML = "<h2>Error loading files.</h2>";//#bytes loaded, the header tags at the end maintain the style.
-                console.log("error in loading flag");
-            }
-        );
-    }
 
     function createPlayer(){
         let pos = {x: 0, y: 105, z: 0}; // start point
@@ -1546,17 +1571,5 @@ function createLevel1() {
         scene.add(resetBoxBound4);
     }
 
-    setupPhysicsWorld();
-    initDebug();
-    gamePlay = true;
-    createPlayer();
-    createCrosshair();
-    createReset();
 
-    createSkyBox();
-    create_Course();
-    create_Walls();
-    create_Columns();
-
-    object_Loader();
 }
