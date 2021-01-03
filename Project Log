@@ -8,7 +8,7 @@
 //  Changes made/sources if used.
 
 Jan/22/2020
-Ryan Slaybaugh:
+Ryan
 Commit 1:
 
   Added three planes for player movement testing. Also added collision physics for player interaction.
@@ -24,7 +24,7 @@ Commit 289654a9509b837736ffe677165b2b500313dc78
 Merged my branch with Ryans changes. 
 
 Jan/24/2020
-Ryan Slaybaugh:
+Ryan
 Commit 2:
 
   Added two new objects, a box and a ramp. The box provides collision for player character movement testing
@@ -34,7 +34,7 @@ from previous object collision code.
 
 
 Jan/25/2020
-Ryan Slaybaugh
+Ryan
 Commit 3:
 
   Moved createObstacles() code to a new file named gamestage.js and renamed function call to createGameStage().
@@ -45,7 +45,7 @@ differentiate between objects. No collision code added to the squares.
 
 
 Jan/26/2020
-Ryan Slaybaugh
+Ryan
 Commit 4:
 
   Tested out creating objects using a for loop. I first created a var str called box, and then used the iterative
@@ -91,7 +91,7 @@ Possible Solution: Use collision handler to determine when the player is on the 
 after pressing jump key. Disable movement while player does not have any collisions.
 
 Jan/28/2020
-Ryan Slaybaugh:
+Ryan
 Commit 5:
 
   Added a new torus object to be used for future starting platform. Also attempted to add objects to scene after render, but currently
@@ -147,7 +147,7 @@ after pressing jump key. Disable movement while player does not have any collisi
 
 
 Jan/31/2020
-Ryan Slaybaugh:
+Ryan
 Commit 6:
 
   Removed initial testing area to begin work on level creation. Created a large platform as the base with a simple texture and
@@ -155,14 +155,14 @@ a lone building to start the player out on. Also implemented textures for the bu
 
 
 Jan/31/2020
-Ryan Slaybaugh:
+Ryan
 Commit 7:
 
   Added createSkyBox() function to level1.js to create a sky box. I found a cubemap online for free to use as a place holder
 until we decide on an official skybox.
 
 Jan/31/2020
-Ryan Slaybaugh:
+Ryan
 Commit 8:
 
   Added createCityScape() function to level1.js to randomly generate a city for player movement testing. Level design will be put on hold while
@@ -170,7 +170,7 @@ I begin work on a start menu for our game.
 
 
 Feb/2/2020
-Ryan Slaybaugh:
+Ryan
 Commit 9:
 
   Added new functions start_Menu() and start_Menu_Loader() to handle the start menu and I renamed the loaders() function to object_Loader(),
@@ -181,14 +181,14 @@ objects.
 
 
 Feb/2/2020
-Ryan Slaybaugh:
+Ryan
 Commit 10:
 
   Added raycasting to highlight start menu elements. Currently working on click eventlistener for selecting the elements of the main menu.
 
 
 Feb/2/2020
-Ryan Slaybaugh:
+Ryan
 Commit 11:
 
   Added the ability to select menu elements. I ran into trouble attempting to delete elements from the scene after selecting Select Level
@@ -197,7 +197,7 @@ appropriate headers.
 
 
 Feb/4/2020
-Ryan Slaybaugh:
+Ryan
 Commit 12:
 
   Added selection functionality to the Select Level and Options buttons which will relocate the camera to the left or right of its starting
@@ -207,7 +207,7 @@ for use by the text objects.
 
 
 Feb/5/2020
-Ryan Slaybaugh:
+Ryan
 Commit 13:
 
   Added the ability to load level 1 from the start menu after selecting the Select Level button and then the Level 1 button. Also Repositioned
@@ -242,7 +242,7 @@ Added a primitive walking animation, but I didn't export/render it.
 
 
 Feb/11/2020
-Ryan Slaybaugh:
+Ryan
 Commit 14:
 
   Added highlighting to menu elements when hovering over them. Also changed the rotation of the Level_1_Cube to only rotate when you 
@@ -251,7 +251,7 @@ to use the render frame to keep the cube rotating.
 
 
 Feb/12/2020
-Ryan Slaybaugh:
+Ryan
 Commit 15:
 
   Changed around a few things about level 1, removed random city generation and manually added some "buildings" to play around with. 
@@ -290,7 +290,7 @@ Exported the file as a glb type, to be used in the program later.
 
 
 Feb/16/2020
-Ryan Slaybaugh:
+Ryan
 Commit: 16
 
   Fixed immediate loading of level 1 by changing level variable to 1 from 0. There were a few issues preventing level 1 from loading 
@@ -305,7 +305,7 @@ Fixed the location to load the catGun.glb from in the object_Loader function, th
 
 
 Feb/19/2020
-Ryan Slaybaugh:
+Ryan
 Commit 17:
 
   Reworked level one, moving away from more open platforming to a more linear platform design. Also reworked building creation by creating
@@ -324,8 +324,9 @@ Semira Pinder
 Commit #3 of week 4
 
 Imported animations to the game (level 1) for catGun. Death animation does not seem to work, though.
+
 Feb/20/2020
-Ryan Slaybaugh:
+Ryan
 Commit 18:
 
   Added a basic running course for level 1. It is the beginning of level 1 but still requires much work to be a full level. Some platform
@@ -357,7 +358,7 @@ Changed catGun's origin so that it's aligned better.
 
 
 2/26/2020
-Ryan Slaybaugh:
+Ryan
 Commit 19:
 
   Fixed a few document elements improperly showing with a scroll bar. Worked on getting in game menu and added ability to get back to the
@@ -365,7 +366,7 @@ main menu from level 1. We have a massive performance problem, most likely a mem
 
 
 3/1/2020
-Ryan Slaybaugh:
+Ryan
 Commit 20:
 
   Fixed the issue with calling and stacking multiple renders by invoking cancelAnimationFrame(renderFrameId) before invoking new renderFrames.
@@ -373,14 +374,14 @@ Also corrected cases of the camera being off center when looking at the in game 
 renderFrame so that it would constantly ensure that it was located at and looking in the correct locations.
 
 3/1/2020
-Ryan Slaybaug:
+Ryan
 Commit 21:
 
   Further improved the look of the ingame menu adding in lighting to get the same color text as in the main menu.
 
 
 3/3/2020
-Ryan Slaybaugh:
+Ryan
 Commit 22:
 
   Pushed the renderframe fix to level_2.js and reinitialized the physics world to flush old bounding boxes from the scene. There is currently
@@ -424,14 +425,14 @@ Changed the "theMixer" object to update using a THREE.Clock object
 
 
 3/5/2020
-Ryan Slaybaugh:
+Ryan
 Commit 23:
 
   Created a level 2 select and level 2 cube for the select level menu, and linked level two to the buttons in the raycasting event handlers.
 
 
 3/9/2020
-Ryan Slaybaugh:
+Ryan
 Commit 24:
 
   Removed unnecessary load_Menu style from css and index, and switched code to use load css style. Also began work on level designing and
@@ -444,9 +445,8 @@ Commit #1 week 7
 Texture changes during each animation, but it is not an individual change. Will fix the jumping, and will look into different face animations with the 
 textures.
 
-
 3/11/2020
-Ryan Slaybaugh:
+Ryan
 Commit 25:
 
   Continued external work on level design, completed 2 and 1/2 pages so far.
@@ -470,65 +470,65 @@ Commit #4 of week 7
 Added crossfading to each animation transition in the loop for catGun
 
 3/25/2020
-Ryan Slaybaugh:
+Ryan
 Commit 26:
 
   Continued work on level design. 4 pages complete and I will probably finish at 6 pages for the entirety of level 1.
 
 3/29/2020
-Ryan Slaybaugh:
+Ryan
 Commit 27:
 
   Finished work on level 1 designs (on paper) and will begin coding them into the game. The level came out to 5 pages
 instead of 6.
 
 3/30/2020
-Ryan Slaybaugh:
+Ryan
 Commit 28:
 
   Began coding in level 1. Currently have first section coded in and added new textures for the platforms. I am switching from a city level
 to a more greek setting. I also remove the base floor plane and am considering different options for settings outside the main course.
 
 3/30/2020
-Ryan Slaybaugh:
+Ryan
 Commit 29:
 
   Added more platforms to level 1 and continuing coding in the level.
   
 3/30/2020
-Ryan Slaybaugh:
+Ryan
 Commit 30:
 
   Completed coding in page 1 of level 1. I have 4 more pages before it will be complete.
   
   
 3/31/2020
-Ryan Slaybaugh:
+Ryan
 Commit 31:
 
   Completed coding in page 2 of level 1. 3 more pages to go.
   
 3/31/2020
-Ryan Slaybaugh:
+Ryan
 Commit 32:
 
   Completed coding in page 3 of level 1. 2 more pages to go.
 
 4/1/2020
-Ryan Slaybaugh:
+Ryan
 Commit 33:
 
   Completed coding in page 4 of level 1 with a few additions not originally planned. 1 more page to go.
 
 4/1/2020
-Ryan Slaybaugh:
+Ryan
 Commit 34:
 
   Completed outline of page 5 of level 1 with a few platforms still needed, otherwise the rest is cosmetic needs that can be filled
 in at a later time.
 
 4/2/2020
-Ryan Slaybaugh:
+Ryan
 Commit 35:
 
   Continued working on page 5, completing all necessary platforms, all that remains is cosmetic changes and maybe some additional platforms
@@ -536,26 +536,26 @@ to fill out the level. There is a noticeable lag when first viewing the entire l
 optimization work.
 
 4/3/2020
-Ryan Slaybaugh:
+Ryan
 Commit 36:
 
   Finished with level designing and working on improving code readability and cosmetic changes.
 
 4/3/2020
-Ryan Slaybaugh:
+Ryan
 Commit 37:
 
   Continued optimizations to code for the objects and I changed around one stretch of platforms on page 2 of the level design.
   
 4/3/2020
-Ryan Slaybaugh:
+Ryan
 Commit 38:
 
   Finished optimizing level objects code and basic cosmetics. I still need to add reset boxes for each "checkpoint" in case the player
 falls off. Otherwise level is basically done with room for cosmetics and texture work.
 
 4/4/2020
-Ryan Slaybaugh:
+Ryan
 Commit 39:
 
   Added some additional walls to page 2 garden area.
@@ -576,32 +576,32 @@ Commit #3 of week March 29th- April 5th
 Fixed the direction of the bullet when it shoots (while the cat is standing up), and edited a few variables so that it looks slightly neater. 
 
 4/9/2020
-Ryan Slaybaugh:
+Ryan
 Commit 40:
 
   Some basic code cleanup and optimization, I will continue to look through and fix up more of the code.
 
 4/9/2020
-Ryan Slaybaugh:
+Ryan
 Commit 41:
 
   Removed unnecessary loading of font in main menu and currently working on doing the same for the in game menu.
   
 4/9/2020
-Ryan Slaybaugh:
+Ryan
 Commit 42:
 
   Applied font loader changes to in game menu.
   
 4/11/2020
-Ryan Slaybaugh:
+Ryan
 Commit 43:
 
   Moved the after game menu into the load order queue along with flag, cat, and sound loader to try to make the game loading more consistent.
 I placed the after game menu at the back so that it is the last thing loaded so the setupControls method and renderframe call are now there.
 
 4/11/2020
-Ryan Slaybaugh:
+Ryan
 Commit 44:
 
   Removed unnecessary load blocker calls, hid the gun when the level has been completed, and moved the first two wall run walls closer together
@@ -652,41 +652,41 @@ Commit #5
 The catObj class now takes an array as an argument, and it uses that array to construct a path for the vehicle using the makePathAndWaypoints function.
 
 4/19/2020
-Ryan Slaybaugh:
+Ryan
 Commit 45:
 
   Worked on BGM for menu and level 1 and uploaded the audio files to the master branch.
 
 4/25/2020
-Ryan Slaybaugh:
+Ryan
 Commit 46:
 
   Added BGM ON OFF to options menu to allow the user to turn on or off a new variable called play_Music, I will continue working on adding
 the menu audio and the functionality of this new variable to turn on or off the game music.
 
 4/25/2020
-Ryan Slaybaugh:
+Ryan
 Commit 47:
   
   Continuing to work on a way to get the menu audio to play, I linked the BGM play_Music variable to the music for level 1 so that it will play
 if set to true and not if set to false.
 
 4/25/2020
-Ryan Slaybaugh:
+Ryan
 Commit 48:
 
   Added a press start section to the main menu for the user to click on to take them to the main menu. This also serves as a way to get user input
 to start playing the menu BGM. Adjusted code as necessary to cancel audio when switching levels.
 
 4/25/2020
-Ryan Slaybaugh:
+Ryan
 Commit 49:
 
   Added scaling audio options for a Master Volume and BGM and continuing to work on one for sounds, I also added an option to turn on or off
 anti-aliasing.
 
 4/25/2020
-Ryan Slaybaugh:
+Ryan
 Commit 50:
 
   Finished linking all appropriate audio levels to their respective sounds and managed to keep consistent audio level changes across both
@@ -713,14 +713,14 @@ Semira Pinder
 Fixed bullet not appearing for the shooting animation, it now shoots for a set amount of milliseconds.
 
 5/1/2020
-Ryan Slaybaugh:
+Ryan
 Commit 51:
 
   Fixed the audio level selector to be consistent when changing audio levels and adjusted audio call backs in soundManager to be consistent
 with the new changes.
 
 5/1/2020
-Ryan Slaybaugh:
+Ryan
 Commit 52:
 
   Found a work around for the lag with the raycaster and the performance hit, and solution seems to work to keep visual performance normal.
